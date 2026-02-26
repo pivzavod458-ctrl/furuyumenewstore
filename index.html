@@ -208,7 +208,7 @@
     /* FLOATING GLASS HEADER */
     .floatbar{
       position:fixed; left:0; right:0; top: calc(env(safe-area-inset-top) + 2px);
-      z-index: 2000; display:flex; justify-content:center; pointer-events:auto;
+      z-index: 2000; display:flex; justify-content:center; pointer-events:none;
     }
     .floatbar-card{
       width: min(420px, calc(100% - 28px)); border-radius: 999px;
@@ -216,10 +216,10 @@
       background-color: rgba(255,255,255,.72); backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px); box-shadow: var(--shadow);
       border: 1px solid rgba(0,0,0,.06); padding: 8px 12px; opacity:0;
-      transform: translateY(-10px); transition: opacity .22s ease, transform .22s ease;
+      transform: translateY(-15px); transition: opacity .35s cubic-bezier(0.22, 1, 0.36, 1), transform .35s cubic-bezier(0.22, 1, 0.36, 1);
       will-change: opacity, transform; contain: paint; pointer-events:auto;
     }
-    .floatbar.show .floatbar-card{ opacity:1; transform: translateY(0); }
+    .floatbar.show .floatbar-card{ opacity:1; transform: translateY(0); pointer-events:auto; }
     .floatbar-inner{ display:flex; align-items:center; justify-content:space-between; gap: 10px; min-width:0; }
     .floatbar-left{ display:flex; align-items:center; justify-content:flex-start; flex:0 0 auto; }
     .floatbar-right{
@@ -240,6 +240,18 @@
     .floatbrand:active{ opacity:.7; transform: scale(.99); background: rgba(0,0,0,.04); }
     .floatbrand img{ width:100%; height:100%; object-fit:contain; display:block; }
 
+    /* ✅ УВЕДОМЛЕНИЕ (TOAST) */
+    .toast {
+      position: fixed; top: calc(env(safe-area-inset-top) + 12px); left: 50%; transform: translate(-50%, -20px);
+      background: rgba(17, 17, 17, 0.92); color: #fff; padding: 12px 20px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: var(--ls);
+      z-index: 9999; opacity: 0; visibility: hidden; pointer-events: none; white-space: nowrap;
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.3s;
+    }
+    .toast.show { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+
     /* SEARCH DRAWER */
     .drawer{ position: fixed; left: 0; right: 0; z-index: 3500; pointer-events: none; }
     .drawer.open{ pointer-events:auto; }
@@ -248,7 +260,8 @@
       background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.68));
       background-color: rgba(255,255,255,.88); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       box-shadow: 0 18px 50px rgba(0,0,0,.12); border: 1px solid rgba(0,0,0,.08); overflow:hidden;
-      opacity:0; transform: translateY(-6px); transition: opacity .18s ease, transform .18s ease;
+      opacity:0; transform: translateY(-10px); 
+      transition: opacity .35s cubic-bezier(0.22, 1, 0.36, 1), transform .35s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .drawer.open .drawer-card{ opacity:1; transform: translateY(0); }
     .drawer-top{ padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,.06); display:flex; align-items:center; gap: 10px; }
@@ -284,14 +297,15 @@
     .modal{
       position:fixed; inset:0; z-index: 4000; display:none; align-items:flex-end; justify-content:center;
       background: rgba(0,0,0,.18); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-      opacity:0; transition: opacity .18s ease;
+      opacity:0; transition: opacity .35s ease;
     }
     .modal.show{ display:flex; }
     .modal.visible{ opacity:1; }
     .sheet{
       width: min(520px, 100%); margin: 0 auto; border-radius: 22px 22px 0 0;
       background: rgba(255,255,255,.92); border: 1px solid rgba(0,0,0,.08); box-shadow: 0 -18px 60px rgba(0,0,0,.18);
-      padding: 14px 14px 18px; transform: translateY(14px); opacity:0; transition: transform .18s ease, opacity .18s ease;
+      padding: 14px 14px 18px; transform: translateY(100%); 
+      transition: transform .35s cubic-bezier(0.22, 1, 0.36, 1), opacity .35s ease;
     }
     .modal.visible .sheet{ transform: translateY(0); opacity:1; }
     .sheet-head{ display:flex; align-items:center; justify-content:space-between; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,.06); }
@@ -312,7 +326,7 @@
     .cart-name{ font-size:11px; font-weight:900; text-transform: uppercase; letter-spacing: var(--ls); line-height: 1.15; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .cart-meta{ margin-top: 6px; font-size:10px; font-weight:800; text-transform: uppercase; letter-spacing: calc(var(--ls) + 0.02em); opacity:.7; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .cart-qty{ display:flex; align-items:center; gap: 8px; flex:0 0 auto; }
-    .qty-btn{ width:30px; height:30px; border-radius: 999px; background: rgba(255,255,255,.92); border: 1px solid rgba(0,0,0,.10); display:grid; place-items:center; font-weight:900; font-size:14px; cursor:pointer; -webkit-tap-highlight-color: transparent; transition: transform .18s ease, opacity .18s ease; user-select:none; touch-action: manipulation; }
+    .qty-btn{ width:30px; height:30px; border-radius: 999px; background: rgba(255,255,255,.92); border: 1px solid rgba(0,0,0,.10); display:grid; place-items:center; font-weight:900; font-size:14px; cursor:pointer; -webkit-tap-highlight-color: transparent; transition: transform .18s ease, opacity .18s ease; user-select:none; touch-action: manipulation; padding-bottom: 2px; }
     .qty-btn:active{ transform: scale(.98); opacity:.75; }
     .qty-val{ min-width: 20px; text-align:center; font-size:11px; font-weight:900; text-transform: uppercase; letter-spacing: var(--ls); opacity:.9; }
     .cart-sum{ margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,.06); display:flex; align-items:center; justify-content:space-between; gap: 10px; }
@@ -351,9 +365,15 @@
     .footer a{ transition: opacity .18s ease, transform .18s ease; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     .footer a:active{ opacity:.65; transform: scale(.99); }
 
-    /* PRODUCT VIEW */
-    .product-view{ position:fixed; inset:0; z-index: 3000; background: var(--bg); display:none; overflow:hidden; }
-    .product-view.show{ display:block; }
+    /* ✅ PRODUCT VIEW - ПЛАВНОСТЬ ОТКРЫТИЯ/ЗАКРЫТИЯ */
+    .product-view { 
+      position:fixed; inset:0; z-index: 3000; background: var(--bg); 
+      display:none; opacity: 0; overflow:hidden;
+      transition: opacity .35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .product-view.show { display:block; }
+    .product-view.visible { opacity: 1; }
+
     .product-scroll{
       position:absolute; inset:0; overflow:auto; -webkit-overflow-scrolling: touch;
       padding-top: calc(env(safe-area-inset-top) + 6px);
@@ -361,11 +381,10 @@
       display:flex; flex-direction:column; min-height: 100vh;
     }
 
-    /* Плавный переход внутри карточки товара (opacity) */
-    .pwrap { transition: opacity 0.25s ease; width: min(520px, 100%); margin: 0 auto; padding-top: 6px; display:flex; flex-direction:column; flex: 1 0 auto; min-height: 0; }
+    /* Плавный переход внутри карточки товара */
+    .pwrap { transition: opacity 0.25s cubic-bezier(0.22, 1, 0.36, 1); width: min(520px, 100%); margin: 0 auto; padding-top: 6px; display:flex; flex-direction:column; flex: 1 0 auto; min-height: 0; }
     .pwrap.fade-out { opacity: 0; }
 
-    /* ✅ ФИКС 2: Простая кнопка НАЗАД без подложки */
     .productbar { position: relative; z-index: 3100; padding: 12px 14px 6px; pointer-events: none; display: flex; align-items: center; }
     .backbtn {
       pointer-events: auto; width: 44px; height: 44px; display: grid; place-items: center;
@@ -375,16 +394,15 @@
     .backbtn:active { transform: scale(.92); opacity: .6; }
     .backbtn svg { width: 22px; height: 22px; display: block; }
 
-    /* ✅ НОВАЯ ГАЛЕРЕЯ (Скролл + точки поверх + 1080x1350) */
     .gallery{ position:relative; border-radius: 22px; overflow:hidden; border: 1px solid rgba(0,0,0,.06); background: rgba(0,0,0,.02); flex: 0 0 auto; }
     .gallery-stage{
       width: 100%; 
-      aspect-ratio: 1080 / 1350; /* Пропорция 4:5 */
+      aspect-ratio: 1080 / 1350; 
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none; /* IE/Edge */
+      scrollbar-width: none; 
+      -ms-overflow-style: none; 
       touch-action: pan-x pan-y;
       position:relative;
     }
@@ -393,13 +411,12 @@
     .gallery-stage img{
       flex: 0 0 100%;
       width: 100%; height: 100%;
-      object-fit: contain; /* картинка аккуратно вписывается */
+      object-fit: contain; 
       scroll-snap-align: center;
       cursor: zoom-in;
       display:block; user-select:none; pointer-events:auto;
     }
 
-    /* ✅ ФИКС 3: Точки-индикаторы теперь ПОВЕРХ фото, в самом низу */
     .gallery-dots {
       position: absolute; bottom: 12px; left: 0; right: 0;
       display: flex; justify-content: center; gap: 6px; pointer-events: none; z-index: 10;
@@ -440,20 +457,16 @@
     .related-head{ display:flex; align-items:center; justify-content:space-between; gap: 10px; margin-bottom: 10px; }
     .related-title{ font-size:12px; font-weight:900; text-transform: uppercase; letter-spacing: var(--ls); opacity:.92; }
     
-    /* ✅ ФИКС 1: Свободный инерционный скролл без грубого примагничивания */
-    .rel-track{ display:flex; gap: 12px; overflow:auto; -webkit-overflow-scrolling: touch; padding: 2px 2px 8px; scrollbar-width: none; -ms-overflow-style: none; }
+    /* ✅ ФИКС 2: Свободный плавный нативный скролл */
+    .rel-track{ display:flex; gap: 12px; overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling: touch; padding: 2px 2px 8px; scrollbar-width: none; -ms-overflow-style: none; }
     .rel-track::-webkit-scrollbar{ display:none; }
-    .rel-card{ flex: 0 0 140px; border-radius: 18px; border: 1px solid rgba(0,0,0,.06); background: rgba(0,0,0,.02); padding: 12px 10px; cursor:pointer; -webkit-tap-highlight-color: transparent; transition: transform .18s ease, opacity .18s ease; touch-action: manipulation; }
+    .rel-card{ flex: 0 0 140px; border-radius: 18px; border: 1px solid rgba(0,0,0,.06); background: rgba(0,0,0,.02); padding: 12px 10px; cursor:pointer; -webkit-tap-highlight-color: transparent; transition: transform .18s ease, opacity .18s ease; }
     .rel-card:active{ transform: scale(.99); opacity:.85; }
     
     .rel-img{ width:100%; aspect-ratio: 1/1; display:flex; align-items:center; justify-content:center; overflow:hidden; background: transparent; margin-bottom: 10px; }
     .rel-img img{ width:100%; height:100%; object-fit: contain; display:block; pointer-events:none; user-select:none; }
     .rel-name{ font-size:10px; font-weight:900; text-transform: uppercase; letter-spacing: var(--ls); line-height: 1.15; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow:hidden; opacity:.92; min-height: calc(2 * 1.15em); }
     .rel-price{ margin-top: 8px; font-size:10px; font-weight:900; text-transform: uppercase; letter-spacing: calc(var(--ls) + 0.02em); opacity:.78; }
-
-    .rel-scrollbar{ margin-top: 10px; height: 6px; border-radius: 999px; background: rgba(0,0,0,.08); border: 1px solid rgba(0,0,0,.06); position: relative; overflow:hidden; user-select:none; touch-action: none; }
-    .rel-thumb{ position:absolute; top:0; left:0; height:100%; border-radius: 999px; background: rgba(0,0,0,.55); box-shadow: 0 10px 22px rgba(0,0,0,.10); width: 40px; transform: translateX(0); transition: opacity .18s ease; opacity:.9; }
-    .rel-scrollbar.dragging .rel-thumb{ opacity: 1; }
 
     .product-actions{
       position:fixed; left:0; right:0; bottom:0; z-index: 12;
@@ -467,28 +480,22 @@
     .btn-primary{ background:#111; color:#fff; }
     .btn-ghost{ background: rgba(0,0,0,.06); color:#111; border: 1px solid rgba(0,0,0,.08); }
 
-    body.product-open .floatbar{ display:none; }
-    body.product-open .app{ display:none; }
     .product-view .footer{ margin-top: auto; padding-top: 18px; padding-bottom: 18px; }
 
-    /* ПРОСТОЙ И УНИВЕРСАЛЬНЫЙ ПРОСМОТРЩИК ФОТО */
     .image-viewer {
       position: fixed; inset: 0; z-index: 5000;
       display: none; align-items: center; justify-content: center;
-      background: rgba(0,0,0,.85); /* Затемнение */
+      background: rgba(0,0,0,.85); 
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       opacity: 0; transition: opacity .25s ease;
       padding: env(safe-area-inset-top) max(16px, env(safe-area-inset-right)) env(safe-area-inset-bottom) max(16px, env(safe-area-inset-left));
-      cursor: pointer; /* Подсказывает, что можно закрыть кликом */
+      cursor: pointer; 
     }
     .image-viewer.show { display: flex; }
     .image-viewer.visible { opacity: 1; }
     .image-viewer img {
-      max-width: 98%; max-height: 98%;
-      object-fit: contain;
-      border-radius: 12px; /* Чуть скруглим углы для стиля */
-      user-select: none; pointer-events: none; /* Чтобы клик пробивал на фон */
-      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      max-width: 98%; max-height: 98%; object-fit: contain; border-radius: 12px; 
+      user-select: none; pointer-events: none; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
     }
 
     @media (max-width: 360px){
@@ -512,6 +519,8 @@
     <div class="loader-sub">Прогружаем всё нужное. Если загрузка идёт слишком долго - перезагрузите приложение.</div>
     <div id="loaderHint" class="loader-hint">Совет: иногда помогает закрыть и открыть Telegram заново.</div>
   </div>
+
+  <div id="toast" class="toast" aria-hidden="true">Товар добавлен в корзину</div>
 
   <div id="searchDrawer" class="drawer" aria-hidden="true">
     <div class="drawer-card" role="dialog" aria-label="Поиск товаров">
@@ -611,9 +620,6 @@
             <div class="related-title">Смотрите также</div>
           </div>
           <div id="relTrack" class="rel-track"></div>
-          <div id="relScrollbar" class="rel-scrollbar" aria-hidden="true">
-            <div id="relThumb" class="rel-thumb"></div>
-          </div>
         </section>
 
         <footer class="footer bottom-safe" aria-label="Нижнее меню">
@@ -959,20 +965,35 @@
     const pDescList = document.getElementById("pDescList");
 
     const relTrack = document.getElementById("relTrack");
-    const relScrollbar = document.getElementById("relScrollbar");
-    const relThumb = document.getElementById("relThumb");
 
     const buyNowBtn = document.getElementById("buyNowBtn");
     const addToCartBtn = document.getElementById("addToCartBtn");
 
     const sizeChartBtn = document.getElementById("sizeChartBtn");
     
-    // Элементы нового просмотрщика
     const imageViewer = document.getElementById("imageViewer");
     const viewerImg = document.getElementById("viewerImg");
 
     const sleep = (ms) => new Promise(r => setTimeout(r, ms));
     const SIZES = ["S","M","L","XL"];
+
+    // Флаг для анти-бага при быстром переключении
+    let isSwitchingProduct = false;
+
+    // ✅ ЗАГРУЗКА КОРЗИНЫ ИЗ ЛОКАЛЬНОЙ ПАМЯТИ
+    const cart = new Map();
+    function saveCart() {
+      localStorage.setItem('furuyume_cart', JSON.stringify(Array.from(cart.entries())));
+    }
+    function loadCart() {
+      const saved = localStorage.getItem('furuyume_cart');
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          for (const [k, v] of parsed) cart.set(k, v);
+        } catch(e){}
+      }
+    }
 
     function fmtRub(n){
       const s = String(Math.round(Number(n) || 0));
@@ -1022,8 +1043,10 @@
       grid.classList.remove("fade-out");
     }
 
+    // ✅ ИСПРАВЛЕННЫЙ OBSERVER (Чтоб меню не прыгало при закрытии товара)
     function setupFloatingHeader() {
       const io = new IntersectionObserver((entries) => {
+        if (document.body.classList.contains("product-open")) return;
         const e = entries[0];
         if (!e) return;
         const show = !e.isIntersecting;
@@ -1093,7 +1116,6 @@
     function closeSearch() { searchDrawer.classList.remove("open"); searchDrawer.setAttribute("aria-hidden", "true"); }
     function toggleSearch() { searchDrawer.classList.contains("open") ? closeSearch() : openSearch(); }
 
-    const cart = new Map();
     function cartKey(pid, size){ return `${pid}__${size}`; }
 
     function addToCart(pid, size){
@@ -1103,12 +1125,14 @@
       const cur = cart.get(k);
       if (cur) cart.set(k, { ...cur, qty: cur.qty + 1 });
       else cart.set(k, { pid, size, qty: 1 });
+      saveCart(); // Сохраняем
       renderCart();
     }
     function setQty(pid, size, qty){
       const k = cartKey(pid, size);
       if (qty <= 0) cart.delete(k);
       else { const cur = cart.get(k); if (cur) cart.set(k, { ...cur, qty }); }
+      saveCart(); // Сохраняем
       renderCart();
     }
     function getCartItems(){ return Array.from(cart.values()); }
@@ -1155,7 +1179,7 @@
     }
     function closeCart() {
       cartModal.classList.remove("visible"); cartModal.setAttribute("aria-hidden", "true");
-      setTimeout(() => cartModal.classList.remove("show"), 180);
+      setTimeout(() => cartModal.classList.remove("show"), 350);
     }
     function buildOrderText(lines, totalRub){
       return `Здравствуйте! Хочу оформить заказ:\n\n${lines.join("\n")}\n\nИтого: ${fmtRub(totalRub)}`;
@@ -1178,8 +1202,12 @@
     function renderGalleryScroll(p){
       galleryStage.innerHTML = p.gallery.map(src => `<img src="${src}" alt="${p.name}">`).join("");
       galleryDots.innerHTML = p.gallery.map((_, i) => `<div class="dot ${i===0 ? 'active' : ''}"></div>`).join("");
-      // Сброс скролла в начало при открытии
-      galleryStage.scrollTo({ left: 0, behavior: "instant" });
+      // ✅ ФИКС 3: Гарантированный сброс скролла в начало
+      requestAnimationFrame(() => {
+        galleryStage.scrollLeft = 0;
+        const dots = galleryDots.querySelectorAll('.dot');
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === 0));
+      });
     }
 
     // Слушатель для обновления активной точки при скролле галереи
@@ -1205,9 +1233,7 @@
           <div class="rel-price">${fmtRub(x.priceRub)}</div>
         </div>
       `).join("");
-      requestAnimationFrame(updateRelatedScrollbar);
       requestAnimationFrame(() => relTrack.scrollTo({ left: 0, top: 0, behavior: "instant" }));
-      requestAnimationFrame(updateRelatedScrollbar);
     }
 
     function updateSkuLine(){
@@ -1215,7 +1241,6 @@
       pSku.textContent = `Артикул: ${(p.articles && p.articles[currentSize]) ? p.articles[currentSize] : `${p.id}-${currentSize}`}`;
     }
 
-    // Вынесенная функция обновления DOM карточки товара
     function updateProductDOM(p) {
       currentProductId = p.id; 
       currentSize = "M";
@@ -1229,37 +1254,62 @@
       updateSkuLine();
     }
 
-    // Открытие товара с плавной подгрузкой, если уже находимся в товаре
+    // ✅ ФИКС 1 и 5: Плавное и защищенное открытие товара
     async function openProduct(pid){
+      if (isSwitchingProduct) return; // Защита от спам-кликов
       const p = byId(pid); if (!p) return;
+      isSwitchingProduct = true;
+
       closeSearch();
-      
       const isAlreadyOpen = document.body.classList.contains("product-open");
 
       if (isAlreadyOpen) {
-        // Плавно затухаем контент
+        // Мягко гасим текущий контент
         pwrap.classList.add("fade-out");
-        await sleep(220); // Ждем пока исчезнет
+        await sleep(250); 
         
-        // Обновляем данные и скроллим вверх
+        // Меняем данные и кидаем наверх
         updateProductDOM(p);
-        productScroll.scrollTo({ top: 0, behavior: "smooth" });
+        productScroll.scrollTo({ top: 0, behavior: "instant" });
         
-        // Плавно показываем
-        pwrap.classList.remove("fade-out");
+        // Плавно показываем новые
+        requestAnimationFrame(() => {
+          pwrap.classList.remove("fade-out");
+          isSwitchingProduct = false;
+        });
       } else {
-        // Обычное открытие
+        // Открытие поверх каталога
         updateProductDOM(p);
         document.body.classList.add("product-open");
         productView.classList.add("show"); 
         productView.setAttribute("aria-hidden", "false");
         productScroll.scrollTo({ top: 0, behavior: "instant" });
+        
+        // Микрозадержка для старта анимации
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            productView.classList.add("visible");
+            isSwitchingProduct = false;
+          });
+        });
       }
     }
 
+    // ✅ ФИКС 4: Плавное закрытие
     function closeProduct(){
-      productView.classList.remove("show"); productView.setAttribute("aria-hidden", "true");
-      document.body.classList.remove("product-open"); currentProductId = null;
+      productView.classList.remove("visible");
+      setTimeout(() => {
+        productView.classList.remove("show");
+        productView.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("product-open");
+        currentProductId = null;
+        
+        // Проверяем позицию каталога, чтобы скрыть/показать floatbar
+        const r = mainHeader.getBoundingClientRect();
+        if (r.bottom > 0) {
+          floatbar.classList.remove("show");
+        }
+      }, 350); // Ждем конца CSS анимации
     }
 
     function orderNowCurrent(){
@@ -1267,53 +1317,25 @@
       openTelegramOrder(buildOrderText([`${p.name}, ${currentSize}, ${fmtRub(p.priceRub)}`], p.priceRub));
     }
     
+    // ✅ ФИКС 8: Уведомление
+    let toastTimer;
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 1500);
+    }
+
     function addCurrentToCart(){
       const p = byId(currentProductId); if (!p) return;
       addToCart(p.id, currentSize);
       addToCartBtn.style.opacity = "0.75"; setTimeout(() => addToCartBtn.style.opacity = "", 160);
+      showToast(); // Вызов уведомления
     }
 
-    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
-
-    function updateRelatedScrollbar(){
-      if (!relScrollbar || !relThumb || !relTrack) return;
-      const sw = relTrack.scrollWidth, cw = relTrack.clientWidth, maxScroll = Math.max(0, sw - cw), barW = relScrollbar.clientWidth;
-      if (barW <= 0 || sw <= 0 || cw <= 0 || maxScroll === 0){ relThumb.style.width = "100%"; relThumb.style.transform = "translateX(0px)"; return; }
-      const thumbW = clamp(Math.round(barW * (cw / sw)), 34, barW), maxX = Math.max(0, barW - thumbW);
-      relThumb.style.width = `${thumbW}px`; relThumb.style.transform = `translateX(${(relTrack.scrollLeft / maxScroll) * maxX}px)`;
-    }
-
-    (function setupRelatedScrollbarDrag(){
-      if (!relScrollbar || !relThumb || !relTrack) return;
-      let dragging = false, startX = 0, startLeft = 0;
-      function getThumbMetrics(){
-        const barW = relScrollbar.clientWidth, thumbW = relThumb.getBoundingClientRect().width;
-        return { barW, thumbW, maxX: Math.max(0, barW - thumbW) };
-      }
-      function thumbLeftPx(){ const m = relThumb.style.transform.match(/translateX\(([-\d.]+)px\)/); return m ? Number(m[1]) : 0; }
-      function setByThumbX(x){
-        const { maxX } = getThumbMetrics(), maxScroll = Math.max(0, relTrack.scrollWidth - relTrack.clientWidth);
-        if (maxX <= 0 || maxScroll <= 0) return;
-        relTrack.scrollLeft = (clamp(x, 0, maxX) / maxX) * maxScroll;
-      }
-      relScrollbar.addEventListener("pointerdown", (e) => {
-        dragging = true; relScrollbar.classList.add("dragging"); relScrollbar.setPointerCapture(e.pointerId);
-        startX = e.clientX; startLeft = thumbLeftPx();
-        const thumbRect = relThumb.getBoundingClientRect();
-        if (!(e.clientX >= thumbRect.left && e.clientX <= thumbRect.right)){
-          setByThumbX((e.clientX - relScrollbar.getBoundingClientRect().left) - (getThumbMetrics().thumbW / 2));
-          updateRelatedScrollbar(); startLeft = thumbLeftPx(); startX = e.clientX;
-        }
-      });
-      relScrollbar.addEventListener("pointermove", (e) => { if (!dragging) return; setByThumbX(startLeft + (e.clientX - startX)); updateRelatedScrollbar(); });
-      function endDrag(){ if (!dragging) return; dragging = false; relScrollbar.classList.remove("dragging"); }
-      relScrollbar.addEventListener("pointerup", endDrag); relScrollbar.addEventListener("pointercancel", endDrag);
-    })();
-
-    // ✅ Функции нового просмотрщика
     function openImageViewer(src) {
       if (!src) return;
-      document.body.classList.add("zoom-open"); // блокируем внешний скролл
+      document.body.classList.add("zoom-open"); 
       viewerImg.src = src;
       imageViewer.classList.add("show");
       imageViewer.setAttribute("aria-hidden", "false");
@@ -1333,6 +1355,7 @@
     imageViewer.addEventListener("click", closeImageViewer);
 
     (function init(){
+      loadCart(); // Грузим корзину
       renderCategories("all"); renderProducts("all"); setupFloatingHeader();
       if (logoBtn) logoBtn.addEventListener("click", scrollToTop);
       if (floatLogoBtn) floatLogoBtn.addEventListener("click", scrollToTop);
@@ -1362,7 +1385,7 @@
       });
 
       window.addEventListener("scroll", () => { if (searchDrawer.classList.contains("open")) setDrawerTop(); }, { passive: true });
-      window.addEventListener("resize", () => { if (searchDrawer.classList.contains("open")) setDrawerTop(); updateRelatedScrollbar(); });
+      window.addEventListener("resize", () => { if (searchDrawer.classList.contains("open")) setDrawerTop(); });
 
       document.addEventListener("click", (e) => {
         const open = e.target.closest("[data-open-product]"); if (!open) return;
@@ -1377,7 +1400,6 @@
         currentSize = s; pSizes.querySelectorAll(".sizebtn").forEach(x => x.classList.toggle("active", x.getAttribute("data-size") === s)); updateSkuLine();
       });
 
-      relTrack.addEventListener("scroll", () => updateRelatedScrollbar(), { passive: true });
       buyNowBtn.addEventListener("click", orderNowCurrent);
       addToCartBtn.addEventListener("click", addCurrentToCart);
       cartClose.addEventListener("click", closeCart);
@@ -1391,7 +1413,6 @@
       });
       cartOrderBtn.addEventListener("click", orderFromCart);
 
-      // Клик по фото товара в галерее открывает просмотрщик
       galleryStage.addEventListener("click", (e) => {
         if (!document.body.classList.contains("product-open")) return;
         if (e.target.tagName === 'IMG') {
@@ -1399,7 +1420,6 @@
         }
       });
 
-      // Клик по размерной сетке
       sizeChartBtn.addEventListener("click", () => {
         openImageViewer("sizechart.webp");
       });
