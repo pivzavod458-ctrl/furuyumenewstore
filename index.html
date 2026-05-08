@@ -498,6 +498,71 @@
       user-select: none; pointer-events: none; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
     }
 
+    /* COUNTDOWN */
+    .countdown-inner {
+      padding: 36px 20px 38px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .countdown-label-top {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: calc(var(--ls) + 0.06em);
+      color: var(--muted);
+      margin-bottom: 26px;
+    }
+    .countdown-blocks {
+      display: flex;
+      align-items: center;
+    }
+    .cd-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 66px;
+    }
+    .cd-num {
+      font-size: clamp(40px, 10vw, 62px);
+      font-weight: 800;
+      letter-spacing: -0.06em;
+      color: var(--text);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum";
+    }
+    .cd-unit {
+      margin-top: 8px;
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: calc(var(--ls) + 0.06em);
+      color: var(--muted);
+    }
+    .cd-sep {
+      font-size: clamp(28px, 7vw, 46px);
+      font-weight: 800;
+      color: rgba(0,0,0,.15);
+      margin: 0 2px;
+      line-height: 1;
+      margin-bottom: 16px;
+      align-self: flex-start;
+      margin-top: 6px;
+    }
+    .countdown-date {
+      margin-top: 26px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: calc(var(--ls) + 0.08em);
+      color: rgba(0,0,0,.25);
+    }
+    @media (max-width: 360px){
+      .cd-block { min-width: 52px; }
+      .countdown-inner { padding: 28px 10px 30px; }
+    }
+
     @media (max-width: 360px){
       .topbar-card{ padding: 9px 12px; }
       .brand{ width:40px; height:40px; }
@@ -666,9 +731,33 @@
       </div>
     </header>
 
-    <section class="hero safe" aria-label="Фото">
+    <section class="hero safe" aria-label="Обратный отсчёт">
       <div class="hero-card">
-        <img src="hero.webp" alt="FURUYUME">
+        <div class="countdown-inner">
+          <div class="countdown-label-top">до дропа осталось</div>
+          <div class="countdown-blocks">
+            <div class="cd-block">
+              <div class="cd-num" id="cdDays">00</div>
+              <div class="cd-unit">дней</div>
+            </div>
+            <div class="cd-sep">:</div>
+            <div class="cd-block">
+              <div class="cd-num" id="cdHours">00</div>
+              <div class="cd-unit">часов</div>
+            </div>
+            <div class="cd-sep">:</div>
+            <div class="cd-block">
+              <div class="cd-num" id="cdMins">00</div>
+              <div class="cd-unit">минут</div>
+            </div>
+            <div class="cd-sep">:</div>
+            <div class="cd-block">
+              <div class="cd-num" id="cdSecs">00</div>
+              <div class="cd-unit">секунд</div>
+            </div>
+          </div>
+          <div class="countdown-date">10 МАЯ · 16:00</div>
+        </div>
       </div>
     </section>
 
@@ -1409,6 +1498,26 @@
 
       if (document.readyState === "complete" || document.readyState === "interactive") { hideLoaderSoon(); }
       else { document.addEventListener("DOMContentLoaded", hideLoaderSoon, { once: true }); }
+    })();
+    // COUNTDOWN — 10 мая 2026, 16:00 UTC+6 (Павлодар)
+    (function initCountdown() {
+      const TARGET = new Date("2026-05-10T10:00:00Z").getTime(); // 16:00 UTC+6 = 10:00 UTC
+      function pad(n){ return String(Math.max(0, n)).padStart(2, "0"); }
+      function tick(){
+        const diff = TARGET - Date.now();
+        if (diff <= 0){
+          ["cdDays","cdHours","cdMins","cdSecs"].forEach(id => document.getElementById(id).textContent = "00");
+          const lbl = document.querySelector(".countdown-label-top");
+          if (lbl) lbl.textContent = "время вышло";
+          return;
+        }
+        document.getElementById("cdDays").textContent  = pad(Math.floor(diff / 86400000));
+        document.getElementById("cdHours").textContent = pad(Math.floor((diff % 86400000) / 3600000));
+        document.getElementById("cdMins").textContent  = pad(Math.floor((diff % 3600000) / 60000));
+        document.getElementById("cdSecs").textContent  = pad(Math.floor((diff % 60000) / 1000));
+      }
+      tick();
+      setInterval(tick, 1000);
     })();
   </script>
 </body>
