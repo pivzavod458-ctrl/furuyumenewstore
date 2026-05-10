@@ -34,9 +34,12 @@
       background:var(--bg); color:var(--text); letter-spacing:var(--ls);
       -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
       text-rendering:geometricPrecision; overflow-x:hidden; touch-action:pan-y;
+      scroll-behavior:smooth; -webkit-overflow-scrolling:touch;
     }
     a{ color:inherit; text-decoration:none; }
     button{ font:inherit; letter-spacing:inherit; background:none; border:0; padding:0; color:inherit; }
+    /* Глобальная плавность для всех интерактивных элементов */
+    button, a, [role="button"]{ -webkit-tap-highlight-color:transparent; }
 
     /* Safe areas */
     .safe{ padding-left:max(16px,env(safe-area-inset-left)); padding-right:max(16px,env(safe-area-inset-right)); }
@@ -107,38 +110,70 @@
     }
     .brand img{ width:100%; height:100%; object-fit:contain; display:block; }
 
-    /* ─── HERO / COUNTDOWN ─── */
+    /* ─── NEW DROP SECTION ─── */
     .hero{ padding-top:10px; padding-bottom:6px; }
-    .hero-card{
+    .drop-wrap{
       width:min(520px,100%); margin:0 auto; border-radius:22px;
       overflow:hidden; border:1px solid rgba(0,0,0,.06); background:rgba(0,0,0,.02);
+      padding:18px 16px 20px;
     }
-    .hero-card img{ width:100%; height:auto; display:block; object-fit:cover; }
-    .countdown-inner{
-      padding:36px 20px 38px; display:flex; flex-direction:column; align-items:center;
+    .drop-label{
+      font-size:10px; font-weight:800; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.10em); color:var(--muted);
+      text-align:center; margin-bottom:16px;
     }
-    .countdown-label-top{
-      font-size:10px; font-weight:700; text-transform:uppercase;
-      letter-spacing:calc(var(--ls) + 0.06em); color:var(--muted); margin-bottom:24px;
+    .drop-track-outer{
+      position:relative; overflow:hidden; border-radius:16px;
     }
-    .countdown-blocks{ display:flex; align-items:center; }
-    .cd-block{ display:flex; flex-direction:column; align-items:center; min-width:64px; }
-    .cd-num{
-      font-size:clamp(38px,10vw,60px); font-weight:800; letter-spacing:-0.06em;
-      color:var(--text); line-height:1; font-variant-numeric:tabular-nums; font-feature-settings:"tnum";
+    .drop-track{
+      display:flex; overflow-x:auto; scroll-snap-type:x mandatory;
+      scrollbar-width:none; -ms-overflow-style:none;
+      -webkit-overflow-scrolling:touch; gap:0;
+      transition:scroll-behavior .4s;
     }
-    .cd-unit{
-      margin-top:8px; font-size:9px; font-weight:700; text-transform:uppercase;
-      letter-spacing:calc(var(--ls) + 0.06em); color:var(--muted);
+    .drop-track::-webkit-scrollbar{ display:none; }
+    .drop-slide{
+      flex:0 0 100%; scroll-snap-align:center;
+      display:flex; flex-direction:column; align-items:center;
+      padding:0 4px; cursor:pointer;
+      -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+      transition:opacity .22s ease, transform .22s ease;
     }
-    .cd-sep{
-      font-size:clamp(26px,6.5vw,44px); font-weight:800; color:rgba(0,0,0,.14);
-      margin:0 1px; line-height:1; margin-bottom:16px; align-self:flex-start; margin-top:5px;
+    .drop-slide:active{ opacity:.80; transform:scale(.99); }
+    .drop-img{
+      width:100%; max-width:220px; aspect-ratio:1/1;
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden; border-radius:16px; background:rgba(0,0,0,.02);
+      border:1px solid rgba(0,0,0,.05);
+      transition:transform .32s cubic-bezier(0.22,1,0.36,1);
     }
-    .countdown-date{
-      margin-top:24px; font-size:10px; font-weight:800; text-transform:uppercase;
-      letter-spacing:calc(var(--ls) + 0.08em); color:rgba(0,0,0,.22);
+    .drop-img img{
+      width:100%; height:100%; object-fit:contain; display:block;
+      pointer-events:none; user-select:none;
     }
+    .drop-name{
+      margin-top:12px; font-size:13px; font-weight:700; text-transform:uppercase;
+      letter-spacing:var(--ls); line-height:1.1; text-align:center;
+      display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+    }
+    .drop-badge{
+      margin-top:5px; font-size:10px; font-weight:700; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.02em); opacity:.60; text-align:center;
+    }
+    .drop-price-row{
+      margin-top:8px; display:flex; align-items:baseline; justify-content:center; gap:7px;
+      font-size:13px; font-weight:800; letter-spacing:calc(var(--ls) + 0.02em); text-transform:uppercase;
+    }
+    .drop-old{ font-size:11px; font-weight:700; color:#8b8b8b; text-decoration:line-through; }
+    .drop-dots{
+      display:flex; justify-content:center; gap:6px; margin-top:14px;
+    }
+    .drop-dot{
+      width:6px; height:6px; border-radius:50%; background:rgba(0,0,0,.18);
+      transition:background .28s ease, transform .28s ease;
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+    }
+    .drop-dot.active{ background:rgba(0,0,0,.80); transform:scale(1.22); }
 
     /* ─── FLOATBAR ─── */
     .floatbar{
@@ -393,7 +428,7 @@
     .grid{
       display:grid; grid-template-columns:1fr 1fr; gap:30px 18px;
       align-items:start; padding-top:4px;
-      transition:opacity .2s ease, transform .2s ease;
+      transition:opacity .28s cubic-bezier(0.22,1,0.36,1), transform .28s cubic-bezier(0.22,1,0.36,1);
     }
     .grid.fade-out{ opacity:0; transform:translateY(4px); }
     .grid-empty{
@@ -406,6 +441,7 @@
       width:100%; aspect-ratio:1/1; display:flex; align-items:center; justify-content:center;
       overflow:hidden; background:transparent; border-radius:18px;
       cursor:pointer; -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+      transition:transform .26s cubic-bezier(0.22,1,0.36,1), opacity .22s ease;
     }
     .product-photo{ width:100%; height:100%; object-fit:contain; display:block; -webkit-user-drag:none; user-select:none; pointer-events:none; }
     .name{
@@ -598,6 +634,14 @@
       :root{ --productbar-space:60px; }
       .cd-block{ min-width:52px; }
       .countdown-inner{ padding:28px 10px 30px; }
+    }
+    /* ─── PC NAV SPACING ─── */
+    /* Используется pointer:fine чтобы отличить ПК/мышь от тача */
+    @media (pointer:fine) and (min-width:431px){
+      /* --pc-nav-gap: расстояние между кнопками меню на ПК. Меняй здесь */
+      .topbar-right{ gap:18px; } /* ← вот это число — расстояние между кнопками на ПК */
+      .nav-item{ padding:6px 4px; }
+      .floatbar-right{ gap:18px; } /* ← и здесь для плавающего меню */
     }
   </style>
 </head>
@@ -803,34 +847,14 @@
       </div>
     </header>
 
-    <!-- COUNTDOWN -->
-    <section class="hero safe" aria-label="Обратный отсчёт">
-      <div class="hero-card">
-        <div class="countdown-inner">
-          <div class="countdown-label-top">до дропа осталось</div>
-          <div class="countdown-blocks">
-            <div class="cd-block">
-              <div class="cd-num" id="cdDays">00</div>
-              <div class="cd-unit">дней</div>
-            </div>
-            <div class="cd-sep">:</div>
-            <div class="cd-block">
-              <div class="cd-num" id="cdHours">00</div>
-              <div class="cd-unit">часов</div>
-            </div>
-            <div class="cd-sep">:</div>
-            <div class="cd-block">
-              <div class="cd-num" id="cdMins">00</div>
-              <div class="cd-unit">минут</div>
-            </div>
-            <div class="cd-sep">:</div>
-            <div class="cd-block">
-              <div class="cd-num" id="cdSecs">00</div>
-              <div class="cd-unit">секунд</div>
-            </div>
-          </div>
-          <div class="countdown-date">· 10 МАЯ ·</div>
+    <!-- NEW DROP -->
+    <section class="hero safe" aria-label="Новый дроп">
+      <div class="drop-wrap">
+        <div class="drop-label">· новый дроп ·</div>
+        <div class="drop-track-outer">
+          <div class="drop-track" id="dropTrack"></div>
         </div>
+        <div class="drop-dots" id="dropDots"></div>
       </div>
     </section>
 
@@ -873,6 +897,33 @@
     ];
 
     const PRODUCTS = [
+      {
+        id:"p13", slug:"adidas-adilenium",
+        name:"ADIDAS ADILENIUM TRACK JACKET",
+        badge:"ОСТАЛОСЬ 100 ШТУК", priceRub:6800, oldPriceRub:10000, dolyami:"Подробнее: Долями",
+        categories:["olymp"],
+        gallery:["p13_1.webp","p13_2.webp","p13_3.webp","p13_4.webp"],
+        articles:{ S:"ADA-S", M:"ADA-M", L:"ADA-L", XL:"ADA-XL" },
+        desc:["НОВИНКА - оформляется под заказ. 100 шт. БЕЗ РЕСТОКА!","Ткань: премиальный спортивный нейлон.","Все детали выполнены качественной вышивкой.","Стирать в холодной воде, деликатный режим."]
+      },
+      {
+        id:"p14", slug:"adidas-drabexist",
+        name:"ADIDAS DRABEXIST TRACK JACKET",
+        badge:"ОСТАЛОСЬ 100 ШТУК", priceRub:6800, oldPriceRub:10000, dolyami:"Подробнее: Долями",
+        categories:["olymp"],
+        gallery:["p14_1.webp","p14_2.webp","p14_3.webp","p14_4.webp"],
+        articles:{ S:"ADDR-S", M:"ADDR-M", L:"ADDR-L", XL:"ADDR-XL" },
+        desc:["НОВИНКА - оформляется под заказ. 100 шт. БЕЗ РЕСТОКА!","Ткань: 3ех нитка футер диагональ (100% хлопок).","Все детали выполнены качественной вышивкой.","Стирать в холодной воде, деликатный режим."]
+      },
+      {
+        id:"p15", slug:"adidas-firebirdts",
+        name:"ADIDAS FIREBIRD T-SHIRT",
+        badge:"ОСТАЛОСЬ 100 ШТУК", priceRub:3200, oldPriceRub:6700, dolyami:"Подробнее: Долями",
+        categories:["olymp"],
+        gallery:["p15_1.webp","p15_2.webp","p15_3.webp","p15_4.webp"],
+        articles:{ S:"ADFTS-S", M:"ADFTS-M", L:"ADFTS-L", XL:"ADFTS-XL" },
+        desc:["НОВИНКА - оформляется под заказ. 100 шт. БЕЗ РЕСТОКА!","Ткань: 2ух нитка футер диагональ (100% хлопок).","Все детали выполнены качественной вышивкой.","Стирать в холодной воде, деликатный режим."]
+      },
       {
         id:"p3", slug:"adidas-yohjiyamamoto-wt",
         name:"ADIDAS X YOHJI YAMAMOTO TRACK JACKET (WHITE-TURQ)",
@@ -1009,7 +1060,8 @@
       ).join("");
     }
     function filterProducts(catId){
-      return catId==="all" ? PRODUCTS : PRODUCTS.filter(p=>(p.categories||[]).includes(catId));
+      const regular = PRODUCTS.filter(p=>!DROP_IDS.includes(p.id));
+      return catId==="all" ? regular : regular.filter(p=>(p.categories||[]).includes(catId));
     }
     function renderProducts(catId){
       const items = filterProducts(catId);
@@ -1103,7 +1155,13 @@
       renderSearchResults(searchInput.value);
     }
     function closeSearch(){ searchDrawer.classList.remove("open"); searchDrawer.setAttribute("aria-hidden","true"); }
-    function toggleSearch(){ searchDrawer.classList.contains("open") ? closeSearch() : openSearch(); }
+    let _searchToggleBusy=false;
+    function toggleSearch(){
+      if(_searchToggleBusy) return;
+      _searchToggleBusy=true;
+      setTimeout(()=>_searchToggleBusy=false,200);
+      searchDrawer.classList.contains("open") ? closeSearch() : openSearch();
+    }
 
     /* ═══════════ CART ═══════════ */
     function cartKey(pid,size){ return `${pid}__${size}`; }
@@ -1304,23 +1362,66 @@
     }
     imageViewer.addEventListener("click", closeImageViewer);
 
-    /* ═══════════ COUNTDOWN ═══════════ */
-    (function initCountdown(){
-      const TARGET=new Date("2026-05-10T10:00:00Z").getTime();
-      function pad(n){ return String(Math.max(0,n)).padStart(2,"0"); }
-      function tick(){
-        const diff=TARGET-Date.now();
-        if(diff<=0){
-          ["cdDays","cdHours","cdMins","cdSecs"].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent="00"; });
-          const lbl=document.querySelector(".countdown-label-top"); if(lbl) lbl.textContent="время вышло";
-          return;
-        }
-        document.getElementById("cdDays").textContent  =pad(Math.floor(diff/86400000));
-        document.getElementById("cdHours").textContent =pad(Math.floor((diff%86400000)/3600000));
-        document.getElementById("cdMins").textContent  =pad(Math.floor((diff%3600000)/60000));
-        document.getElementById("cdSecs").textContent  =pad(Math.floor((diff%60000)/1000));
+    /* ═══════════ DROP SLIDER ═══════════ */
+    const DROP_IDS = ["p13","p14","p15"];
+    (function initDropSlider(){
+      const track = document.getElementById("dropTrack");
+      const dotsEl = document.getElementById("dropDots");
+      if(!track||!dotsEl) return;
+      const dropProducts = DROP_IDS.map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);
+      if(!dropProducts.length) return;
+
+      track.innerHTML = dropProducts.map(p=>`
+        <div class="drop-slide" role="button" tabindex="0" data-open-product="${p.id}" aria-label="Открыть ${p.name}">
+          <div class="drop-img">
+            <img src="${p.gallery[0]}" alt="${p.name}" loading="lazy">
+          </div>
+          <div class="drop-name">${p.name}</div>
+          <div class="drop-badge">${p.badge}</div>
+          <div class="drop-price-row">
+            <span>${fmtRub(p.priceRub)}</span>
+            <span class="drop-old">${fmtRub(p.oldPriceRub)}</span>
+          </div>
+        </div>`
+      ).join("");
+
+      dotsEl.innerHTML = dropProducts.map((_,i)=>
+        `<div class="drop-dot${i===0?" active":""}" data-drop-dot="${i}" role="button" tabindex="0" aria-label="Слайд ${i+1}"></div>`
+      ).join("");
+
+      let currentSlide = 0;
+      const dots = dotsEl.querySelectorAll(".drop-dot");
+
+      function goTo(idx){
+        const slides = track.querySelectorAll(".drop-slide");
+        if(idx<0||idx>=slides.length) return;
+        currentSlide = idx;
+        track.scrollTo({ left: track.offsetWidth * idx, behavior:"smooth" });
+        dots.forEach((d,i)=>d.classList.toggle("active",i===idx));
       }
-      tick(); setInterval(tick,1000);
+
+      // Dot click
+      dotsEl.addEventListener("click", e=>{
+        const dot=e.target.closest("[data-drop-dot]"); if(!dot) return;
+        goTo(parseInt(dot.dataset.dropDot,10));
+      });
+
+      // Scroll sync
+      let scrollTimer;
+      track.addEventListener("scroll", ()=>{
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(()=>{
+          const idx = Math.round(track.scrollLeft / (track.offsetWidth||1));
+          if(idx!==currentSlide){ currentSlide=idx; dots.forEach((d,i)=>d.classList.toggle("active",i===idx)); }
+        }, 60);
+      },{ passive:true });
+
+      // Auto-advance every 3.5s
+      let autoTimer = setInterval(()=>{
+        const slides=track.querySelectorAll(".drop-slide");
+        goTo((currentSlide+1)%slides.length);
+      }, 3500);
+      track.addEventListener("pointerdown", ()=>clearInterval(autoTimer),{ once:true });
     })();
 
     /* ═══════════ INIT ═══════════ */
