@@ -756,22 +756,14 @@
       padding:18px 18px 14px; overflow:hidden;
     }
     .reviews-head{
-      display:flex; align-items:center; justify-content:space-between;
+      display:flex; align-items:center; justify-content:center;
       margin-bottom:14px;
     }
     .reviews-head-title{
       font-size:13px; font-weight:900; text-transform:uppercase;
-      letter-spacing:var(--ls);
+      letter-spacing:var(--ls); text-align:center;
     }
-    .reviews-close-x{
-      width:28px; height:28px; display:flex; align-items:center; justify-content:center;
-      border-radius:999px; background:rgba(0,0,0,.06);
-      font-size:14px; font-weight:900; line-height:1;
-      cursor:pointer; -webkit-tap-highlight-color:transparent;
-      transition:opacity .18s ease, background .18s ease;
-      flex:0 0 auto; touch-action:manipulation; color:var(--text);
-    }
-    .reviews-close-x:active{ opacity:.6; background:rgba(0,0,0,.10); }
+    .reviews-close-x{ display:none; }
     .reviews-stats{
       display:flex; gap:10px; margin-bottom:14px;
     }
@@ -957,7 +949,7 @@
   <div id="fpOverlay" class="fp-overlay" aria-hidden="true">
     <div class="fp-sheet safe" role="dialog" aria-label="Забытое прошлое">
       <div class="fp-title">ЗАБЫТОЕ ПРОШЛОЕ</div>
-      <div class="fp-text">Мы открылись в мае 2024 на волне эстетики гулей и редана. Казалось, это навсегда, но мода беспощадна - сегодня мы уже другие.<br><br>Признаем, мы лоханулись с объемами, и теперь на складе грустят отличные вещи из той самой первой коллекции. Они качественные, удобные, но просто ждут тех, кому этот стиль все еще близок.<br><br>Если хотите поддержать наш проект и помочь нам освободить место для новых дропов - забирайте.</div>
+      <div class="fp-text">Мы открылись в мае 2024-го на волне эстетики гулей и редана. Казалось, это навсегда, но мода беспощадна — сегодня мы уже другие, и стиль бренда сильно изменился.<br><br>Признаем, мы лоханулись с объемами, и теперь на складе грустят отличные вещи из той самой первой коллекции. Они качественные, удобные, но просто ждут тех, кому этот стиль все еще близок.<br><br>Если хотите поддержать наш проект и помочь нам освободить место для новых дропов — забирайте.</div>
       <div class="fp-actions">
         <button id="fpGo" class="fp-btn fp-btn-go" type="button">ПЕРЕЙТИ</button>
         <button id="fpExit" class="fp-btn fp-btn-exit" type="button">ВЫЙТИ</button>
@@ -980,8 +972,8 @@
       </div>
       <div class="reviews-stats">
         <div class="reviews-stat">
-          <div class="reviews-stat-num">1000+</div>
-          <div class="reviews-stat-label">Отправленных<br>заказов</div>
+          <div class="reviews-stat-num">1283</div>
+          <div class="reviews-stat-label">Отправленных<br>заказа</div>
         </div>
         <div class="reviews-stat">
           <div class="reviews-stat-stars">
@@ -1000,7 +992,7 @@
         <a id="reviewsGoBtn" href="https://t.me/furuyumedelivery/9" target="_blank" rel="noopener" class="reviews-btn reviews-btn-go">ПЕРЕЙТИ</a>
         <button id="reviewsCloseBtn" class="reviews-btn reviews-btn-close" type="button">ЗАКРЫТЬ</button>
       </div>
-      <div class="reviews-note">Данные за последние 7 дней</div>
+      <div class="reviews-note">Данные за последние 365 дней</div>
     </div>
   </div>
 
@@ -1149,7 +1141,7 @@
       {
         id:"p13", slug:"adidas-adilenium",
         name:"ADIDAS ADILENIUM TRACK JACKET",
-        badge:"ОСТАЛОСЬ 100 ШТУК", priceRub:6800, oldPriceRub:10000, dolyami:"Подробнее: Долями",
+        badge:"ОСТАЛОСЬ 38 ШТУК", priceRub:6800, oldPriceRub:10000, dolyami:"Подробнее: Долями",
         categories:["olymp"],
         gallery:["p13_1.webp","p13_2.webp","p13_3.webp","p13_4.webp"],
         articles:{ S:"ADA-S", M:"ADA-M", L:"ADA-L", XL:"ADA-XL" },
@@ -1158,7 +1150,7 @@
       {
         id:"p14", slug:"adidas-drabexist",
         name:"ADIDAS DRABEXIST TRACK JACKET",
-        badge:"ОСТАЛОСЬ 100 ШТУК", priceRub:6800, oldPriceRub:10000, dolyami:"Подробнее: Долями",
+        badge:"РАСПРОДАНО", priceRub:6800, oldPriceRub:10000, dolyami:"Подробнее: Долями",
         categories:["olymp"],
         gallery:["p14_1.webp","p14_2.webp","p14_3.webp","p14_4.webp"],
         articles:{ S:"ADDR-S", M:"ADDR-M", L:"ADDR-L", XL:"ADDR-XL" },
@@ -1167,7 +1159,7 @@
       {
         id:"p15", slug:"adidas-firebirdts",
         name:"ADIDAS FIREBIRD T-SHIRT",
-        badge:"ОСТАЛОСЬ 100 ШТУК", priceRub:3200, oldPriceRub:6700, dolyami:"Подробнее: Долями",
+        badge:"ОСТАЛОСЬ 85 ШТУК", priceRub:3200, oldPriceRub:6700, dolyami:"Подробнее: Долями",
         categories:["olymp"],
         gallery:["p15_1.webp","p15_2.webp","p15_3.webp","p15_4.webp"],
         articles:{ S:"ADFTS-S", M:"ADFTS-M", L:"ADFTS-L", XL:"ADFTS-XL" },
@@ -1419,7 +1411,7 @@
             </div>
             <div class="result-mid">
               <div class="result-name">ЗАБЫТОЕ ПРОШЛОЕ</div>
-              <div class="result-meta">Секретная коллекция</div>
+              <div class="result-meta">Секретная коллекция · первый дроп</div>
             </div>
             <div class="result-price" style="font-size:10px;opacity:.6;">ПЕРЕЙТИ</div>
           </div>`;
