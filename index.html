@@ -616,6 +616,204 @@
       user-select:none; pointer-events:none; box-shadow:0 10px 40px rgba(0,0,0,.3);
     }
 
+    /* ─── ЗАБЫТОЕ ПРОШЛОЕ — кнопка в каталоге ─── */
+    .forgotten-btn-wrap{
+      width:100%; display:flex; justify-content:center;
+      padding:40px 0 1px;
+    }
+    .forgotten-btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:7px;
+      padding:11px 22px; border-radius:16px;
+      border:1px solid rgba(0,0,0,.10); background:rgba(0,0,0,.03);
+      font-size:11px; font-weight:800; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.04em); color:var(--text); opacity:.72;
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+      transition:opacity .22s ease, transform .22s ease, background .22s ease, border-color .22s ease;
+      user-select:none; touch-action:manipulation; white-space:nowrap;
+    }
+    .forgotten-btn:active{ opacity:.5; transform:scale(.97); background:rgba(0,0,0,.07); }
+    .forgotten-btn svg{ flex:0 0 auto; }
+
+    /* ─── ЗАБЫТОЕ ПРОШЛОЕ — модальное окно ─── */
+    .fp-overlay{
+      position:fixed; inset:0; z-index:6000;
+      display:none; align-items:flex-end; justify-content:center;
+      background:rgba(0,0,0,.22); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px);
+      opacity:0; transition:opacity .35s cubic-bezier(0.22,1,0.36,1);
+    }
+    .fp-overlay.show{ display:flex; }
+    .fp-overlay.visible{ opacity:1; }
+    .fp-sheet{
+      width:min(520px,100%); margin:0 auto; border-radius:22px 22px 0 0;
+      background:rgba(255,255,255,.97); border:1px solid rgba(0,0,0,.07);
+      box-shadow:0 -20px 60px rgba(0,0,0,.16);
+      padding:24px 20px calc(24px + env(safe-area-inset-bottom));
+      transform:translateY(100%);
+      transition:transform .44s cubic-bezier(0.22,1,0.36,1);
+      will-change:transform;
+    }
+    .fp-overlay.visible .fp-sheet{ transform:translateY(0); }
+    .fp-title{
+      font-size:13px; font-weight:900; text-transform:uppercase;
+      letter-spacing:var(--ls); text-align:center; margin-bottom:14px;
+      line-height:1.1;
+    }
+    .fp-text{
+      font-size:11px; font-weight:600; line-height:1.65;
+      letter-spacing:calc(var(--ls) + 0.01em); opacity:.78;
+      text-align:center; margin-bottom:20px;
+    }
+    .fp-actions{
+      display:flex; gap:10px;
+    }
+    .fp-btn{
+      flex:1 1 50%; padding:14px 14px; border-radius:16px;
+      font-size:12px; font-weight:700; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.02em);
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+      transition:transform .18s ease, opacity .18s ease;
+      user-select:none; white-space:nowrap; touch-action:manipulation;
+    }
+    .fp-btn:active{ transform:scale(.98); opacity:.82; }
+    .fp-btn-go{ background:#111; color:#fff; }
+    .fp-btn-exit{ background:rgba(0,0,0,.06); color:#111; border:1px solid rgba(0,0,0,.08); }
+
+    /* ─── ЗАБЫТОЕ ПРОШЛОЕ — каталог внутри ─── */
+    /* Кнопка выйти в главное меню (в каталоге) */
+    .fp-back-bar{
+      width:100%; display:flex; justify-content:center;
+      padding:36px 0 36px; margin-top:0;
+    }
+    .fp-back-catalog-btn{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:9px 14px; border-radius:14px;
+      border:1px solid rgba(0,0,0,.08); background:rgba(0,0,0,.03);
+      font-size:11px; font-weight:800; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.03em); color:var(--text); opacity:.80;
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+      transition:opacity .2s ease, transform .2s ease, background .2s ease;
+      user-select:none; touch-action:manipulation;
+    }
+    .fp-back-catalog-btn:active{ opacity:.55; transform:scale(.97); }
+    .fp-back-catalog-btn svg{ flex:0 0 auto; }
+
+    /* ─── p14 РАСПРОДАНО overlay ─── */
+    .card-sold-out-wrap{
+      position:relative; overflow:hidden; border-radius:inherit;
+    }
+    .sold-out-blur{
+      filter:blur(3px); opacity:.6;
+      transition:filter .2s ease, opacity .2s ease;
+    }
+    .sold-out-badge{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      pointer-events:none; z-index:2;
+    }
+    .sold-out-badge-inner{
+      background:rgba(255,255,255,.90); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+      border:1px solid rgba(0,0,0,.10); border-radius:12px;
+      padding:7px 16px;
+      font-size:12px; font-weight:900; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.04em); color:#111;
+    }
+
+    /* ─── ЗАБЫТОЕ ПРОШЛОЕ — лоадер-переход ─── */
+    .fp-loader{
+      position:fixed; inset:0; z-index:7000; background:#fff;
+      display:none; flex-direction:column; align-items:center; justify-content:center;
+      opacity:0; transition:opacity .32s cubic-bezier(0.22,1,0.36,1);
+    }
+    .fp-loader.show{ display:flex; }
+    .fp-loader.visible{ opacity:1; }
+    .fp-loader-spinner{
+      width:38px; height:38px; border-radius:999px;
+      border:2.5px solid #e8e8e8; border-top-color:#111;
+      animation:spin .85s linear infinite; margin-bottom:12px;
+    }
+    .fp-loader-title{
+      font-size:12px; font-weight:700; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.04em); opacity:.70;
+    }
+
+    /* ─── ОТЗЫВЫ — всплывающая карточка ─── */
+    .reviews-popup{
+      position:fixed; left:50%; bottom:calc(env(safe-area-inset-bottom) + 76px);
+      transform:translateX(-50%) translateY(20px);
+      width:min(340px, calc(100% - 32px));
+      z-index:3600; pointer-events:none;
+      opacity:0;
+      transition:opacity .38s cubic-bezier(0.22,1,0.36,1), transform .38s cubic-bezier(0.22,1,0.36,1);
+      will-change:opacity,transform;
+    }
+    .reviews-popup.show{
+      opacity:1; transform:translateX(-50%) translateY(0); pointer-events:auto;
+    }
+    .reviews-card{
+      background:rgba(255,255,255,.97); border:1px solid rgba(0,0,0,.08);
+      border-radius:20px; box-shadow:0 16px 48px rgba(0,0,0,.14);
+      backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+      padding:18px 18px 14px; overflow:hidden;
+    }
+    .reviews-head{
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:14px;
+    }
+    .reviews-head-title{
+      font-size:13px; font-weight:900; text-transform:uppercase;
+      letter-spacing:var(--ls);
+    }
+    .reviews-close-x{
+      width:28px; height:28px; display:flex; align-items:center; justify-content:center;
+      border-radius:999px; background:rgba(0,0,0,.06);
+      font-size:14px; font-weight:900; line-height:1;
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+      transition:opacity .18s ease, background .18s ease;
+      flex:0 0 auto; touch-action:manipulation; color:var(--text);
+    }
+    .reviews-close-x:active{ opacity:.6; background:rgba(0,0,0,.10); }
+    .reviews-stats{
+      display:flex; gap:10px; margin-bottom:14px;
+    }
+    .reviews-stat{
+      flex:1; background:rgba(0,0,0,.03); border:1px solid rgba(0,0,0,.05);
+      border-radius:14px; padding:12px 10px; text-align:center;
+    }
+    .reviews-stat-num{
+      font-size:20px; font-weight:900; letter-spacing:var(--ls); line-height:1;
+      margin-bottom:4px;
+    }
+    .reviews-stat-stars{
+      display:flex; justify-content:center; gap:2px; margin-bottom:4px;
+    }
+    .reviews-stat-stars svg{ width:14px; height:14px; }
+    .reviews-stat-label{
+      font-size:9px; font-weight:700; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.03em); opacity:.58; line-height:1.3;
+    }
+    .reviews-hint{
+      font-size:10px; font-weight:600; opacity:.55; text-align:center;
+      letter-spacing:calc(var(--ls) + 0.01em); margin-bottom:14px; line-height:1.45;
+    }
+    .reviews-note{
+      font-size:9px; font-weight:600; opacity:.38; text-align:center;
+      letter-spacing:calc(var(--ls) + 0.02em); margin-top:10px;
+      text-transform:uppercase;
+    }
+    .reviews-actions{ display:flex; gap:8px; }
+    .reviews-btn{
+      flex:1; padding:12px 10px; border-radius:14px;
+      font-size:11px; font-weight:800; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.02em);
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+      transition:transform .18s ease, opacity .18s ease;
+      user-select:none; touch-action:manipulation;
+      display:flex; align-items:center; justify-content:center; text-align:center;
+    }
+    .reviews-btn:active{ transform:scale(.98); opacity:.82; }
+    .reviews-btn-go{ background:#111; color:#fff; }
+    .reviews-btn-close{ background:rgba(0,0,0,.06); color:#111; border:1px solid rgba(0,0,0,.08); }
+
     /* ─── RESPONSIVE ─── */
     @media (max-width:430px){
       .topbar-right{ gap:1px; font-size:11px; }
@@ -742,8 +940,8 @@
         </div>
         <div class="floatbar-right">
           <button class="nav-item" type="button" data-action="search">ПОИСК</button>
-          <a class="nav-item" href="https://t.me/furuyume_online" target="_blank" rel="noopener">поддержка</a>
-          <a class="nav-item" href="https://t.me/furuyumedelivery/9" target="_blank" rel="noopener">отзывы</a>
+          <a class="nav-item" href="https://t.me/furuyume_online" target="_blank" rel="noopener">ПОДДЕРЖКА</a>
+          <button class="nav-item" type="button" data-action="reviews">ОТЗЫВЫ</button>
           <button class="nav-item" type="button" data-action="cart">КОРЗИНА</button>
         </div>
       </div>
@@ -753,6 +951,57 @@
   <!-- IMAGE VIEWER -->
   <div id="imageViewer" class="image-viewer" aria-hidden="true">
     <img id="viewerImg" src="" alt="">
+  </div>
+
+  <!-- ЗАБЫТОЕ ПРОШЛОЕ MODAL -->
+  <div id="fpOverlay" class="fp-overlay" aria-hidden="true">
+    <div class="fp-sheet safe" role="dialog" aria-label="Забытое прошлое">
+      <div class="fp-title">ЗАБЫТОЕ ПРОШЛОЕ</div>
+      <div class="fp-text">Мы открылись в мае 2024-го на волне эстетики гулей и редана. Казалось, это навсегда, но мода беспощадна — сегодня мы уже другие, и стиль бренда сильно изменился.<br><br>Признаем, мы лоханулись с объемами, и теперь на складе грустят отличные вещи из той самой первой коллекции. Они качественные, удобные, но просто ждут тех, кому этот стиль все еще близок.<br><br>Если хотите поддержать наш проект и помочь нам освободить место для новых дропов — забирайте.</div>
+      <div class="fp-actions">
+        <button id="fpGo" class="fp-btn fp-btn-go" type="button">ПЕРЕЙТИ</button>
+        <button id="fpExit" class="fp-btn fp-btn-exit" type="button">ВЫЙТИ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ЗАБЫТОЕ ПРОШЛОЕ LOADER -->
+  <div id="fpLoader" class="fp-loader" aria-hidden="true">
+    <div class="fp-loader-spinner" aria-hidden="true"></div>
+    <div class="fp-loader-title" id="fpLoaderTitle">Загрузка</div>
+  </div>
+
+  <!-- ОТЗЫВЫ POPUP -->
+  <div id="reviewsPopup" class="reviews-popup" aria-hidden="true" role="dialog" aria-label="Отзывы">
+    <div class="reviews-card">
+      <div class="reviews-head">
+        <div class="reviews-head-title">Отзывы</div>
+        <button class="reviews-close-x" id="reviewsCloseX" type="button" aria-label="Закрыть">✕</button>
+      </div>
+      <div class="reviews-stats">
+        <div class="reviews-stat">
+          <div class="reviews-stat-num">1000+</div>
+          <div class="reviews-stat-label">Отправленных<br>заказов</div>
+        </div>
+        <div class="reviews-stat">
+          <div class="reviews-stat-stars">
+            <svg viewBox="0 0 24 24" fill="#111"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#111"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#111"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="#111"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77" fill="#111" clip-path="inset(0 20% 0 0)"/></svg>
+          </div>
+          <div class="reviews-stat-num" style="font-size:16px;">4.8</div>
+          <div class="reviews-stat-label">346 оценок</div>
+        </div>
+      </div>
+      <div class="reviews-hint">Мы делаем всё, чтобы вы остались довольны своим заказом.<br>Оставить отзыв можно в нашей группе Telegram.</div>
+      <div class="reviews-actions">
+        <a id="reviewsGoBtn" href="https://t.me/furuyumedelivery/9" target="_blank" rel="noopener" class="reviews-btn reviews-btn-go">ПЕРЕЙТИ</a>
+        <button id="reviewsCloseBtn" class="reviews-btn reviews-btn-close" type="button">ЗАКРЫТЬ</button>
+      </div>
+      <div class="reviews-note">Данные за последние 7 дней</div>
+    </div>
   </div>
 
   <!-- PRODUCT VIEW -->
@@ -839,8 +1088,8 @@
           </div>
           <nav class="topbar-right" aria-label="Меню">
             <button class="nav-item" type="button" data-action="search">ПОИСК</button>
-            <a class="nav-item" href="https://t.me/furuyume_online" target="_blank" rel="noopener">поддержка</a>
-            <a class="nav-item" href="https://t.me/furuyumedelivery/9" target="_blank" rel="noopener">отзывы</a>
+            <a class="nav-item" href="https://t.me/furuyume_online" target="_blank" rel="noopener">ПОДДЕРЖКА</a>
+            <button class="nav-item" type="button" data-action="reviews">ОТЗЫВЫ</button>
             <button class="nav-item" type="button" data-action="cart">КОРЗИНА</button>
           </nav>
         </div>
@@ -989,6 +1238,11 @@
       }
     ];
 
+    /* ═══════════ PRODUCT SETS ═══════════ */
+    const DROP_IDS      = ["p13","p14","p15"];
+    const FORGOTTEN_IDS = ["p7","p8"];
+    const SOLD_OUT_IDS  = ["p14"];
+
     /* ═══════════ DOM ═══════════ */
     const loader        = document.getElementById("loader");
     const loaderHint    = document.getElementById("loaderHint");
@@ -1060,13 +1314,16 @@
       ).join("");
     }
     function filterProducts(catId){
-      const regular = PRODUCTS.filter(p=>!DROP_IDS.includes(p.id));
+      const regular = PRODUCTS.filter(p=>!DROP_IDS.includes(p.id) && !FORGOTTEN_IDS.includes(p.id) && !SOLD_OUT_IDS.includes(p.id));
       return catId==="all" ? regular : regular.filter(p=>(p.categories||[]).includes(catId));
     }
+    let _currentCatId = "all";
     function renderProducts(catId){
+      _currentCatId = catId;
       const items = filterProducts(catId);
       if(!items.length){
         grid.innerHTML = `<div class="grid-empty">каталог пустой</div>`;
+        renderForgottenBtn(catId);
         return;
       }
       grid.innerHTML = items.map(p=>`
@@ -1086,8 +1343,29 @@
           </button>
         </article>`
       ).join("");
+      renderForgottenBtn(catId);
+    }
+    function renderForgottenBtn(catId){
+      const existing = document.getElementById("forgottenBtnWrap");
+      if(existing) existing.remove();
+      if(catId !== "all") return;
+      const wrap = document.createElement("div");
+      wrap.id = "forgottenBtnWrap";
+      wrap.className = "forgotten-btn-wrap";
+      wrap.innerHTML = `
+        <button class="forgotten-btn" id="forgottenBtn" type="button" aria-label="Забытое прошлое">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+          </svg>
+          ЗАБЫТОЕ ПРОШЛОЕ
+        </button>`;
+      // Вставляем после grid, но до footer
+      const content = document.querySelector(".content.safe");
+      if(content) content.appendChild(wrap);
     }
     async function switchCategory(nextId){
+      // Если сейчас активен режим забытого прошлого — выходим через лоадер
+      if(_inForgottenMode){ await exitForgottenMode(); return; }
       grid.classList.add("fade-out");
       await sleep(160);
       renderProducts(nextId);
@@ -1131,7 +1409,27 @@
     function renderSearchResults(query){
       const q = (query||"").trim().toLowerCase();
       if(!q){ searchResults.innerHTML=`<div class="drawer-empty">начните ввод — появятся товары</div>`; return; }
+
+      // Особый поиск: "забытое прошлое"
+      if("забытое прошлое".includes(q) || q.includes("забытое") || q.includes("прошлое")){
+        searchResults.innerHTML = `
+          <div class="result fp-search-result" role="listitem" id="fpSearchResult" aria-label="Забытое прошлое">
+            <div class="result-img" style="background:rgba(0,0,0,.04);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            </div>
+            <div class="result-mid">
+              <div class="result-name">ЗАБЫТОЕ ПРОШЛОЕ</div>
+              <div class="result-meta">Секретная коллекция · первый дроп</div>
+            </div>
+            <div class="result-price" style="font-size:10px;opacity:.6;">ПЕРЕЙТИ</div>
+          </div>`;
+        document.getElementById("fpSearchResult")?.addEventListener("click", ()=>{ closeSearch(); openFpModal(); });
+        return;
+      }
+
+      const excluded = [...FORGOTTEN_IDS, ...SOLD_OUT_IDS];
       const found = PRODUCTS.filter(p=>
+        !excluded.includes(p.id) &&
         `${p.name} ${p.badge} ${fmtRub(p.priceRub)} ${p.id}`.toLowerCase().includes(q)
       ).slice(0,10);
       if(!found.length){ searchResults.innerHTML=`<div class="drawer-empty">ничего не найдено</div>`; return; }
@@ -1270,7 +1568,8 @@
     }
     function renderDesc(p){ pDescList.innerHTML=(p.desc||[]).map(x=>`<li>${x}</li>`).join(""); }
     function renderRelated(p){
-      const pick=PRODUCTS.filter(x=>x.id!==p.id).sort(()=>Math.random()-.5).slice(0,6);
+      const excluded = [...FORGOTTEN_IDS, ...SOLD_OUT_IDS];
+      const pick=PRODUCTS.filter(x=>x.id!==p.id && !excluded.includes(x.id)).sort(()=>Math.random()-.5).slice(0,6);
       relTrack.innerHTML=pick.map(x=>`
         <div class="rel-card" role="button" tabindex="0" data-open-product="${x.id}" aria-label="Открыть ${x.name}">
           <div class="rel-img"><img src="${x.gallery[0]}" alt="" loading="lazy"></div>
@@ -1292,6 +1591,7 @@
 
     async function openProduct(pid){
       if(isSwitchingProduct) return;
+      if(SOLD_OUT_IDS.includes(pid)) return; // нельзя открыть распроданный товар
       const p=byId(pid); if(!p) return;
       isSwitchingProduct=true;
       closeSearch();
@@ -1363,7 +1663,6 @@
     imageViewer.addEventListener("click", closeImageViewer);
 
     /* ═══════════ DROP SLIDER ═══════════ */
-    const DROP_IDS = ["p13","p14","p15"];
     (function initDropSlider(){
       const track = document.getElementById("dropTrack");
       const dotsEl = document.getElementById("dropDots");
@@ -1371,10 +1670,13 @@
       const dropProducts = DROP_IDS.map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);
       if(!dropProducts.length) return;
 
-      track.innerHTML = dropProducts.map(p=>`
-        <div class="drop-slide" role="button" tabindex="0" data-open-product="${p.id}" aria-label="Открыть ${p.name}">
-          <div class="drop-img">
-            <img src="${p.gallery[0]}" alt="${p.name}" loading="lazy">
+      track.innerHTML = dropProducts.map(p=>{
+        const isSoldOut = SOLD_OUT_IDS.includes(p.id);
+        return `
+        <div class="drop-slide${isSoldOut ? " sold-out-item" : ""}" ${!isSoldOut ? `role="button" tabindex="0" data-open-product="${p.id}" aria-label="Открыть ${p.name}"` : `aria-label="${p.name} — распродано"`} style="${isSoldOut ? "cursor:default;pointer-events:none;" : ""}">
+          <div class="drop-img" style="position:relative;overflow:hidden;">
+            <img src="${p.gallery[0]}" alt="${p.name}" loading="lazy"${isSoldOut ? ' style="filter:blur(3px);opacity:.55;"' : ""}>
+            ${isSoldOut ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;"><div style="background:rgba(255,255,255,.90);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:1px solid rgba(0,0,0,.10);border-radius:12px;padding:7px 18px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:-.03em;color:#111;">РАСПРОДАНО</div></div>` : ""}
           </div>
           <div class="drop-name">${p.name}</div>
           <div class="drop-badge">${p.badge}</div>
@@ -1382,8 +1684,8 @@
             <span>${fmtRub(p.priceRub)}</span>
             <span class="drop-old">${fmtRub(p.oldPriceRub)}</span>
           </div>
-        </div>`
-      ).join("");
+        </div>`;
+      }).join("");
 
       dotsEl.innerHTML = dropProducts.map((_,i)=>
         `<div class="drop-dot${i===0?" active":""}" data-drop-dot="${i}" role="button" tabindex="0" aria-label="Слайд ${i+1}"></div>`
@@ -1424,6 +1726,179 @@
       track.addEventListener("pointerdown", ()=>clearInterval(autoTimer),{ once:true });
     })();
 
+    /* ═══════════ ЗАБЫТОЕ ПРОШЛОЕ ═══════════ */
+    const fpOverlay = document.getElementById("fpOverlay");
+    const fpLoader  = document.getElementById("fpLoader");
+    const fpLoaderTitle = document.getElementById("fpLoaderTitle");
+    const fpGo      = document.getElementById("fpGo");
+    const fpExit    = document.getElementById("fpExit");
+    let _inForgottenMode = false;
+
+    function openFpModal(){
+      fpOverlay.classList.add("show");
+      fpOverlay.setAttribute("aria-hidden","false");
+      requestAnimationFrame(()=>fpOverlay.classList.add("visible"));
+    }
+    function closeFpModal(){
+      fpOverlay.classList.remove("visible");
+      fpOverlay.setAttribute("aria-hidden","true");
+      setTimeout(()=>fpOverlay.classList.remove("show"),380);
+    }
+
+    // Показать лоадер-переход — мгновенно накрывает экран, без fade-in мелькания
+    function showFpLoader(title){
+      fpLoaderTitle.textContent = title || "Загрузка";
+      fpLoader.classList.add("show");
+      fpLoader.classList.add("visible");
+      fpLoader.style.opacity = "1";          // inline-стиль перебивает transition — opacity сразу 1
+      fpLoader.setAttribute("aria-hidden","false");
+    }
+    function hideFpLoader(){
+      return new Promise(resolve=>{
+        fpLoader.style.opacity = "";         // снимаем inline, CSS transition берёт управление
+        fpLoader.classList.remove("visible"); // запускает transition opacity:1 → 0
+        fpLoader.setAttribute("aria-hidden","true");
+        setTimeout(()=>{ fpLoader.classList.remove("show"); resolve(); }, 360);
+      });
+    }
+
+    async function enterForgottenMode(){
+      closeFpModal();
+      await sleep(260);
+
+      // Показываем лоадер — мгновенно накрывает экран
+      showFpLoader("ЗАБЫТОЕ ПРОШЛОЕ");
+
+      _inForgottenMode = true;
+
+      // Мгновенно скрываем всё под лоадером (без анимации — лоадер перекрывает)
+      const heroSection = document.querySelector(".hero.safe");
+      const catSection  = document.querySelector(".categories.safe");
+      if(heroSection){ heroSection.style.display="none"; }
+      if(catSection){  catSection.style.display="none"; }
+
+      // Убираем кнопку "Забытое прошлое"
+      document.getElementById("forgottenBtnWrap")?.remove();
+
+      // Рендерим товары
+      const forgottenProducts = PRODUCTS.filter(p=>FORGOTTEN_IDS.includes(p.id));
+      grid.innerHTML = forgottenProducts.map(p=>`
+        <article class="card" data-product-id="${p.id}">
+          <div class="img" role="button" tabindex="0" data-open-product="${p.id}" aria-label="Открыть ${p.name}">
+            <img class="product-photo" src="${p.gallery[0]}" alt="${p.name}" loading="lazy">
+          </div>
+          <div class="name" role="button" tabindex="0" data-open-product="${p.id}">${p.name}</div>
+          <div class="desc">${p.badge}</div>
+          <div class="price-row">
+            <span>${fmtRub(p.priceRub)}</span>
+            <span class="old">${fmtRub(p.oldPriceRub)}</span>
+          </div>
+          <button class="dolyami" type="button" data-action="dolyami" aria-label="Узнать про Долями">
+            <img class="dolyami-icon" src="dolyami.webp" alt="" aria-hidden="true">
+            <span>${p.dolyami}</span>
+          </button>
+        </article>`
+      ).join("");
+
+      // Добавляем кнопку "Выйти в главное меню" СНИЗУ — после grid
+      const content = document.querySelector(".content.safe");
+      if(content && !document.getElementById("fpBackBar")){
+        const backBar = document.createElement("div");
+        backBar.className = "fp-back-bar";
+        backBar.id = "fpBackBar";
+        backBar.innerHTML = `
+          <button class="fp-back-catalog-btn" id="fpBackCatalogBtn" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6L9 12l6 6"/></svg>
+            ВЫЙТИ В ГЛАВНОЕ МЕНЮ
+          </button>`;
+        content.appendChild(backBar); // appendChild — добавляет В КОНЕЦ
+        document.getElementById("fpBackCatalogBtn")?.addEventListener("click", ()=>exitForgottenMode());
+      }
+
+      // Скроллим наверх под лоадером
+      window.scrollTo({ top:0, behavior:"instant" });
+      await sleep(500); // держим лоадер минимум 0.5с
+
+      // Скрываем лоадер — страница плавно появляется
+      await hideFpLoader();
+    }
+
+    async function exitForgottenMode(){
+      // Показываем лоадер — мгновенно накрывает экран
+      showFpLoader("Главный каталог");
+
+      _inForgottenMode = false;
+
+      // Убираем кнопку выхода
+      document.getElementById("fpBackBar")?.remove();
+
+      // Восстанавливаем секции мгновенно под лоадером
+      const heroSection = document.querySelector(".hero.safe");
+      const catSection  = document.querySelector(".categories.safe");
+      if(heroSection){ heroSection.style.display=""; heroSection.style.opacity=""; heroSection.style.transition=""; }
+      if(catSection){  catSection.style.display="";  catSection.style.opacity="";  catSection.style.transition=""; }
+
+      // Возвращаем активную категорию "all"
+      catWrap.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.cat==="all"));
+      renderProducts("all");
+
+      // Скроллим наверх
+      window.scrollTo({ top:0, behavior:"instant" });
+      await sleep(500);
+
+      await hideFpLoader();
+    }
+
+    fpGo?.addEventListener("click", enterForgottenMode);
+    fpExit?.addEventListener("click", closeFpModal);
+    fpOverlay?.addEventListener("click", e=>{ if(e.target===fpOverlay) closeFpModal(); });
+
+    document.addEventListener("click", e=>{
+      if(e.target.closest("#forgottenBtn")) openFpModal();
+    });
+
+    /* ═══════════ ОТЗЫВЫ POPUP ═══════════ */
+    const reviewsPopup    = document.getElementById("reviewsPopup");
+    const reviewsCloseX   = document.getElementById("reviewsCloseX");
+    const reviewsCloseBtn = document.getElementById("reviewsCloseBtn");
+    let _reviewsScrollTimer = null;
+    let _reviewsAutoClose = null;
+
+    function openReviews(){
+      reviewsPopup.classList.add("show");
+      reviewsPopup.setAttribute("aria-hidden","false");
+      // Авто-скрытие при скролле
+      _reviewsScrollTimer = null;
+      const onScroll = ()=>{
+        clearTimeout(_reviewsScrollTimer);
+        _reviewsScrollTimer = setTimeout(()=>{
+          closeReviews();
+          window.removeEventListener("scroll", onScroll, { passive:true });
+        }, 120);
+      };
+      window.addEventListener("scroll", onScroll, { passive:true });
+      // Запоминаем листенер чтобы убрать при закрытии
+      reviewsPopup._scrollHandler = onScroll;
+    }
+    function closeReviews(){
+      reviewsPopup.classList.remove("show");
+      reviewsPopup.setAttribute("aria-hidden","true");
+      if(reviewsPopup._scrollHandler){
+        window.removeEventListener("scroll", reviewsPopup._scrollHandler, { passive:true });
+        reviewsPopup._scrollHandler = null;
+      }
+    }
+
+    reviewsCloseX?.addEventListener("click",   closeReviews);
+    reviewsCloseBtn?.addEventListener("click",  closeReviews);
+    // Закрытие по клику вне карточки
+    document.addEventListener("pointerdown", e=>{
+      if(!reviewsPopup.classList.contains("show")) return;
+      if(!reviewsPopup.querySelector(".reviews-card").contains(e.target)) closeReviews();
+    });
+    // Закрытие по Escape
+    // (уже добавится в keydown ниже)
+
     /* ═══════════ INIT ═══════════ */
     (function init(){
       loadCart();
@@ -1449,6 +1924,7 @@
         if(act==="search")  toggleSearch();
         if(act==="cart")    openCart();
         if(act==="dolyami") openDolyami();
+        if(act==="reviews") openReviews();
       });
 
       searchClose.addEventListener("click", closeSearch);
@@ -1507,6 +1983,8 @@
         if(searchDrawer.classList.contains("open"))       closeSearch();
         if(cartModal.classList.contains("show"))          closeCart();
         if(dolyamiModal.classList.contains("show"))       closeDolyami();
+        if(reviewsPopup.classList.contains("show"))       closeReviews();
+        if(fpOverlay.classList.contains("show"))          closeFpModal();
         if(imageViewer.classList.contains("show"))        closeImageViewer();
         if(document.body.classList.contains("product-open")) closeProduct();
       });
