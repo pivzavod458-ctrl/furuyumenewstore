@@ -806,6 +806,213 @@
     .reviews-btn-go{ background:#111; color:#fff; }
     .reviews-btn-close{ background:rgba(0,0,0,.06); color:#111; border:1px solid rgba(0,0,0,.08); }
 
+    /* ─── NEWS CAROUSEL (заменяет НОВЫЙ ДРОП) ─── */
+    .news-wrap{
+      width:min(520px,100%); margin:0 auto; border-radius:22px;
+      overflow:hidden; border:1px solid rgba(0,0,0,.06); background:rgba(0,0,0,.02);
+      padding:14px 14px 14px;
+    }
+    .news-track-outer{
+      position:relative; overflow:hidden; border-radius:14px;
+    }
+    .news-track{
+      display:flex; overflow-x:auto; scroll-snap-type:x mandatory;
+      scrollbar-width:none; -ms-overflow-style:none;
+      -webkit-overflow-scrolling:touch; gap:0;
+      transition:scroll-behavior .4s;
+    }
+    .news-track::-webkit-scrollbar{ display:none; }
+    .news-slide{
+      flex:0 0 100%; scroll-snap-align:center;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      text-align:center; padding:8px 6px 4px;
+      min-height:148px; /* все 3 новости одинаковой высоты — flex автоматически выровняет */
+      -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+    }
+    .news-title{
+      font-size:17px; font-weight:900; text-transform:uppercase;
+      letter-spacing:var(--ls); line-height:1.1; margin-bottom:8px;
+    }
+    .news-text{
+      font-size:11px; font-weight:600; line-height:1.5;
+      letter-spacing:calc(var(--ls) + 0.01em); opacity:.78;
+      max-width:280px; margin:0 auto;
+    }
+    .news-text-clickable{
+      display:inline-block;
+      font-weight:800; color:var(--text); opacity:1;
+      border-bottom:1px dashed rgba(0,0,0,.30);
+      padding-bottom:1px;
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+      transition:opacity .18s ease, border-color .18s ease;
+      touch-action:manipulation;
+    }
+    .news-text-clickable:active{ opacity:.55; border-color:rgba(0,0,0,.55); }
+    .news-action-btn{
+      margin-top:10px;
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:8px 20px; border-radius:12px;
+      background:#111; color:#fff;
+      font-size:10px; font-weight:800; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.04em);
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+      transition:opacity .18s ease, transform .18s ease;
+      touch-action:manipulation; text-decoration:none;
+    }
+    .news-action-btn:active{ opacity:.82; transform:scale(.97); }
+    .news-dots{
+      display:flex; justify-content:center; gap:6px; margin-top:10px;
+    }
+    .news-dot{
+      width:6px; height:6px; border-radius:50%; background:rgba(0,0,0,.18);
+      transition:background .28s ease, transform .28s ease;
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+    }
+    .news-dot.active{ background:rgba(0,0,0,.80); transform:scale(1.22); }
+
+    /* ─── АКСЕССУАРЫ — кнопка-запуск ─── */
+    .acc-launcher{ padding-top:14px; padding-bottom:0; }
+    .acc-btn-wrap{
+      width:min(520px,100%); margin:0 auto;
+      display:flex; justify-content:center;
+    }
+    .acc-btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding:11px 22px; border-radius:16px;
+      border:1px solid rgba(0,0,0,.10); background:rgba(0,0,0,.03);
+      font-size:11px; font-weight:800; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.04em); color:var(--text);
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+      transition:opacity .22s ease, transform .22s ease, background .22s ease, border-color .22s ease;
+      user-select:none; touch-action:manipulation; white-space:nowrap;
+    }
+    .acc-btn:active{ opacity:.55; transform:scale(.97); background:rgba(0,0,0,.07); }
+    .acc-badge{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:3px 7px; border-radius:8px;
+      background:#111; color:#fff;
+      font-size:9px; font-weight:900; letter-spacing:calc(var(--ls) + 0.04em);
+      text-transform:uppercase; line-height:1;
+    }
+
+    /* ─── ИНТЕРЕС МОДАЛКА (Что вас интересует?) ─── */
+    .interest-grid{
+      display:flex; flex-wrap:wrap; justify-content:center; gap:8px;
+      padding:6px 2px 4px;
+    }
+    .interest-btn{
+      padding:9px 14px; border-radius:12px;
+      border:1px solid rgba(0,0,0,.10); background:rgba(0,0,0,.03);
+      font-size:11px; font-weight:800; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.03em); color:var(--text); opacity:.88;
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+      transition:opacity .18s ease, transform .18s ease, background .18s ease;
+      user-select:none; touch-action:manipulation; white-space:nowrap;
+    }
+    .interest-btn:active{ opacity:.6; transform:scale(.97); background:rgba(0,0,0,.07); }
+
+    /* ─── АКСЕССУАРЫ — кнопка "Выйти в главное меню" (как у Забытого прошлого) ─── */
+    .acc-back-bar{
+      width:100%; display:flex; justify-content:center;
+      padding:36px 0 36px; margin-top:0;
+    }
+    .acc-back-catalog-btn{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:9px 14px; border-radius:14px;
+      border:1px solid rgba(0,0,0,.08); background:rgba(0,0,0,.03);
+      font-size:11px; font-weight:800; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.03em); color:var(--text); opacity:.80;
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+      transition:opacity .2s ease, transform .2s ease, background .2s ease;
+      user-select:none; touch-action:manipulation;
+    }
+    .acc-back-catalog-btn:active{ opacity:.55; transform:scale(.97); }
+    .acc-back-catalog-btn svg{ flex:0 0 auto; }
+
+    /* ─── FIT BUTTONS (Как сидит на: М / Ж) ─── */
+    .pfit-wrap{
+      margin-top:18px;
+      display:flex; flex-direction:column; align-items:center; gap:9px;
+    }
+    .pfit-label{
+      font-size:11px; font-weight:700; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.04em); opacity:.60;
+    }
+    .pfit-buttons{
+      display:flex; justify-content:center; gap:10px; flex-wrap:wrap;
+    }
+    .pfit-btn{
+      min-width:64px; height:42px; padding:0 14px;
+      display:inline-flex; align-items:center; justify-content:center;
+      border-radius:14px; border:1px solid rgba(0,0,0,.10);
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+      transition:transform .18s ease, opacity .18s ease, background .18s ease, border-color .18s ease;
+      user-select:none; touch-action:manipulation;
+    }
+    .pfit-btn:active{ transform:scale(.97); opacity:.82; }
+    .pfit-btn-m{
+      background:rgba(55, 105, 175, 0.05);
+      border-color:rgba(55, 105, 175, 0.22);
+      color:#3a6aa0;
+    }
+    .pfit-btn-m:active{ background:rgba(55, 105, 175, 0.10); }
+    .pfit-btn-f{
+      background:rgba(200, 100, 145, 0.05);
+      border-color:rgba(200, 100, 145, 0.22);
+      color:#a8527a;
+    }
+    .pfit-btn-f:active{ background:rgba(200, 100, 145, 0.10); }
+    .pfit-btn-icon{ width:20px; height:20px; flex:0 0 auto; display:block; }
+
+    /* ─── FIT VIEWER MODAL ─── */
+    .fit-gallery-wrap{
+      position:relative; border-radius:18px; overflow:hidden;
+      border:1px solid rgba(0,0,0,.06); background:rgba(0,0,0,.02);
+    }
+    .fit-gallery-stage{
+      width:100%; aspect-ratio:1080/1350; max-height:60vh;
+      display:flex;
+      overflow-x:auto; scroll-snap-type:x mandatory;
+      scrollbar-width:none; -ms-overflow-style:none;
+      -webkit-overflow-scrolling:touch;
+    }
+    .fit-gallery-stage::-webkit-scrollbar{ display:none; }
+    .fit-gallery-stage img{
+      flex:0 0 100%; width:100%; height:100%; object-fit:contain;
+      scroll-snap-align:center; display:block;
+      user-select:none; pointer-events:none;
+    }
+    .fit-gallery-dots{
+      position:absolute; bottom:12px; left:0; right:0;
+      display:flex; justify-content:center; gap:6px;
+      pointer-events:none; z-index:10;
+    }
+    .fit-gallery-dots .dot{
+      width:6px; height:6px; border-radius:50%;
+      background:rgba(0,0,0,.2);
+      transition:background .25s ease, transform .25s ease;
+    }
+    .fit-gallery-dots .dot.active{ background:rgba(0,0,0,.8); transform:scale(1.2); }
+    /* Caption теперь кликабельный — ведёт на t.me/furuyume_online */
+    .fit-caption{
+      margin-top:14px; padding:11px 14px;
+      border-radius:14px; background:rgba(0,0,0,.04); border:1px solid rgba(0,0,0,.07);
+      font-size:12px; font-weight:700; line-height:1.45;
+      letter-spacing:calc(var(--ls) + 0.01em); opacity:.88;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      text-align:center;
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+      touch-action:manipulation;
+      transition:opacity .18s ease, background .18s ease, transform .18s ease, border-color .18s ease;
+    }
+    .fit-caption:active{
+      opacity:.65; background:rgba(0,0,0,.08); transform:scale(.985);
+      border-color:rgba(0,0,0,.12);
+    }
+    .fit-caption-arrow{
+      width:12px; height:12px; flex:0 0 auto; opacity:.5;
+    }
+
     /* ─── RESPONSIVE ─── */
     @media (max-width:430px){
       .topbar-right{ gap:1px; font-size:11px; }
@@ -824,6 +1031,12 @@
       :root{ --productbar-space:60px; }
       .cd-block{ min-width:52px; }
       .countdown-inner{ padding:28px 10px 30px; }
+      .news-title{ font-size:15px; }
+      .news-text{ font-size:10px; }
+      .news-slide{ min-height:140px; padding:6px 4px 2px; }
+      .acc-btn{ padding:10px 18px; font-size:10px; }
+      .acc-badge{ font-size:8px; padding:3px 6px; }
+      .interest-btn{ font-size:10px; padding:8px 12px; }
     }
     /* ─── PC NAV SPACING ─── */
     /* Используется pointer:fine чтобы отличить ПК/мышь от тача */
@@ -917,6 +1130,51 @@
           </div>
         </div>
         <a href="https://t.me/furuyume_online" target="_blank" rel="noopener" class="dolyami-support-btn">по вопросам — написать в поддержку</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTEREST MODAL (Что вас интересует?) -->
+  <div id="interestModal" class="modal" aria-hidden="true">
+    <div class="sheet safe bottom-safe" role="dialog" aria-label="Что вас интересует">
+      <div class="dolyami-modal-head">
+        <button id="interestClose" class="dolyami-back" type="button" aria-label="Закрыть">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M15 6L9 12l6 6" stroke="#8b8b8b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="dolyami-modal-title">Что вас интересует?</div>
+        <div class="dolyami-spacer"></div>
+      </div>
+      <div class="sheet-body" style="padding-top:18px; padding-bottom:6px;">
+        <div class="interest-grid" id="interestGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIT VIEWER MODAL (Как сидит на: М / Ж) -->
+  <div id="fitViewer" class="modal" aria-hidden="true">
+    <div class="sheet safe bottom-safe" role="dialog" aria-label="Как сидит">
+      <div class="dolyami-modal-head">
+        <button id="fitViewerClose" class="dolyami-back" type="button" aria-label="Закрыть">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M15 6L9 12l6 6" stroke="#8b8b8b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="dolyami-modal-title" id="fitViewerTitle">Как сидит</div>
+        <div class="dolyami-spacer"></div>
+      </div>
+      <div class="sheet-body" style="padding-top:14px;">
+        <div class="fit-gallery-wrap">
+          <div id="fitGalleryStage" class="fit-gallery-stage"></div>
+          <div id="fitGalleryDots" class="fit-gallery-dots" aria-hidden="true"></div>
+        </div>
+        <div id="fitGalleryCaption" class="fit-caption" role="button" tabindex="0" aria-label="Открыть чат для уточнения размерной сетки">
+          <span id="fitGalleryCaptionText"></span>
+          <svg class="fit-caption-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 6L15 12L9 18"/>
+          </svg>
+        </div>
       </div>
     </div>
   </div>
@@ -1030,6 +1288,10 @@
               </svg>
             </button>
           </div>
+          <div id="pFitWrap" class="pfit-wrap" style="display:none;">
+            <div class="pfit-label">Как сидит на:</div>
+            <div class="pfit-buttons" id="pFitButtons"></div>
+          </div>
           <div class="pdesc" aria-label="Описание">
             <h3>Описание</h3>
             <ul id="pDescList"></ul>
@@ -1088,14 +1350,23 @@
       </div>
     </header>
 
-    <!-- NEW DROP -->
-    <section class="hero safe" aria-label="Новый дроп">
-      <div class="drop-wrap">
-        <div class="drop-label">· новый дроп ·</div>
-        <div class="drop-track-outer">
-          <div class="drop-track" id="dropTrack"></div>
+    <!-- NEWS CAROUSEL (заменяет НОВЫЙ ДРОП) -->
+    <section class="hero safe" aria-label="Новости">
+      <div class="news-wrap">
+        <div class="news-track-outer">
+          <div class="news-track" id="newsTrack"></div>
         </div>
-        <div class="drop-dots" id="dropDots"></div>
+        <div class="news-dots" id="newsDots"></div>
+      </div>
+    </section>
+
+    <!-- АКСЕССУАРЫ — кнопка-запуск нового каталога -->
+    <section class="acc-launcher safe" id="accLauncher" aria-label="Аксессуары">
+      <div class="acc-btn-wrap">
+        <button class="acc-btn" id="accBtn" type="button" aria-label="Открыть каталог аксессуаров">
+          АКСЕССУАРЫ
+          <span class="acc-badge">НОВИНКА!</span>
+        </button>
       </div>
     </section>
 
@@ -1137,15 +1408,32 @@
       { id:"shoes",       label:"Обувь" }
     ];
 
+    /* Категории внутри каталога АКСЕССУАРЫ (отдельный режим, как Забытое прошлое) */
+    const ACCESSORY_CATEGORIES = [
+      { id:"all",     label:"Все" },
+      { id:"bags",    label:"Сумки" },
+      { id:"caps",    label:"Головные уборы" }
+    ];
+
     const PRODUCTS = [
       {
         id:"p13", slug:"adidas-adilenium",
         name:"ADIDAS ADILENIUM TRACK JACKET",
-        badge:"ОСТАЛОСЬ 38 ШТУК", priceRub:6800, oldPriceRub:10000, dolyami:"Подробнее: Долями",
+        badge:"ОСТАЛОСЬ 10 ШТУК", priceRub:6800, oldPriceRub:10000, dolyami:"Подробнее: Долями",
         categories:["olymp"],
         gallery:["p13_1.webp","p13_2.webp","p13_3.webp","p13_4.webp"],
         articles:{ S:"ADA-S", M:"ADA-M", L:"ADA-L", XL:"ADA-XL" },
-        desc:["НОВИНКА - оформляется под заказ. 100 шт. БЕЗ РЕСТОКА!","Ткань: премиальный спортивный нейлон.","Все детали выполнены качественной вышивкой.","Стирать в холодной воде, деликатный режим."]
+        desc:["НОВИНКА - оформляется под заказ. 100 шт. БЕЗ РЕСТОКА!","Ткань: премиальный спортивный нейлон.","Все детали выполнены качественной вышивкой.","Стирать в холодной воде, деликатный режим."],
+        fit:{
+          male:{
+            images:["p13_fit_m_1.webp","p13_fit_m_2.webp","p13_fit_m_3.webp","p13_fit_m_4.webp"],
+            text:"Размерная сетка: @furuyume_online"
+          },
+          female:{
+            images:["p13_fit_f_1.webp","p13_fit_f_2.webp","p13_fit_f_3.webp","p13_fit_f_4.webp"],
+            text:"Размерная сетка: @furuyume_online"
+          }
+        }
       },
       {
         id:"p14", slug:"adidas-drabexist",
@@ -1159,8 +1447,8 @@
       {
         id:"p15", slug:"adidas-firebirdts",
         name:"ADIDAS FIREBIRD T-SHIRT",
-        badge:"ОСТАЛОСЬ 85 ШТУК", priceRub:3200, oldPriceRub:6700, dolyami:"Подробнее: Долями",
-        categories:["olymp"],
+        badge:"РАСПРОДАНО", priceRub:3200, oldPriceRub:6700, dolyami:"Подробнее: Долями",
+        categories:["tees"],
         gallery:["p15_1.webp","p15_2.webp","p15_3.webp","p15_4.webp"],
         articles:{ S:"ADFTS-S", M:"ADFTS-M", L:"ADFTS-L", XL:"ADFTS-XL" },
         desc:["НОВИНКА - оформляется под заказ. 100 шт. БЕЗ РЕСТОКА!","Ткань: 2ух нитка футер диагональ (100% хлопок).","Все детали выполнены качественной вышивкой.","Стирать в холодной воде, деликатный режим."]
@@ -1172,21 +1460,37 @@
         categories:["olymp"],
         gallery:["p1_1.webp","p1_2.webp","p1_3.webp","p1_4.webp"],
         articles:{ S:"AYYWT-S", M:"AYYWT-M", L:"AYYWT-L", XL:"AYYWT-XL" },
-        desc:["РАСПРОДАЖА — Максимальная скидка. БЕЗ РЕСТОКА!","Ткань: 3ех нитка футер диагональ (90% хлопок и 10% п/э).","Все детали выполнены качественной вышивкой.","Стирать в холодной воде, деликатный режим."]
+        desc:["РАСПРОДАЖА — Максимальная скидка. БЕЗ РЕСТОКА!","Ткань: 3ех нитка футер диагональ (90% хлопок и 10% п/э).","Все детали выполнены качественной вышивкой.","Стирать в холодной воде, деликатный режим."],
+        fit:{
+          male:{
+            images:["p3_fit_m_1.webp","p3_fit_m_2.webp","p3_fit_m_3.webp","p3_fit_m_4.webp"],
+            text:"Размерная сетка: @furuyume_online"
+          },
+          female:{
+            images:["p3_fit_f_1.webp","p3_fit_f_2.webp","p3_fit_f_3.webp","p3_fit_f_4.webp"],
+            text:"Размерная сетка: @furuyume_online"
+          }
+        }
       },
       {
         id:"p9", slug:"anshirt",
         name:"ADIDAS X NIGO SHIRT JAPAN",
-        badge:"ПРЕДЗАКАЗ", priceRub:3200, oldPriceRub:4000, dolyami:"Подробнее: Долями",
+        badge:"ПРЕДЗАКАЗ", priceRub:5000, oldPriceRub:7000, dolyami:"Подробнее: Долями",
         categories:["tees"],
         gallery:["p9_1.webp","p9_2.webp","p9_3.webp","p9_4.webp"],
         articles:{ S:"ANS-S", M:"ANS-M", L:"ANS-L", XL:"ANS-XL" },
-        desc:["ЛУЧШАЯ РЕПЛИКА на рынке, оформляется под заказ.","Оверсайз крой, лёгкая посадка — идеально для весны и лета.","Все детали выполнены качественной вышивкой.","Стирать в холодной воде, деликатный режим."]
+        desc:["ЛУЧШАЯ РЕПЛИКА на рынке, оформляется под заказ.","Оверсайз крой, лёгкая посадка — идеально для весны и лета.","Все детали выполнены качественной вышивкой.","Стирать в холодной воде, деликатный режим."],
+        fit:{
+          female:{
+            images:["p9_fit_f_1.webp","p9_fit_f_2.webp","p9_fit_f_3.webp","p9_fit_f_4.webp"],
+            text:"Размерная сетка: @furuyume_online"
+          }
+        }
       },
       {
         id:"p1", slug:"adidas-sandking",
         name:"ADIDAS SANDKING ZIP-HOODIE VINTAGE",
-        badge:"ОСТАЛОСЬ 15 ШТУК", priceRub:7200, oldPriceRub:11000, dolyami:"Подробнее: Долями",
+        badge:"РАСПРОДАНО", priceRub:7200, oldPriceRub:11000, dolyami:"Подробнее: Долями",
         categories:["hoodies"],
         gallery:["p3_1.webp","p3_2.webp","p3_3.webp","p3_4.webp"],
         articles:{ S:"ASK-S", M:"ASK-M", L:"ASK-L", XL:"ASK-XL" },
@@ -1199,7 +1503,13 @@
         categories:["tees"],
         gallery:["p10_1.webp","p10_2.webp","p10_3.webp","p10_4.webp"],
         articles:{ S:"ASG-S", M:"ASG-M", L:"ASG-L", XL:"ASG-XL" },
-        desc:["ОРИГИНАЛ под заказ с Poizon (Шанхай).","Оверсайз крой, лёгкая посадка — идеально для весны и лета.","Все детали выполнены качественной вышивкой.","Стирать в холодной воде, деликатный режим."]
+        desc:["ОРИГИНАЛ под заказ с Poizon (Шанхай).","Оверсайз крой, лёгкая посадка — идеально для весны и лета.","Все детали выполнены качественной вышивкой.","Стирать в холодной воде, деликатный режим."],
+        fit:{
+          female:{
+            images:["p10_fit_f_1.webp","p10_fit_f_2.webp","p10_fit_f_3.webp","p10_fit_f_4.webp"],
+            text:"Размерная сетка: @furuyume_online"
+          }
+        }
       },
       {
         id:"p4", slug:"adidas-chinese",
@@ -1208,7 +1518,17 @@
         categories:["olymp"],
         gallery:["p4_1.webp","p4_2.webp","p4_3.webp","p4_4.webp"],
         articles:{ S:"AC-S", M:"AC-M", L:"AC-L", XL:"AC-XL" },
-        desc:["ОРИГИНАЛ под заказ с Poizon (Шанхай).","Оверсайз крой, лёгкая посадка — идеально для весны.","Все детали выполнены качественной вышивкой.","Доступно более 10 цветов, подробнее в ЛС."]
+        desc:["ОРИГИНАЛ под заказ с Poizon (Шанхай).","Оверсайз крой, лёгкая посадка — идеально для весны.","Все детали выполнены качественной вышивкой.","Доступно более 10 цветов, подробнее в ЛС."],
+        fit:{
+          male:{
+            images:["p4_fit_m_1.webp","p4_fit_m_2.webp","p4_fit_m_3.webp","p4_fit_m_4.webp"],
+            text:"Размерная сетка: @furuyume_online"
+          },
+          female:{
+            images:["p4_fit_f_1.webp","p4_fit_f_2.webp","p4_fit_f_3.webp","p4_fit_f_4.webp"],
+            text:"Размерная сетка: @furuyume_online"
+          }
+        }
       },
       {
         id:"p7", slug:"furhoodiew",
@@ -1231,9 +1551,40 @@
     ];
 
     /* ═══════════ PRODUCT SETS ═══════════ */
-    const DROP_IDS      = ["p13","p14","p15"];
+    /* p13, p14, p15 теперь обычные товары (раньше были в "НОВЫЙ ДРОП") */
     const FORGOTTEN_IDS = ["p7","p8"];
-    const SOLD_OUT_IDS  = ["p14"];
+    const SOLD_OUT_IDS  = ["p14","p15","p1"];
+    /* ID товаров-аксессуаров. Эти товары видны только в каталоге "АКСЕССУАРЫ".
+       Чтобы добавить аксессуар: добавь товар в PRODUCTS и его id сюда.
+       Поле categories у аксессуара может быть: "bags"/"caps"/"glasses"/"belts". */
+    const ACCESSORY_IDS = [];
+
+    /* ═══════════ NEWS DATA ═══════════ */
+    /* 3 новости для верхней карусели. Авто-листание 10с, отключается при ручном взаимодействии. */
+    const NEWS = [
+      {
+        id:"n1",
+        type:"assortment",
+        title:"ПОПОЛНИЛИ АССОРТИМЕНТ",
+        prefix:"Теперь не только олимпийки, но и:",
+        clickable:"кроссовки, штаны, футболки и аксессуары"
+      },
+      {
+        id:"n2",
+        type:"accessories",
+        title:"АКСЕССУАРЫ",
+        prefix:"Пополнили ассортимент аксессуарами,",
+        clickable:"нажмите и перейдите в каталог"
+      },
+      {
+        id:"n3",
+        type:"gift",
+        title:"ПОДАРОК ДЛЯ ТЕБЯ",
+        text:"Подпишись на нашу группу ВКонтакте и автоматически получи скидку −15%.",
+        btnText:"ПЕРЕЙТИ",
+        btnUrl:"https://vk.com/archwr"
+      }
+    ];
 
     /* ═══════════ DOM ═══════════ */
     const loader        = document.getElementById("loader");
@@ -1256,6 +1607,18 @@
     const cartOrderBtn  = document.getElementById("cartOrderBtn");
     const dolyamiModal  = document.getElementById("dolyamiModal");
     const dolyamiClose  = document.getElementById("dolyamiClose");
+    const interestModal = document.getElementById("interestModal");
+    const interestClose = document.getElementById("interestClose");
+    const interestGrid  = document.getElementById("interestGrid");
+    const accBtn        = document.getElementById("accBtn");
+    const fitViewer     = document.getElementById("fitViewer");
+    const fitViewerClose= document.getElementById("fitViewerClose");
+    const fitViewerTitle= document.getElementById("fitViewerTitle");
+    const fitGalleryStage   = document.getElementById("fitGalleryStage");
+    const fitGalleryDots    = document.getElementById("fitGalleryDots");
+    const fitGalleryCaption = document.getElementById("fitGalleryCaption");
+    const pFitWrap      = document.getElementById("pFitWrap");
+    const pFitButtons   = document.getElementById("pFitButtons");
     const productView   = document.getElementById("productView");
     const pwrap         = document.getElementById("pwrap");
     const productScroll = document.getElementById("productScroll");
@@ -1306,19 +1669,37 @@
       ).join("");
     }
     function filterProducts(catId){
-      const regular = PRODUCTS.filter(p=>!DROP_IDS.includes(p.id) && !FORGOTTEN_IDS.includes(p.id) && !SOLD_OUT_IDS.includes(p.id));
-      return catId==="all" ? regular : regular.filter(p=>(p.categories||[]).includes(catId));
+      // Обычные товары (не sold-out, не из забытого прошлого, не аксессуары)
+      const regular = PRODUCTS.filter(p=>!FORGOTTEN_IDS.includes(p.id) && !ACCESSORY_IDS.includes(p.id) && !SOLD_OUT_IDS.includes(p.id));
+      // Распроданные — показываем их тоже, но в конце
+      const soldOut = PRODUCTS.filter(p=>SOLD_OUT_IDS.includes(p.id) && !FORGOTTEN_IDS.includes(p.id) && !ACCESSORY_IDS.includes(p.id));
+      const inCat = arr => catId==="all" ? arr : arr.filter(p=>(p.categories||[]).includes(catId));
+      return [...inCat(regular), ...inCat(soldOut)];
     }
     let _currentCatId = "all";
-    function renderProducts(catId){
-      _currentCatId = catId;
-      const items = filterProducts(catId);
-      if(!items.length){
-        grid.innerHTML = `<div class="grid-empty">каталог пустой</div>`;
-        renderForgottenBtn(catId);
-        return;
+
+    /* Универсальный HTML карточки товара — поддерживает sold-out стиль (блюр + оверлей + не кликается) */
+    function productCardHTML(p){
+      const isSoldOut = SOLD_OUT_IDS.includes(p.id);
+      if(isSoldOut){
+        // Распроданные товары — без кнопки Долями (нет смысла оформлять рассрочку на распроданное)
+        return `
+        <article class="card sold-out-card" data-product-id="${p.id}">
+          <div class="img" aria-label="${p.name} — распродано" style="cursor:default; pointer-events:none; position:relative; overflow:hidden;">
+            <img class="product-photo" src="${p.gallery[0]}" alt="${p.name}" loading="lazy" style="filter:blur(3px); opacity:.55;">
+            <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:2;">
+              <div style="background:rgba(255,255,255,.92); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); border:1px solid rgba(0,0,0,.10); border-radius:11px; padding:6px 14px; font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:-.03em; color:#111;">РАСПРОДАНО</div>
+            </div>
+          </div>
+          <div class="name" style="cursor:default; opacity:.55;">${p.name}</div>
+          <div class="desc" style="opacity:.55;">${p.badge}</div>
+          <div class="price-row" style="opacity:.55;">
+            <span>${fmtRub(p.priceRub)}</span>
+            <span class="old">${fmtRub(p.oldPriceRub)}</span>
+          </div>
+        </article>`;
       }
-      grid.innerHTML = items.map(p=>`
+      return `
         <article class="card" data-product-id="${p.id}">
           <div class="img" role="button" tabindex="0" data-open-product="${p.id}" aria-label="Открыть ${p.name}">
             <img class="product-photo" src="${p.gallery[0]}" alt="${p.name}" loading="lazy">
@@ -1333,8 +1714,18 @@
             <img class="dolyami-icon" src="dolyami.webp" alt="" aria-hidden="true">
             <span>${p.dolyami}</span>
           </button>
-        </article>`
-      ).join("");
+        </article>`;
+    }
+
+    function renderProducts(catId){
+      _currentCatId = catId;
+      const items = filterProducts(catId);
+      if(!items.length){
+        grid.innerHTML = `<div class="grid-empty">каталог пустой</div>`;
+        renderForgottenBtn(catId);
+        return;
+      }
+      grid.innerHTML = items.map(productCardHTML).join("");
       renderForgottenBtn(catId);
     }
     function renderForgottenBtn(catId){
@@ -1419,6 +1810,24 @@
         return;
       }
 
+      // Особый поиск: "аксессуары"
+      if("аксессуары".includes(q) || q.includes("аксессуар")){
+        searchResults.innerHTML = `
+          <div class="result acc-search-result" role="listitem" id="accSearchResult" aria-label="Аксессуары">
+            <div class="result-img" style="background:rgba(0,0,0,.04);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+            </div>
+            <div class="result-mid">
+              <div class="result-name">АКСЕССУАРЫ</div>
+              <div class="result-meta">Новый каталог</div>
+            </div>
+            <div class="result-price" style="font-size:10px;opacity:.6;">ПЕРЕЙТИ</div>
+          </div>`;
+        document.getElementById("accSearchResult")?.addEventListener("click", ()=>{ closeSearch(); enterAccessoriesMode(); });
+        return;
+      }
+
+      // Обычный поиск — теперь включает аксессуары (по названиям). Исключены только забытое прошлое и распроданные.
       const excluded = [...FORGOTTEN_IDS, ...SOLD_OUT_IDS];
       const found = PRODUCTS.filter(p=>
         !excluded.includes(p.id) &&
@@ -1524,14 +1933,29 @@
     function openDolyami(){ openModal(dolyamiModal); }
     function closeDolyami(){ closeModal(dolyamiModal); }
 
+    /* ─── Юникод-жирный текст для Telegram ───
+       Telegram URL prefill не поддерживает markdown — текст передаётся как plain.
+       Используем Unicode-блок "Mathematical Sans-Serif Bold" — символы выглядят жирными
+       без форматирования. Работает для латиницы (A-Z, a-z) и цифр (0-9).
+       Кириллица не имеет Unicode bold аналога — остаётся обычной. */
+    function toBold(s){
+      return String(s).split('').map(c => {
+        const code = c.charCodeAt(0);
+        if(code >= 65 && code <= 90)  return String.fromCodePoint(0x1D5D4 + code - 65);   // A-Z → 𝗔-𝗭
+        if(code >= 97 && code <= 122) return String.fromCodePoint(0x1D5EE + code - 97);   // a-z → 𝗮-𝘇
+        if(code >= 48 && code <= 57)  return String.fromCodePoint(0x1D7EC + code - 48);   // 0-9 → 𝟬-𝟵
+        return c; // пробелы, знаки, кириллица — без изменений
+      }).join('');
+    }
+
     function buildOrderText(lines,totalRub){
-      return `Здравствуйте! Хочу оформить заказ:\n\n${lines.join("\n")}\n\nИтого: ${fmtRub(totalRub)}`;
+      return `Здравствуйте! Хочу оформить заказ:\n\n${lines.join("\n")}\n\nИтого: ${toBold(fmtRub(totalRub))}`;
     }
     function openTelegramOrder(text){ window.open(`https://t.me/furuyume_online?text=${encodeURIComponent(text)}`,"_blank","noopener"); }
     function orderFromCart(){
       const items=getCartItems(); if(!items.length) return;
       openTelegramOrder(buildOrderText(
-        items.map(it=>{ const p=byId(it.pid); return `${p.name}, ${it.size}, ${fmtRub(p.priceRub)} × ${it.qty} = ${fmtRub(p.priceRub*it.qty)}`; }),
+        items.map(it=>{ const p=byId(it.pid); return toBold(`${p.name}, ${it.size}, ${fmtRub(p.priceRub)} × ${it.qty} = ${fmtRub(p.priceRub*it.qty)}`); }),
         calcCartTotal()
       ));
     }
@@ -1560,7 +1984,7 @@
     }
     function renderDesc(p){ pDescList.innerHTML=(p.desc||[]).map(x=>`<li>${x}</li>`).join(""); }
     function renderRelated(p){
-      const excluded = [...FORGOTTEN_IDS, ...SOLD_OUT_IDS];
+      const excluded = [...FORGOTTEN_IDS, ...SOLD_OUT_IDS, ...ACCESSORY_IDS];
       const pick=PRODUCTS.filter(x=>x.id!==p.id && !excluded.includes(x.id)).sort(()=>Math.random()-.5).slice(0,6);
       relTrack.innerHTML=pick.map(x=>`
         <div class="rel-card" role="button" tabindex="0" data-open-product="${x.id}" aria-label="Открыть ${x.name}">
@@ -1575,10 +1999,44 @@
       const p=byId(currentProductId); if(!p) return;
       pSku.textContent=`Артикул: ${p.articles?.[currentSize]||`${p.id}-${currentSize}`}`;
     }
+
+    /* ─── Кнопки "Как сидит на:" М / Ж ─── */
+    function renderFitButtons(p){
+      if(!pFitWrap || !pFitButtons) return;
+      const hasMale   = !!(p.fit && p.fit.male);
+      const hasFemale = !!(p.fit && p.fit.female);
+      if(!hasMale && !hasFemale){
+        pFitWrap.style.display = "none";
+        pFitButtons.innerHTML  = "";
+        return;
+      }
+      // Иконки в стиле сайта: контурный SVG (Mars и Venus), без буквенной подписи — только символ
+      const maleBtn = hasMale ? `
+        <button class="pfit-btn pfit-btn-m" type="button" data-fit-gender="male" aria-label="Как сидит на мужчине">
+          <svg class="pfit-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="10" cy="14" r="5"/>
+            <path d="M14.5 9.5L20.5 3.5"/>
+            <path d="M20.5 3.5h-4.5"/>
+            <path d="M20.5 3.5v4.5"/>
+          </svg>
+        </button>` : "";
+      const femaleBtn = hasFemale ? `
+        <button class="pfit-btn pfit-btn-f" type="button" data-fit-gender="female" aria-label="Как сидит на женщине">
+          <svg class="pfit-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="9" r="5"/>
+            <path d="M12 14v8"/>
+            <path d="M9 19h6"/>
+          </svg>
+        </button>` : "";
+      pFitButtons.innerHTML  = maleBtn + femaleBtn;
+      pFitWrap.style.display = "";
+    }
+
     function updateProductDOM(p){
       currentProductId=p.id; currentSize="M";
       pTitle.textContent=p.name; pPrice.textContent=fmtRub(p.priceRub); pOld.textContent=fmtRub(p.oldPriceRub);
       renderGalleryScroll(p); renderSizes(p); renderDesc(p); renderRelated(p); updateSkuLine();
+      renderFitButtons(p);
     }
 
     async function openProduct(pid){
@@ -1618,7 +2076,7 @@
     }
     function orderNowCurrent(){
       const p=byId(currentProductId); if(!p) return;
-      openTelegramOrder(buildOrderText([`${p.name}, ${currentSize}, ${fmtRub(p.priceRub)}`],p.priceRub));
+      openTelegramOrder(buildOrderText([toBold(`${p.name}, ${currentSize}, ${fmtRub(p.priceRub)}`)],p.priceRub));
     }
 
     /* ═══════════ TOAST ═══════════ */
@@ -1654,68 +2112,169 @@
     }
     imageViewer.addEventListener("click", closeImageViewer);
 
-    /* ═══════════ DROP SLIDER ═══════════ */
-    (function initDropSlider(){
-      const track = document.getElementById("dropTrack");
-      const dotsEl = document.getElementById("dropDots");
-      if(!track||!dotsEl) return;
-      const dropProducts = DROP_IDS.map(id=>PRODUCTS.find(p=>p.id===id)).filter(Boolean);
-      if(!dropProducts.length) return;
+    /* ═══════════ FIT VIEWER (Как сидит на: М / Ж) ═══════════ */
+    const fitGalleryCaptionText = document.getElementById("fitGalleryCaptionText");
+    let _fitViewerProductId = null;
 
-      track.innerHTML = dropProducts.map(p=>{
-        const isSoldOut = SOLD_OUT_IDS.includes(p.id);
-        return `
-        <div class="drop-slide${isSoldOut ? " sold-out-item" : ""}" ${!isSoldOut ? `role="button" tabindex="0" data-open-product="${p.id}" aria-label="Открыть ${p.name}"` : `aria-label="${p.name} — распродано"`} style="${isSoldOut ? "cursor:default;pointer-events:none;" : ""}">
-          <div class="drop-img" style="position:relative;overflow:hidden;">
-            <img src="${p.gallery[0]}" alt="${p.name}" loading="lazy"${isSoldOut ? ' style="filter:blur(3px);opacity:.55;"' : ""}>
-            ${isSoldOut ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;"><div style="background:rgba(255,255,255,.90);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:1px solid rgba(0,0,0,.10);border-radius:12px;padding:7px 18px;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:-.03em;color:#111;">РАСПРОДАНО</div></div>` : ""}
-          </div>
-          <div class="drop-name">${p.name}</div>
-          <div class="drop-badge">${p.badge}</div>
-          <div class="drop-price-row">
-            <span>${fmtRub(p.priceRub)}</span>
-            <span class="drop-old">${fmtRub(p.oldPriceRub)}</span>
-          </div>
-        </div>`;
+    function openFitViewer(productId, gender){
+      const p = byId(productId);
+      if(!p || !p.fit) return;
+      const data = p.fit[gender];
+      if(!data) return;
+
+      _fitViewerProductId = productId;
+
+      // Заголовок
+      fitViewerTitle.textContent = gender === "male" ? "Как сидит на мужчине" : "Как сидит на женщине";
+
+      // Галерея — 4 фото со свайпом
+      const imgs = Array.isArray(data.images) ? data.images : [];
+      fitGalleryStage.innerHTML = imgs.map(src => `<img src="${src}" alt="${p.name}" loading="lazy">`).join("");
+      fitGalleryDots.innerHTML  = imgs.map((_,i) => `<div class="dot${i===0?' active':''}" data-fit-dot="${i}"></div>`).join("");
+
+      // Текст-подпись (редактируется в данных товара). Caption кликабелен → открывает Telegram.
+      if(fitGalleryCaptionText) fitGalleryCaptionText.textContent = data.text || "";
+
+      // Сброс позиции скролла
+      requestAnimationFrame(()=>{
+        fitGalleryStage.scrollLeft = 0;
+        fitGalleryDots.querySelectorAll(".dot").forEach((d,i)=>d.classList.toggle("active",i===0));
+      });
+
+      openModal(fitViewer);
+    }
+    function closeFitViewer(){ closeModal(fitViewer); }
+
+    // Клик по подписи — открывает Telegram с предзаполненным сообщением о размерной сетке
+    function askSizeChartInTelegram(){
+      const pid = _fitViewerProductId || currentProductId;
+      const p = byId(pid);
+      if(!p) return;
+      const text = `Здравствуйте! Хочу уточнить размерную сетку для:\n\n${toBold(p.name)}.`;
+      window.open(`https://t.me/furuyume_online?text=${encodeURIComponent(text)}`, "_blank", "noopener");
+    }
+    fitGalleryCaption?.addEventListener("click", askSizeChartInTelegram);
+    fitGalleryCaption?.addEventListener("keydown", e=>{
+      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); askSizeChartInTelegram(); }
+    });
+
+    // Синхронизация точек при свайпе галереи
+    fitGalleryStage.addEventListener("scroll", ()=>{
+      const w = fitGalleryStage.clientWidth; if(!w) return;
+      const idx = Math.round(fitGalleryStage.scrollLeft / w);
+      fitGalleryDots.querySelectorAll(".dot").forEach((d,i)=>d.classList.toggle("active",i===idx));
+    },{ passive:true });
+
+    // Клик по кнопкам М/Ж в карточке товара
+    pFitButtons?.addEventListener("click", e=>{
+      const btn = e.target.closest("[data-fit-gender]");
+      if(!btn) return;
+      const gender = btn.dataset.fitGender;
+      openFitViewer(currentProductId, gender);
+    });
+    fitViewerClose?.addEventListener("click", closeFitViewer);
+    fitViewer?.addEventListener("click", e=>{ if(e.target===fitViewer) closeFitViewer(); });
+
+    /* ═══════════ NEWS SLIDER (заменяет DROP) ═══════════ */
+    (function initNewsSlider(){
+      const track = document.getElementById("newsTrack");
+      const dotsEl = document.getElementById("newsDots");
+      if(!track||!dotsEl) return;
+      if(!NEWS.length) return;
+
+      track.innerHTML = NEWS.map(n=>{
+        if(n.type==="assortment"){
+          // Новость 1: клик по выделенной фразе открывает модалку "Что вас интересует?"
+          return `
+          <div class="news-slide" data-news-id="${n.id}" data-news-type="assortment">
+            <div class="news-title">${n.title}</div>
+            <div class="news-text">
+              ${n.prefix}<br>
+              <span class="news-text-clickable" data-news-action="interest" role="button" tabindex="0">${n.clickable}</span>.
+            </div>
+          </div>`;
+        }
+        if(n.type==="accessories"){
+          // Новость 2: клик по выделенной фразе ведёт в каталог Аксессуары
+          return `
+          <div class="news-slide" data-news-id="${n.id}" data-news-type="accessories">
+            <div class="news-title">${n.title}</div>
+            <div class="news-text">
+              ${n.prefix}<br>
+              <span class="news-text-clickable" data-news-action="go-accessories" role="button" tabindex="0">${n.clickable}</span>.
+            </div>
+          </div>`;
+        }
+        if(n.type==="gift"){
+          // Новость 3: кнопка ПЕРЕЙТИ открывает группу ВК
+          return `
+          <div class="news-slide" data-news-id="${n.id}" data-news-type="gift">
+            <div class="news-title">${n.title}</div>
+            <div class="news-text">${n.text}</div>
+            <a class="news-action-btn" data-news-action="go-vk" href="${n.btnUrl}" target="_blank" rel="noopener">${n.btnText}</a>
+          </div>`;
+        }
+        return "";
       }).join("");
 
-      dotsEl.innerHTML = dropProducts.map((_,i)=>
-        `<div class="drop-dot${i===0?" active":""}" data-drop-dot="${i}" role="button" tabindex="0" aria-label="Слайд ${i+1}"></div>`
+      dotsEl.innerHTML = NEWS.map((_,i)=>
+        `<div class="news-dot${i===0?" active":""}" data-news-dot="${i}" role="button" tabindex="0" aria-label="Слайд ${i+1}"></div>`
       ).join("");
 
       let currentSlide = 0;
-      const dots = dotsEl.querySelectorAll(".drop-dot");
+      let isAutoMode  = true;
+      let autoTimer   = null;
+      const dots = dotsEl.querySelectorAll(".news-dot");
 
       function goTo(idx){
-        const slides = track.querySelectorAll(".drop-slide");
+        const slides = track.querySelectorAll(".news-slide");
         if(idx<0||idx>=slides.length) return;
         currentSlide = idx;
         track.scrollTo({ left: track.offsetWidth * idx, behavior:"smooth" });
         dots.forEach((d,i)=>d.classList.toggle("active",i===idx));
       }
 
-      // Dot click
+      function stopAuto(){
+        if(autoTimer){ clearInterval(autoTimer); autoTimer = null; }
+        isAutoMode = false;
+      }
+
+      function startAuto(){
+        if(autoTimer) return;
+        autoTimer = setInterval(()=>{
+          if(!isAutoMode) return;
+          const slides = track.querySelectorAll(".news-slide");
+          if(!slides.length) return;
+          goTo((currentSlide+1) % slides.length);
+        }, 10000); // 10 секунд на новость
+      }
+
+      // Клик по точкам — переключение + остановка авто
       dotsEl.addEventListener("click", e=>{
-        const dot=e.target.closest("[data-drop-dot]"); if(!dot) return;
-        goTo(parseInt(dot.dataset.dropDot,10));
+        const dot = e.target.closest("[data-news-dot]");
+        if(!dot) return;
+        stopAuto();
+        goTo(parseInt(dot.dataset.newsDot,10));
       });
 
-      // Scroll sync
+      // Ручное листание (свайп) — останавливает авто навсегда
+      track.addEventListener("pointerdown", stopAuto, { once:true });
+
+      // Синхронизация при скролле (ручной свайп)
       let scrollTimer;
       track.addEventListener("scroll", ()=>{
         clearTimeout(scrollTimer);
         scrollTimer = setTimeout(()=>{
           const idx = Math.round(track.scrollLeft / (track.offsetWidth||1));
-          if(idx!==currentSlide){ currentSlide=idx; dots.forEach((d,i)=>d.classList.toggle("active",i===idx)); }
+          if(idx!==currentSlide){
+            currentSlide = idx;
+            dots.forEach((d,i)=>d.classList.toggle("active",i===idx));
+          }
         }, 60);
       },{ passive:true });
 
-      // Auto-advance every 3.5s
-      let autoTimer = setInterval(()=>{
-        const slides=track.querySelectorAll(".drop-slide");
-        goTo((currentSlide+1)%slides.length);
-      }, 3500);
-      track.addEventListener("pointerdown", ()=>clearInterval(autoTimer),{ once:true });
+      // Запускаем авто
+      startAuto();
     })();
 
     /* ═══════════ ЗАБЫТОЕ ПРОШЛОЕ ═══════════ */
@@ -1766,31 +2325,17 @@
       // Мгновенно скрываем всё под лоадером (без анимации — лоадер перекрывает)
       const heroSection = document.querySelector(".hero.safe");
       const catSection  = document.querySelector(".categories.safe");
+      const accLauncher = document.getElementById("accLauncher");
       if(heroSection){ heroSection.style.display="none"; }
       if(catSection){  catSection.style.display="none"; }
+      if(accLauncher){ accLauncher.style.display="none"; }
 
       // Убираем кнопку "Забытое прошлое"
       document.getElementById("forgottenBtnWrap")?.remove();
 
       // Рендерим товары
       const forgottenProducts = PRODUCTS.filter(p=>FORGOTTEN_IDS.includes(p.id));
-      grid.innerHTML = forgottenProducts.map(p=>`
-        <article class="card" data-product-id="${p.id}">
-          <div class="img" role="button" tabindex="0" data-open-product="${p.id}" aria-label="Открыть ${p.name}">
-            <img class="product-photo" src="${p.gallery[0]}" alt="${p.name}" loading="lazy">
-          </div>
-          <div class="name" role="button" tabindex="0" data-open-product="${p.id}">${p.name}</div>
-          <div class="desc">${p.badge}</div>
-          <div class="price-row">
-            <span>${fmtRub(p.priceRub)}</span>
-            <span class="old">${fmtRub(p.oldPriceRub)}</span>
-          </div>
-          <button class="dolyami" type="button" data-action="dolyami" aria-label="Узнать про Долями">
-            <img class="dolyami-icon" src="dolyami.webp" alt="" aria-hidden="true">
-            <span>${p.dolyami}</span>
-          </button>
-        </article>`
-      ).join("");
+      grid.innerHTML = forgottenProducts.map(productCardHTML).join("");
 
       // Добавляем кнопку "Выйти в главное меню" СНИЗУ — после grid
       const content = document.querySelector(".content.safe");
@@ -1827,8 +2372,10 @@
       // Восстанавливаем секции мгновенно под лоадером
       const heroSection = document.querySelector(".hero.safe");
       const catSection  = document.querySelector(".categories.safe");
+      const accLauncher = document.getElementById("accLauncher");
       if(heroSection){ heroSection.style.display=""; heroSection.style.opacity=""; heroSection.style.transition=""; }
       if(catSection){  catSection.style.display="";  catSection.style.opacity="";  catSection.style.transition=""; }
+      if(accLauncher){ accLauncher.style.display=""; }
 
       // Возвращаем активную категорию "all"
       catWrap.querySelectorAll(".cat").forEach(x=>x.classList.toggle("active",x.dataset.cat==="all"));
@@ -1847,6 +2394,183 @@
 
     document.addEventListener("click", e=>{
       if(e.target.closest("#forgottenBtn")) openFpModal();
+    });
+
+    /* ═══════════ АКСЕССУАРЫ (новый каталог) ═══════════ */
+    let _inAccessoriesMode = false;
+    let _currentAccCatId   = "all";
+
+    function filterAccessories(subCatId){
+      const accProducts = PRODUCTS.filter(p=>ACCESSORY_IDS.includes(p.id));
+      return subCatId === "all" ? accProducts : accProducts.filter(p=>(p.categories||[]).includes(subCatId));
+    }
+    function renderAccessoryCards(subCatId){
+      _currentAccCatId = subCatId;
+      const items = filterAccessories(subCatId);
+      if(!items.length){
+        grid.innerHTML = `<div class="grid-empty">каталог пустой</div>`;
+        return;
+      }
+      grid.innerHTML = items.map(productCardHTML).join("");
+    }
+    function renderAccessoryCategories(activeId){
+      catWrap.innerHTML = ACCESSORY_CATEGORIES.map(c =>
+        `<button class="cat ${c.id===activeId?"active":""}" data-cat="${c.id}" type="button">${c.label}</button>`
+      ).join("");
+    }
+    async function switchAccessoryCategory(nextId){
+      if(nextId === _currentAccCatId) return;
+      grid.classList.add("fade-out");
+      await sleep(160);
+      renderAccessoryCards(nextId);
+      await sleep(20);
+      grid.classList.remove("fade-out");
+    }
+
+    async function enterAccessoriesMode(){
+      if(_inAccessoriesMode) return;
+      // Если в забытом прошлом — сначала выходим
+      if(_inForgottenMode){ await exitForgottenMode(); }
+
+      showFpLoader("АКСЕССУАРЫ");
+      _inAccessoriesMode = true;
+      _currentAccCatId   = "all";
+
+      // Скрываем кнопку-запуск аксессуаров (мы уже внутри)
+      const accLauncher = document.getElementById("accLauncher");
+      if(accLauncher) accLauncher.style.display = "none";
+
+      // Убираем кнопку "Забытое прошлое" если она была
+      document.getElementById("forgottenBtnWrap")?.remove();
+
+      // Заменяем категории на аксессуарные подкатегории
+      renderAccessoryCategories("all");
+
+      // Рендерим товары аксессуаров
+      renderAccessoryCards("all");
+
+      // Добавляем кнопку "Выйти в главное меню" в конце контента
+      const content = document.querySelector(".content.safe");
+      if(content && !document.getElementById("accBackBar")){
+        const backBar = document.createElement("div");
+        backBar.className = "acc-back-bar";
+        backBar.id = "accBackBar";
+        backBar.innerHTML = `
+          <button class="acc-back-catalog-btn" id="accBackCatalogBtn" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6L9 12l6 6"/></svg>
+            ВЫЙТИ В ГЛАВНОЕ МЕНЮ
+          </button>`;
+        content.appendChild(backBar);
+        document.getElementById("accBackCatalogBtn")?.addEventListener("click", ()=>exitAccessoriesMode());
+      }
+
+      window.scrollTo({ top:0, behavior:"instant" });
+      await sleep(500);
+      await hideFpLoader();
+    }
+
+    async function exitAccessoriesMode(targetCatId){
+      if(!_inAccessoriesMode) return;
+      showFpLoader("Главный каталог");
+
+      _inAccessoriesMode = false;
+      _currentAccCatId   = "all";
+
+      // Убираем кнопку выхода
+      document.getElementById("accBackBar")?.remove();
+
+      // Показываем кнопку-запуск аксессуаров снова
+      const accLauncher = document.getElementById("accLauncher");
+      if(accLauncher) accLauncher.style.display = "";
+
+      // Восстанавливаем главные категории
+      const goCatId = targetCatId || "all";
+      renderCategories(goCatId);
+      renderProducts(goCatId);
+
+      window.scrollTo({ top:0, behavior:"instant" });
+      await sleep(500);
+      await hideFpLoader();
+    }
+
+    accBtn?.addEventListener("click", ()=>enterAccessoriesMode());
+
+    /* ═══════════ INTEREST MODAL (Что вас интересует?) ═══════════ */
+    /* Список категорий для выбора из новости 1.
+       НЕ включаем: "Все" и "Забытое прошлое" (по требованию). */
+    const INTEREST_CATS = [
+      { id:"olymp",       label:"ОЛИМПИЙКИ" },
+      { id:"bombers",     label:"БОМБЕРЫ" },
+      { id:"hoodies",     label:"ХУДИ" },
+      { id:"longsleeves", label:"ЛОНГСЛИВЫ" },
+      { id:"tees",        label:"ФУТБОЛКИ" },
+      { id:"pants",       label:"ШТАНЫ" },
+      { id:"shoes",       label:"ОБУВЬ" },
+      { id:"accessories", label:"АКСЕССУАРЫ" }
+    ];
+
+    function renderInterestGrid(){
+      if(!interestGrid) return;
+      interestGrid.innerHTML = INTEREST_CATS.map(c =>
+        `<button class="interest-btn" data-interest-cat="${c.id}" type="button">${c.label}</button>`
+      ).join("");
+    }
+    function openInterestModal(){ renderInterestGrid(); openModal(interestModal); }
+    function closeInterestModal(){ closeModal(interestModal); }
+
+    async function selectInterestCategory(catId){
+      closeInterestModal();
+      await sleep(400); // ждём анимацию закрытия
+
+      if(catId === "accessories"){
+        // Переход в каталог аксессуаров
+        await enterAccessoriesMode();
+        return;
+      }
+
+      // Обычная категория главного каталога
+      if(_inAccessoriesMode){
+        await exitAccessoriesMode(catId);
+      } else if(_inForgottenMode){
+        await exitForgottenMode();
+        renderCategories(catId);
+        grid.classList.add("fade-out");
+        await sleep(160);
+        renderProducts(catId);
+        await sleep(20);
+        grid.classList.remove("fade-out");
+      } else {
+        renderCategories(catId);
+        grid.classList.add("fade-out");
+        await sleep(160);
+        renderProducts(catId);
+        await sleep(20);
+        grid.classList.remove("fade-out");
+      }
+      window.scrollTo({ top:0, behavior:"smooth" });
+    }
+
+    interestClose?.addEventListener("click", closeInterestModal);
+    interestModal?.addEventListener("click", e=>{ if(e.target===interestModal) closeInterestModal(); });
+    interestGrid?.addEventListener("click", e=>{
+      const btn = e.target.closest("[data-interest-cat]");
+      if(!btn) return;
+      selectInterestCategory(btn.dataset.interestCat);
+    });
+
+    /* ═══════════ NEWS ACTIONS (клики внутри карусели новостей) ═══════════ */
+    document.addEventListener("click", e=>{
+      const el = e.target.closest("[data-news-action]");
+      if(!el) return;
+      const act = el.dataset.newsAction;
+      if(act === "interest"){
+        openInterestModal();
+      } else if(act === "go-accessories"){
+        // Открыть каталог аксессуаров
+        if(_inAccessoriesMode) return;
+        enterAccessoriesMode();
+      }
+      // act === "go-vk": <a target="_blank"> — браузер сам откроет ссылку
     });
 
     /* ═══════════ ОТЗЫВЫ POPUP ═══════════ */
@@ -1907,7 +2631,11 @@
         if(nextId===catWrap.querySelector(".cat.active")?.dataset.cat) return;
         catWrap.querySelectorAll(".cat").forEach(x=>x.classList.remove("active"));
         btn.classList.add("active");
-        await switchCategory(nextId);
+        if(_inAccessoriesMode){
+          await switchAccessoryCategory(nextId);
+        } else {
+          await switchCategory(nextId);
+        }
       });
 
       document.addEventListener("click", e=>{
@@ -1975,6 +2703,8 @@
         if(searchDrawer.classList.contains("open"))       closeSearch();
         if(cartModal.classList.contains("show"))          closeCart();
         if(dolyamiModal.classList.contains("show"))       closeDolyami();
+        if(interestModal.classList.contains("show"))      closeInterestModal();
+        if(fitViewer.classList.contains("show"))          closeFitViewer();
         if(reviewsPopup.classList.contains("show"))       closeReviews();
         if(fpOverlay.classList.contains("show"))          closeFpModal();
         if(imageViewer.classList.contains("show"))        closeImageViewer();
