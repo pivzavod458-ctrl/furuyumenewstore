@@ -294,6 +294,28 @@
     }
     .modal.visible .sheet{ transform:translateY(0); }
 
+    /* ─── ЦЕНТРИРОВАННАЯ МОДАЛКА (отзывы / выбор категории) ─── */
+    .modal.modal-center{ align-items:center; justify-content:center; padding:20px; }
+    .center-card{
+      width:min(380px,100%); margin:0 auto;
+      background:rgba(255,255,255,.97); border:1px solid rgba(0,0,0,.08);
+      border-radius:22px; box-shadow:0 24px 70px rgba(0,0,0,.18);
+      backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+      padding:20px 18px 18px;
+      transform:scale(.92) translateY(12px); opacity:0;
+      transition:transform .42s cubic-bezier(0.22,1,0.36,1), opacity .3s ease;
+      will-change:transform,opacity;
+    }
+    .modal.visible .center-card{ transform:scale(1) translateY(0); opacity:1; }
+    .center-card-head{
+      display:flex; align-items:center; justify-content:center;
+      margin-bottom:16px;
+    }
+    .center-card-title{
+      font-size:13px; font-weight:900; text-transform:uppercase;
+      letter-spacing:var(--ls); text-align:center;
+    }
+
     /* ─── CART MODAL ─── */
     .sheet-head{
       display:flex; align-items:center; gap:10px;
@@ -619,17 +641,17 @@
 
     /* ─── ЗАБЫТОЕ ПРОШЛОЕ — кнопка в каталоге ─── */
     .forgotten-btn{
-      display:inline-flex; align-items:center; justify-content:center; gap:7px;
-      padding:11px 20px; border-radius:16px;
+      display:inline-flex; align-items:center; justify-content:center; gap:6px;
+      padding:9px 14px; border-radius:14px;
       border:1px solid rgba(0,0,0,.10); background:rgba(0,0,0,.03);
-      font-size:11px; font-weight:800; text-transform:uppercase;
-      letter-spacing:calc(var(--ls) + 0.04em); color:var(--text); opacity:.78;
+      font-size:10px; font-weight:800; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.03em); color:var(--text); opacity:.78;
       cursor:pointer; -webkit-tap-highlight-color:transparent;
       transition:opacity .22s ease, transform .22s ease, background .22s ease, border-color .22s ease;
       user-select:none; touch-action:manipulation; white-space:nowrap;
     }
     .forgotten-btn:active{ opacity:.5; transform:scale(.97); background:rgba(0,0,0,.07); }
-    .forgotten-btn svg{ flex:0 0 auto; }
+    .forgotten-btn svg{ flex:0 0 auto; width:13px; height:13px; }
 
     /* ─── ЗАБЫТОЕ ПРОШЛОЕ — модальное окно ─── */
     .fp-overlay{
@@ -734,23 +756,8 @@
     }
 
     /* ─── ОТЗЫВЫ — всплывающая карточка ─── */
-    .reviews-popup{
-      position:fixed; left:50%; bottom:calc(env(safe-area-inset-bottom) + 76px);
-      transform:translateX(-50%) translateY(20px);
-      width:min(340px, calc(100% - 32px));
-      z-index:3600; pointer-events:none;
-      opacity:0;
-      transition:opacity .38s cubic-bezier(0.22,1,0.36,1), transform .38s cubic-bezier(0.22,1,0.36,1);
-      will-change:opacity,transform;
-    }
-    .reviews-popup.show{
-      opacity:1; transform:translateX(-50%) translateY(0); pointer-events:auto;
-    }
     .reviews-card{
-      background:rgba(255,255,255,.97); border:1px solid rgba(0,0,0,.08);
-      border-radius:20px; box-shadow:0 16px 48px rgba(0,0,0,.14);
-      backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
-      padding:18px 18px 14px; overflow:hidden;
+      overflow:hidden;
     }
     .reviews-head{
       display:flex; align-items:center; justify-content:center;
@@ -868,18 +875,18 @@
     .news-dot.active{ background:rgba(0,0,0,.80); transform:scale(1.22); }
 
     /* ─── АКСЕССУАРЫ + ЗАБЫТОЕ ПРОШЛОЕ — ряд кнопок-запуска ─── */
-    .acc-launcher{ padding-top:14px; padding-bottom:0; }
+    .acc-launcher{ padding-top:16px; padding-bottom:0; }
     .launcher-row{
       width:min(520px,100%); margin:0 auto;
       display:flex; justify-content:center; align-items:stretch;
-      gap:10px; flex-wrap:wrap;
+      gap:8px; flex-wrap:nowrap;
     }
     .acc-btn{
-      display:inline-flex; align-items:center; justify-content:center; gap:8px;
-      padding:11px 20px; border-radius:16px;
+      display:inline-flex; align-items:center; justify-content:center; gap:6px;
+      padding:9px 14px; border-radius:14px;
       border:1px solid rgba(0,0,0,.10); background:rgba(0,0,0,.03);
-      font-size:11px; font-weight:800; text-transform:uppercase;
-      letter-spacing:calc(var(--ls) + 0.04em); color:var(--text);
+      font-size:10px; font-weight:800; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.03em); color:var(--text);
       cursor:pointer; -webkit-tap-highlight-color:transparent;
       transition:opacity .22s ease, transform .22s ease, background .22s ease, border-color .22s ease;
       user-select:none; touch-action:manipulation; white-space:nowrap;
@@ -887,27 +894,23 @@
     .acc-btn:active{ opacity:.55; transform:scale(.97); background:rgba(0,0,0,.07); }
     .acc-badge{
       display:inline-flex; align-items:center; justify-content:center;
-      padding:3px 7px; border-radius:8px;
+      padding:2px 6px; border-radius:7px;
       background:#111; color:#fff;
-      font-size:9px; font-weight:900; letter-spacing:calc(var(--ls) + 0.04em);
+      font-size:8px; font-weight:900; letter-spacing:calc(var(--ls) + 0.03em);
       text-transform:uppercase; line-height:1;
     }
 
-    /* ─── ИНТЕРЕС МОДАЛКА (Что вас интересует?) ─── */
-    .interest-grid{
-      display:flex; flex-wrap:wrap; justify-content:center; gap:8px;
-      padding:6px 2px 4px;
+    /* ─── ИНТЕРЕС МОДАЛКА (Что вас интересует?) — табы как в каталоге ─── */
+    .interest-card{ width:min(400px,100%); }
+    .interest-cats{
+      display:flex; flex-wrap:wrap; justify-content:center; align-items:center;
+      gap:8px;
     }
-    .interest-btn{
-      padding:9px 14px; border-radius:12px;
-      border:1px solid rgba(0,0,0,.10); background:rgba(0,0,0,.03);
-      font-size:11px; font-weight:800; text-transform:uppercase;
-      letter-spacing:calc(var(--ls) + 0.03em); color:var(--text); opacity:.88;
-      cursor:pointer; -webkit-tap-highlight-color:transparent;
-      transition:opacity .18s ease, transform .18s ease, background .18s ease;
-      user-select:none; touch-action:manipulation; white-space:nowrap;
+    .interest-cats .cat{
+      font-weight:700; font-size:10px; padding:7px 12px; border-radius:11px;
+      background:rgba(0,0,0,.04); opacity:.9; white-space:nowrap;
     }
-    .interest-btn:active{ opacity:.6; transform:scale(.97); background:rgba(0,0,0,.07); }
+    .interest-cats .cat:active{ transform:scale(.96); opacity:.6; background:rgba(0,0,0,.09); }
 
     /* ─── АКСЕССУАРЫ — кнопка "Выйти в главное меню" (как у Забытого прошлого) ─── */
     .acc-back-bar{
@@ -1030,11 +1033,11 @@
       .news-title{ font-size:15px; }
       .news-text{ font-size:10px; }
       .news-slide{ min-height:140px; padding:6px 4px 2px; }
-      .acc-btn{ padding:10px 16px; font-size:10px; }
-      .acc-badge{ font-size:8px; padding:3px 6px; }
-      .forgotten-btn{ padding:10px 16px; font-size:10px; }
-      .launcher-row{ gap:8px; }
-      .interest-btn{ font-size:10px; padding:8px 12px; }
+      .acc-btn{ padding:8px 10px; font-size:9px; gap:5px; }
+      .acc-badge{ font-size:7px; padding:2px 4px; }
+      .forgotten-btn{ padding:8px 10px; font-size:9px; gap:5px; }
+      .forgotten-btn svg{ width:12px; height:12px; }
+      .launcher-row{ gap:6px; }
     }
     /* ─── PC NAV SPACING ─── */
     /* Используется pointer:fine чтобы отличить ПК/мышь от тача */
@@ -1133,20 +1136,12 @@
   </div>
 
   <!-- INTEREST MODAL (Что вас интересует?) -->
-  <div id="interestModal" class="modal" aria-hidden="true">
-    <div class="sheet safe bottom-safe" role="dialog" aria-label="Что вас интересует">
-      <div class="dolyami-modal-head">
-        <button id="interestClose" class="dolyami-back" type="button" aria-label="Закрыть">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M15 6L9 12l6 6" stroke="#8b8b8b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-        <div class="dolyami-modal-title">Что вас интересует?</div>
-        <div class="dolyami-spacer"></div>
+  <div id="interestModal" class="modal modal-center" aria-hidden="true">
+    <div class="center-card interest-card" role="dialog" aria-label="Что вас интересует">
+      <div class="center-card-head">
+        <div class="center-card-title">Что вас интересует?</div>
       </div>
-      <div class="sheet-body" style="padding-top:18px; padding-bottom:6px;">
-        <div class="interest-grid" id="interestGrid"></div>
-      </div>
+      <div class="interest-cats" id="interestGrid"></div>
     </div>
   </div>
 
@@ -1217,8 +1212,8 @@
   </div>
 
   <!-- ОТЗЫВЫ POPUP -->
-  <div id="reviewsPopup" class="reviews-popup" aria-hidden="true" role="dialog" aria-label="Отзывы">
-    <div class="reviews-card">
+  <div id="reviewsPopup" class="modal modal-center" aria-hidden="true" role="dialog" aria-label="Отзывы">
+    <div class="reviews-card center-card">
       <div class="reviews-head">
         <div class="reviews-head-title">Отзывы</div>
         <button class="reviews-close-x" id="reviewsCloseX" type="button" aria-label="Закрыть">✕</button>
@@ -1638,7 +1633,6 @@
     const dolyamiModal  = document.getElementById("dolyamiModal");
     const dolyamiClose  = document.getElementById("dolyamiClose");
     const interestModal = document.getElementById("interestModal");
-    const interestClose = document.getElementById("interestClose");
     const interestGrid  = document.getElementById("interestGrid");
     const accBtn        = document.getElementById("accBtn");
     const fitViewer     = document.getElementById("fitViewer");
@@ -1731,7 +1725,7 @@
     function productCardHTML(p){
       const isSoldOut = SOLD_OUT_IDS.includes(p.id);
       if(isSoldOut){
-        // Распроданные товары — без кнопки Долями (нет смысла оформлять рассрочку на распроданное)
+        // Распроданные товары — без кнопки Долями, без описания, без цены/старой цены
         return `
         <article class="card sold-out-card" data-product-id="${p.id}">
           <div class="img" aria-label="${p.name} — распродано" style="cursor:default; pointer-events:none; position:relative; overflow:hidden;">
@@ -1741,11 +1735,6 @@
             </div>
           </div>
           <div class="name" style="cursor:default; opacity:.55;">${p.name}</div>
-          <div class="desc" style="opacity:.55;">${p.badge}</div>
-          <div class="price-row" style="opacity:.55;">
-            <span>${fmtRub(p.priceRub)}</span>
-            <span class="old">${fmtRub(p.oldPriceRub)}</span>
-          </div>
         </article>`;
       }
       return `
@@ -2555,8 +2544,9 @@
 
     function renderInterestGrid(){
       if(!interestGrid) return;
+      // Одним потоком с переносом по центру — раскладка всегда заполняется аккуратно
       interestGrid.innerHTML = INTEREST_CATS.map(c =>
-        `<button class="interest-btn" data-interest-cat="${c.id}" type="button">${c.label}</button>`
+        `<button class="cat" data-interest-cat="${c.id}" type="button">${c.label}</button>`
       ).join("");
     }
     function openInterestModal(){ renderInterestGrid(); openModal(interestModal); }
@@ -2594,7 +2584,6 @@
       window.scrollTo({ top:0, behavior:"smooth" });
     }
 
-    interestClose?.addEventListener("click", closeInterestModal);
     interestModal?.addEventListener("click", e=>{ if(e.target===interestModal) closeInterestModal(); });
     interestGrid?.addEventListener("click", e=>{
       const btn = e.target.closest("[data-interest-cat]");
@@ -2621,41 +2610,14 @@
     const reviewsPopup    = document.getElementById("reviewsPopup");
     const reviewsCloseX   = document.getElementById("reviewsCloseX");
     const reviewsCloseBtn = document.getElementById("reviewsCloseBtn");
-    let _reviewsScrollTimer = null;
-    let _reviewsAutoClose = null;
 
-    function openReviews(){
-      reviewsPopup.classList.add("show");
-      reviewsPopup.setAttribute("aria-hidden","false");
-      // Авто-скрытие при скролле
-      _reviewsScrollTimer = null;
-      const onScroll = ()=>{
-        clearTimeout(_reviewsScrollTimer);
-        _reviewsScrollTimer = setTimeout(()=>{
-          closeReviews();
-          window.removeEventListener("scroll", onScroll, { passive:true });
-        }, 120);
-      };
-      window.addEventListener("scroll", onScroll, { passive:true });
-      // Запоминаем листенер чтобы убрать при закрытии
-      reviewsPopup._scrollHandler = onScroll;
-    }
-    function closeReviews(){
-      reviewsPopup.classList.remove("show");
-      reviewsPopup.setAttribute("aria-hidden","true");
-      if(reviewsPopup._scrollHandler){
-        window.removeEventListener("scroll", reviewsPopup._scrollHandler, { passive:true });
-        reviewsPopup._scrollHandler = null;
-      }
-    }
+    function openReviews(){ openModal(reviewsPopup); }
+    function closeReviews(){ closeModal(reviewsPopup); }
 
     reviewsCloseX?.addEventListener("click",   closeReviews);
     reviewsCloseBtn?.addEventListener("click",  closeReviews);
-    // Закрытие по клику вне карточки
-    document.addEventListener("pointerdown", e=>{
-      if(!reviewsPopup.classList.contains("show")) return;
-      if(!reviewsPopup.querySelector(".reviews-card").contains(e.target)) closeReviews();
-    });
+    // Закрытие по клику вне карточки (по затемнённому фону)
+    reviewsPopup?.addEventListener("click", e=>{ if(e.target===reviewsPopup) closeReviews(); });
     // Закрытие по Escape
     // (уже добавится в keydown ниже)
 
