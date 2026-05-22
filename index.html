@@ -412,7 +412,8 @@
 
     /* ─── CATEGORIES ─── */
     .categories{ padding-top:12px; padding-bottom:18px; }
-    .cat-wrap{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px 16px; padding-top:6px; }
+    .cat-wrap{ display:flex; flex-direction:column; align-items:center; gap:9px; padding-top:6px; }
+    .cat-row{ display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:8px 12px; max-width:100%; }
     .cat{
       font-weight:600; font-size:10px; text-transform:uppercase; opacity:.86;
       cursor:pointer; padding:7px 12px; border-radius:10px;
@@ -539,8 +540,8 @@
     .pprice{ margin-top:14px; display:flex; align-items:baseline; justify-content:center; gap:10px; font-size:16px; font-weight:700; text-transform:uppercase; letter-spacing:calc(var(--ls) + 0.02em); }
     .pprice .pold{ font-size:13px; font-weight:600; color:#8b8b8b; text-decoration:line-through; letter-spacing:calc(var(--ls) + 0.03em); }
 
-    .psizes-wrap{ margin-top:14px; display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap; }
-    .psizes{ display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap; }
+    .psizes-wrap{ margin-top:14px; display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:nowrap; }
+    .psizes{ display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap; max-width:232px; }
     .sizebtn{
       min-width:46px; height:40px; padding:0 12px; display:inline-flex; align-items:center; justify-content:center;
       border-radius:14px; border:1px solid rgba(0,0,0,.10); background:rgba(0,0,0,.02);
@@ -617,16 +618,12 @@
     }
 
     /* ─── ЗАБЫТОЕ ПРОШЛОЕ — кнопка в каталоге ─── */
-    .forgotten-btn-wrap{
-      width:100%; display:flex; justify-content:center;
-      padding:40px 0 1px;
-    }
     .forgotten-btn{
       display:inline-flex; align-items:center; justify-content:center; gap:7px;
-      padding:11px 22px; border-radius:16px;
+      padding:11px 20px; border-radius:16px;
       border:1px solid rgba(0,0,0,.10); background:rgba(0,0,0,.03);
       font-size:11px; font-weight:800; text-transform:uppercase;
-      letter-spacing:calc(var(--ls) + 0.04em); color:var(--text); opacity:.72;
+      letter-spacing:calc(var(--ls) + 0.04em); color:var(--text); opacity:.78;
       cursor:pointer; -webkit-tap-highlight-color:transparent;
       transition:opacity .22s ease, transform .22s ease, background .22s ease, border-color .22s ease;
       user-select:none; touch-action:manipulation; white-space:nowrap;
@@ -870,15 +867,16 @@
     }
     .news-dot.active{ background:rgba(0,0,0,.80); transform:scale(1.22); }
 
-    /* ─── АКСЕССУАРЫ — кнопка-запуск ─── */
+    /* ─── АКСЕССУАРЫ + ЗАБЫТОЕ ПРОШЛОЕ — ряд кнопок-запуска ─── */
     .acc-launcher{ padding-top:14px; padding-bottom:0; }
-    .acc-btn-wrap{
+    .launcher-row{
       width:min(520px,100%); margin:0 auto;
-      display:flex; justify-content:center;
+      display:flex; justify-content:center; align-items:stretch;
+      gap:10px; flex-wrap:wrap;
     }
     .acc-btn{
       display:inline-flex; align-items:center; justify-content:center; gap:8px;
-      padding:11px 22px; border-radius:16px;
+      padding:11px 20px; border-radius:16px;
       border:1px solid rgba(0,0,0,.10); background:rgba(0,0,0,.03);
       font-size:11px; font-weight:800; text-transform:uppercase;
       letter-spacing:calc(var(--ls) + 0.04em); color:var(--text);
@@ -994,12 +992,13 @@
     }
     .fit-gallery-dots .dot.active{ background:rgba(0,0,0,.8); transform:scale(1.2); }
     /* Caption теперь кликабельный — ведёт на t.me/furuyume_online */
+    /* Caption теперь кликабельный — ведёт на t.me/furuyume_online. Только текст по центру, без иконок. */
     .fit-caption{
       margin-top:14px; padding:11px 14px;
       border-radius:14px; background:rgba(0,0,0,.04); border:1px solid rgba(0,0,0,.07);
       font-size:12px; font-weight:700; line-height:1.45;
       letter-spacing:calc(var(--ls) + 0.01em); opacity:.88;
-      display:flex; align-items:center; justify-content:center; gap:8px;
+      display:flex; align-items:center; justify-content:center;
       text-align:center;
       cursor:pointer; -webkit-tap-highlight-color:transparent;
       touch-action:manipulation;
@@ -1008,9 +1007,6 @@
     .fit-caption:active{
       opacity:.65; background:rgba(0,0,0,.08); transform:scale(.985);
       border-color:rgba(0,0,0,.12);
-    }
-    .fit-caption-arrow{
-      width:12px; height:12px; flex:0 0 auto; opacity:.5;
     }
 
     /* ─── RESPONSIVE ─── */
@@ -1034,8 +1030,10 @@
       .news-title{ font-size:15px; }
       .news-text{ font-size:10px; }
       .news-slide{ min-height:140px; padding:6px 4px 2px; }
-      .acc-btn{ padding:10px 18px; font-size:10px; }
+      .acc-btn{ padding:10px 16px; font-size:10px; }
       .acc-badge{ font-size:8px; padding:3px 6px; }
+      .forgotten-btn{ padding:10px 16px; font-size:10px; }
+      .launcher-row{ gap:8px; }
       .interest-btn{ font-size:10px; padding:8px 12px; }
     }
     /* ─── PC NAV SPACING ─── */
@@ -1171,9 +1169,6 @@
         </div>
         <div id="fitGalleryCaption" class="fit-caption" role="button" tabindex="0" aria-label="Открыть чат для уточнения размерной сетки">
           <span id="fitGalleryCaptionText"></span>
-          <svg class="fit-caption-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M9 6L15 12L9 18"/>
-          </svg>
         </div>
       </div>
     </div>
@@ -1360,12 +1355,18 @@
       </div>
     </section>
 
-    <!-- АКСЕССУАРЫ — кнопка-запуск нового каталога -->
-    <section class="acc-launcher safe" id="accLauncher" aria-label="Аксессуары">
-      <div class="acc-btn-wrap">
+    <!-- АКСЕССУАРЫ + ЗАБЫТОЕ ПРОШЛОЕ — кнопки-запуск отдельных каталогов -->
+    <section class="acc-launcher safe" id="accLauncher" aria-label="Спец-каталоги">
+      <div class="launcher-row">
         <button class="acc-btn" id="accBtn" type="button" aria-label="Открыть каталог аксессуаров">
           АКСЕССУАРЫ
           <span class="acc-badge">НОВИНКА!</span>
+        </button>
+        <button class="forgotten-btn" id="forgottenBtn" type="button" aria-label="Забытое прошлое">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+          </svg>
+          ЗАБЫТОЕ ПРОШЛОЕ
         </button>
       </div>
     </section>
@@ -1445,6 +1446,15 @@
         desc:["НОВИНКА - оформляется под заказ. 100 шт. БЕЗ РЕСТОКА!","Ткань: 3ех нитка футер диагональ (100% хлопок).","Все детали выполнены качественной вышивкой.","Стирать в холодной воде, деликатный режим."]
       },
       {
+        id:"a1", slug:"furuyume-bag-1",
+        name:"FURUYUME BAG",
+        badge:"НОВИНКА", priceRub:2500, oldPriceRub:4000, dolyami:"Подробнее: Долями",
+        categories:["bags"],  // или "caps", "glasses", "belts"
+        gallery:["a1_1.webp"],
+        articles:{ S:"BAG-S" },
+        desc:["..."]
+      },
+      {
         id:"p15", slug:"adidas-firebirdts",
         name:"ADIDAS FIREBIRD T-SHIRT",
         badge:"РАСПРОДАНО", priceRub:3200, oldPriceRub:6700, dolyami:"Подробнее: Долями",
@@ -1486,6 +1496,26 @@
             text:"Размерная сетка: @furuyume_online"
           }
         }
+      },
+      {
+        id:"p16", slug:"adidas-terracore",
+        name:"ADIDAS SUPERSTAR TERRACORE",
+        badge:"ПРЕДЗАКАЗ", priceRub:7100, oldPriceRub:12000, dolyami:"Подробнее: Долями",
+        categories:["shoes"],
+        sizes:["35","36","37","38","39","40","41","42"],
+        gallery:["p16_1.webp","p16_2.webp","p16_3.webp","p16_4.webp"],
+        articles:{ S:"ASTC-S", M:"ASTC-M", L:"ASTC-L", XL:"ASTC-XL" },
+        desc:["НОВИНКА - оформляется под заказ.","Верх выполнен из объемного стеганого текстиля и","гладкой кожи в двух нежных оттенках:","небесно-голубом и чистом белом."]
+      },
+      {
+        id:"p17", slug:"oldorder-chiikawa",
+        name:"OLD ORDER X CHIIKAWA GOAL",
+        badge:"ПРЕДЗАКАЗ", priceRub:6400, oldPriceRub:7500, dolyami:"Подробнее: Долями",
+        categories:["shoes"],
+        sizes:["35","36","37","38","39","40","41","42"],
+        gallery:["p17_1.webp","p17_2.webp","p17_3.webp"],
+        articles:{ S:"OOCG-S", M:"OOCG-M", L:"OOCG-L", XL:"OOCG-XL" },
+        desc:["НОВИНКА - оформляется под заказ.","Верх выполнен из плотной матовой замши в двух оттенках:","песочно-бежевом и глубоком мокко.","Форма и тактильность."]
       },
       {
         id:"p1", slug:"adidas-sandking",
@@ -1557,7 +1587,7 @@
     /* ID товаров-аксессуаров. Эти товары видны только в каталоге "АКСЕССУАРЫ".
        Чтобы добавить аксессуар: добавь товар в PRODUCTS и его id сюда.
        Поле categories у аксессуара может быть: "bags"/"caps"/"glasses"/"belts". */
-    const ACCESSORY_IDS = [];
+    const ACCESSORY_IDS = ["a1"];
 
     /* ═══════════ NEWS DATA ═══════════ */
     /* 3 новости для верхней карусели. Авто-листание 10с, отключается при ручном взаимодействии. */
@@ -1630,6 +1660,7 @@
     const pPrice        = document.getElementById("pPrice");
     const pOld          = document.getElementById("pOld");
     const pSizes        = document.getElementById("pSizes");
+    const pSizesWrap    = document.querySelector(".psizes-wrap");
     const pDescList     = document.getElementById("pDescList");
     const relTrack      = document.getElementById("relTrack");
     const buyNowBtn     = document.getElementById("buyNowBtn");
@@ -1641,7 +1672,16 @@
 
     /* ═══════════ UTILS ═══════════ */
     const sleep = ms => new Promise(r => setTimeout(r, ms));
-    const SIZES = ["S","M","L","XL"];
+
+    /* Размеры по умолчанию для одежды. Чтобы задать свои размеры товару —
+       добавь поле sizes:[...] прямо в объект товара в PRODUCTS (например для обуви sizes:["35","36",...]). */
+    const DEFAULT_SIZES = ["S","M","L","XL"];
+    // Аксессуары не имеют размеров вообще
+    function productHasSizes(p){ return p && !ACCESSORY_IDS.includes(p.id); }
+    function getSizes(p){
+      if(!productHasSizes(p)) return [];
+      return (p && Array.isArray(p.sizes) && p.sizes.length) ? p.sizes : DEFAULT_SIZES;
+    }
     let isSwitchingProduct = false;
 
     function fmtRub(n){
@@ -1663,10 +1703,19 @@
     }
 
     /* ═══════════ CATEGORIES & GRID ═══════════ */
+    /* Раскладывает категории рядами по 4 (макс. 4 в ряд, дальше — в ряд ниже). Каждый ряд центрируется. */
+    function buildCatRows(cats, activeId){
+      let html = "";
+      for(let i=0; i<cats.length; i+=4){
+        const row = cats.slice(i, i+4);
+        html += `<div class="cat-row">` + row.map(c =>
+          `<button class="cat ${c.id===activeId?"active":""}" data-cat="${c.id}" type="button">${c.label}</button>`
+        ).join("") + `</div>`;
+      }
+      return html;
+    }
     function renderCategories(activeId){
-      catWrap.innerHTML = CATEGORIES.map(c =>
-        `<button class="cat ${c.id===activeId?"active":""}" data-cat="${c.id}" type="button">${c.label}</button>`
-      ).join("");
+      catWrap.innerHTML = buildCatRows(CATEGORIES, activeId);
     }
     function filterProducts(catId){
       // Обычные товары (не sold-out, не из забытого прошлого, не аксессуары)
@@ -1722,30 +1771,13 @@
       const items = filterProducts(catId);
       if(!items.length){
         grid.innerHTML = `<div class="grid-empty">каталог пустой</div>`;
-        renderForgottenBtn(catId);
         return;
       }
       grid.innerHTML = items.map(productCardHTML).join("");
-      renderForgottenBtn(catId);
     }
-    function renderForgottenBtn(catId){
-      const existing = document.getElementById("forgottenBtnWrap");
-      if(existing) existing.remove();
-      if(catId !== "all") return;
-      const wrap = document.createElement("div");
-      wrap.id = "forgottenBtnWrap";
-      wrap.className = "forgotten-btn-wrap";
-      wrap.innerHTML = `
-        <button class="forgotten-btn" id="forgottenBtn" type="button" aria-label="Забытое прошлое">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
-          </svg>
-          ЗАБЫТОЕ ПРОШЛОЕ
-        </button>`;
-      // Вставляем после grid, но до footer
-      const content = document.querySelector(".content.safe");
-      if(content) content.appendChild(wrap);
-    }
+    /* Кнопка "Забытое прошлое" теперь статична в .launcher-row рядом с "Аксессуары".
+       Функция оставлена как no-op на случай старых вызовов / совместимости. */
+    function renderForgottenBtn(){ document.getElementById("forgottenBtnWrap")?.remove(); }
     async function switchCategory(nextId){
       // Если сейчас активен режим забытого прошлого — выходим через лоадер
       if(_inForgottenMode){ await exitForgottenMode(); return; }
@@ -1913,7 +1945,7 @@
             <div class="cart-img"><img src="${p.gallery[0]}" alt="" loading="lazy"></div>
             <div class="cart-mid">
               <div class="cart-name">${p.name}</div>
-              <div class="cart-meta">${it.size} · ${fmtRub(p.priceRub)}</div>
+              <div class="cart-meta">${it.size ? it.size + " · " : ""}${fmtRub(p.priceRub)}</div>
             </div>
             <div class="cart-qty" aria-label="Количество">
               <button class="qty-btn" type="button" data-cart-act="minus" aria-label="Убрать">−</button>
@@ -1955,7 +1987,7 @@
     function orderFromCart(){
       const items=getCartItems(); if(!items.length) return;
       openTelegramOrder(buildOrderText(
-        items.map(it=>{ const p=byId(it.pid); return toBold(`${p.name}, ${it.size}, ${fmtRub(p.priceRub)} × ${it.qty} = ${fmtRub(p.priceRub*it.qty)}`); }),
+        items.map(it=>{ const p=byId(it.pid); const sizePart = it.size ? `, ${it.size}` : ""; return toBold(`${p.name}${sizePart}, ${fmtRub(p.priceRub)} × ${it.qty} = ${fmtRub(p.priceRub*it.qty)}`); }),
         calcCartTotal()
       ));
     }
@@ -1978,7 +2010,8 @@
     },{ passive:true });
 
     function renderSizes(p){
-      pSizes.innerHTML=SIZES.map(s=>
+      const sizes = getSizes(p);
+      pSizes.innerHTML = sizes.map(s=>
         `<button class="sizebtn ${s===currentSize?"active":""}" type="button" data-size="${s}" aria-label="Размер ${s}">${s}</button>`
       ).join("");
     }
@@ -2033,9 +2066,21 @@
     }
 
     function updateProductDOM(p){
-      currentProductId=p.id; currentSize="M";
+      currentProductId=p.id;
+      const sizes = getSizes(p);
+      currentSize = sizes.length ? sizes[0] : "";
+
       pTitle.textContent=p.name; pPrice.textContent=fmtRub(p.priceRub); pOld.textContent=fmtRub(p.oldPriceRub);
-      renderGalleryScroll(p); renderSizes(p); renderDesc(p); renderRelated(p); updateSkuLine();
+
+      // Размеры: у аксессуаров их нет вообще — прячем весь блок
+      const isAccessory = ACCESSORY_IDS.includes(p.id);
+      const isShoes     = (p.categories||[]).includes("shoes");
+      if(pSizesWrap) pSizesWrap.style.display = isAccessory ? "none" : "";
+      // Размерная сетка: скрыта у обуви и аксессуаров
+      if(sizeChartBtn) sizeChartBtn.style.display = (isAccessory || isShoes) ? "none" : "";
+
+      if(!isAccessory) renderSizes(p);
+      renderGalleryScroll(p); renderDesc(p); renderRelated(p); updateSkuLine();
       renderFitButtons(p);
     }
 
@@ -2076,7 +2121,8 @@
     }
     function orderNowCurrent(){
       const p=byId(currentProductId); if(!p) return;
-      openTelegramOrder(buildOrderText([toBold(`${p.name}, ${currentSize}, ${fmtRub(p.priceRub)}`)],p.priceRub));
+      const sizePart = currentSize ? `, ${currentSize}` : "";
+      openTelegramOrder(buildOrderText([toBold(`${p.name}${sizePart}, ${fmtRub(p.priceRub)}`)],p.priceRub));
     }
 
     /* ═══════════ TOAST ═══════════ */
@@ -2414,9 +2460,7 @@
       grid.innerHTML = items.map(productCardHTML).join("");
     }
     function renderAccessoryCategories(activeId){
-      catWrap.innerHTML = ACCESSORY_CATEGORIES.map(c =>
-        `<button class="cat ${c.id===activeId?"active":""}" data-cat="${c.id}" type="button">${c.label}</button>`
-      ).join("");
+      catWrap.innerHTML = buildCatRows(ACCESSORY_CATEGORIES, activeId);
     }
     async function switchAccessoryCategory(nextId){
       if(nextId === _currentAccCatId) return;
@@ -2667,7 +2711,9 @@
 
       document.querySelector(".psizes-wrap").addEventListener("click", e=>{
         const b=e.target.closest("[data-size]"); if(!b) return;
-        const s=b.dataset.size; if(!SIZES.includes(s)) return;
+        const s=b.dataset.size;
+        const p=byId(currentProductId);
+        if(!getSizes(p).includes(s)) return;
         currentSize=s;
         pSizes.querySelectorAll(".sizebtn").forEach(x=>x.classList.toggle("active",x.dataset.size===s));
         updateSkuLine();
