@@ -453,6 +453,18 @@
       align-items:start; padding-top:4px;
       transition:opacity .28s cubic-bezier(0.22,1,0.36,1), transform .28s cubic-bezier(0.22,1,0.36,1);
     }
+    /* Эксклюзивный товар — отдельная строка по центру каталога */
+    .exclusive-row{
+      grid-column:1 / -1;
+      display:flex; justify-content:center;
+    }
+    .exclusive-row .card{ width:calc(50% - 9px); }
+    .exclusive-card .img{
+      box-shadow:0 0 0 1px rgba(0,0,0,.05) inset;
+    }
+    /* Режим закрытия: прячем кнопки спец-каталогов и чуть добавляем воздух категориям */
+    body.closing #accLauncher{ display:none !important; }
+    body.closing .categories{ padding-top:18px; }
     .grid.fade-out{ opacity:0; transform:translateY(4px); }
     .grid-empty{
       grid-column:1/-1; text-align:center; padding:44px 0 24px;
@@ -592,6 +604,13 @@
       scrollbar-width:none; -ms-overflow-style:none;
     }
     .rel-track::-webkit-scrollbar{ display:none; }
+    .rel-closing{
+      flex:1 1 auto; min-width:0; text-align:center;
+      padding:24px 18px; border-radius:18px;
+      border:1px solid rgba(0,0,0,.06); background:rgba(0,0,0,.02);
+      font-size:11px; font-weight:700; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.02em); opacity:.55; line-height:1.55;
+    }
     .rel-card{
       flex:0 0 138px; border-radius:18px; border:1px solid rgba(0,0,0,.06);
       background:rgba(0,0,0,.02); padding:12px 10px;
@@ -1584,30 +1603,33 @@
        Поле categories у аксессуара может быть: "bags"/"caps"/"glasses"/"belts". */
     const ACCESSORY_IDS = ["a1"];
 
+    /* ═══════════ РЕЖИМ ЗАКРЫТИЯ МАГАЗИНА ═══════════
+       CLOSING_MODE = true  → магазин закрывается: всё распродано, кроме одного
+       эксклюзивного товара EXCLUSIVE_ID. Скрываются кнопки спец-каталогов,
+       поиск находит только эксклюзив, "Смотрите также" — заглушка.
+       Чтобы вернуть обычный режим (для нового магазина по этому шаблону) —
+       поставь CLOSING_MODE = false. Всё остальное продолжит работать как раньше. */
+    const CLOSING_MODE = true;
+    const EXCLUSIVE_ID  = "p3";
+
+    /* Распродан ли товар: в режиме закрытия — всё, кроме эксклюзива; иначе по списку SOLD_OUT_IDS */
+    function isSoldOut(p){
+      if(!p) return false;
+      if(CLOSING_MODE) return p.id !== EXCLUSIVE_ID;
+      return SOLD_OUT_IDS.includes(p.id);
+    }
+
     /* ═══════════ NEWS DATA ═══════════ */
-    /* 3 новости для верхней карусели. Авто-листание 10с, отключается при ручном взаимодействии. */
+    /* В режиме закрытия — одна новость. Для нового магазина можно вернуть несколько. */
     const NEWS = [
       {
         id:"n1",
-        type:"assortment",
-        title:"ПОПОЛНИЛИ АССОРТИМЕНТ",
-        prefix:"Теперь не только олимпийки, но и:",
-        clickable:"кроссовки, штаны, футболки и аксессуары"
-      },
-      {
-        id:"n2",
-        type:"accessories",
-        title:"АКСЕССУАРЫ",
-        prefix:"Пополнили ассортимент аксессуарами,",
-        clickable:"нажмите и перейдите в каталог"
-      },
-      {
-        id:"n3",
-        type:"gift",
-        title:"ПОДАРОК ДЛЯ ТЕБЯ",
-        text:"Подпишись на нашу группу ВКонтакте и автоматически получи скидку −15%.",
-        btnText:"ПЕРЕЙТИ",
-        btnUrl:"https://vk.com/archwr"
+        type:"closing",
+        title:"МЫ ЗАКРЫВАЕМСЯ",
+        prefix:"Всё, что у нас осталось в наличии, это",
+        clickable:"ADIDAS X YOHJI YAMAMOTO TRACK JACKET",
+        btnText:"ПОЧЕМУ?",
+        btnUrl:"https://t.me/furuyume/474"
       }
     ];
 
@@ -1712,19 +1734,20 @@
       catWrap.innerHTML = buildCatRows(CATEGORIES, activeId);
     }
     function filterProducts(catId){
-      // Обычные товары (не sold-out, не из забытого прошлого, не аксессуары)
-      const regular = PRODUCTS.filter(p=>!FORGOTTEN_IDS.includes(p.id) && !ACCESSORY_IDS.includes(p.id) && !SOLD_OUT_IDS.includes(p.id));
+      // Обычные товары (в наличии, не из забытого прошлого, не аксессуары)
+      const regular = PRODUCTS.filter(p=>!FORGOTTEN_IDS.includes(p.id) && !ACCESSORY_IDS.includes(p.id) && !isSoldOut(p));
       // Распроданные — показываем их тоже, но в конце
-      const soldOut = PRODUCTS.filter(p=>SOLD_OUT_IDS.includes(p.id) && !FORGOTTEN_IDS.includes(p.id) && !ACCESSORY_IDS.includes(p.id));
+      const soldOut = PRODUCTS.filter(p=>!FORGOTTEN_IDS.includes(p.id) && !ACCESSORY_IDS.includes(p.id) && isSoldOut(p));
       const inCat = arr => catId==="all" ? arr : arr.filter(p=>(p.categories||[]).includes(catId));
       return [...inCat(regular), ...inCat(soldOut)];
     }
     let _currentCatId = "all";
 
-    /* Универсальный HTML карточки товара — поддерживает sold-out стиль (блюр + оверлей + не кликается) */
-    function productCardHTML(p){
-      const isSoldOut = SOLD_OUT_IDS.includes(p.id);
-      if(isSoldOut){
+    /* Универсальный HTML карточки товара — поддерживает sold-out стиль (блюр + оверлей + не кликается)
+       и эксклюзивный стиль (isExclusive — тонкая подсветка). */
+    function productCardHTML(p, isExclusive){
+      const soldOut = isSoldOut(p);
+      if(soldOut){
         // Распроданные товары — без кнопки Долями, без описания, без цены/старой цены
         return `
         <article class="card sold-out-card" data-product-id="${p.id}">
@@ -1738,7 +1761,7 @@
         </article>`;
       }
       return `
-        <article class="card" data-product-id="${p.id}">
+        <article class="card${isExclusive ? " exclusive-card" : ""}" data-product-id="${p.id}">
           <div class="img" role="button" tabindex="0" data-open-product="${p.id}" aria-label="Открыть ${p.name}">
             <img class="product-photo" src="${p.gallery[0]}" alt="${p.name}" loading="lazy">
           </div>
@@ -1762,7 +1785,17 @@
         grid.innerHTML = `<div class="grid-empty">каталог пустой</div>`;
         return;
       }
-      grid.innerHTML = items.map(productCardHTML).join("");
+      // В режиме закрытия эксклюзивный товар идёт отдельной строкой по центру, остальные — ниже
+      const exIdx = CLOSING_MODE ? items.findIndex(p=>p.id===EXCLUSIVE_ID) : -1;
+      if(exIdx >= 0){
+        const ex   = items[exIdx];
+        const rest = items.filter((_,i)=>i!==exIdx);
+        grid.innerHTML =
+          `<div class="exclusive-row">${productCardHTML(ex, true)}</div>` +
+          rest.map(p=>productCardHTML(p)).join("");
+      } else {
+        grid.innerHTML = items.map(p=>productCardHTML(p)).join("");
+      }
     }
     /* Кнопка "Забытое прошлое" теперь статична в .launcher-row рядом с "Аксессуары".
        Функция оставлена как no-op на случай старых вызовов / совместимости. */
@@ -1814,44 +1847,47 @@
       const q = (query||"").trim().toLowerCase();
       if(!q){ searchResults.innerHTML=`<div class="drawer-empty">начните ввод — появятся товары</div>`; return; }
 
-      // Особый поиск: "забытое прошлое"
-      if("забытое прошлое".includes(q) || q.includes("забытое") || q.includes("прошлое")){
-        searchResults.innerHTML = `
-          <div class="result fp-search-result" role="listitem" id="fpSearchResult" aria-label="Забытое прошлое">
-            <div class="result-img" style="background:rgba(0,0,0,.04);border-radius:10px;display:flex;align-items:center;justify-content:center;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-            </div>
-            <div class="result-mid">
-              <div class="result-name">ЗАБЫТОЕ ПРОШЛОЕ</div>
-              <div class="result-meta">Секретная коллекция</div>
-            </div>
-            <div class="result-price" style="font-size:10px;opacity:.6;">ПЕРЕЙТИ</div>
-          </div>`;
-        document.getElementById("fpSearchResult")?.addEventListener("click", ()=>{ closeSearch(); openFpModal(); });
-        return;
+      // Спец-разделы в поиске работают только вне режима закрытия
+      if(!CLOSING_MODE){
+        // Особый поиск: "забытое прошлое"
+        if("забытое прошлое".includes(q) || q.includes("забытое") || q.includes("прошлое")){
+          searchResults.innerHTML = `
+            <div class="result fp-search-result" role="listitem" id="fpSearchResult" aria-label="Забытое прошлое">
+              <div class="result-img" style="background:rgba(0,0,0,.04);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+              </div>
+              <div class="result-mid">
+                <div class="result-name">ЗАБЫТОЕ ПРОШЛОЕ</div>
+                <div class="result-meta">Секретная коллекция</div>
+              </div>
+              <div class="result-price" style="font-size:10px;opacity:.6;">ПЕРЕЙТИ</div>
+            </div>`;
+          document.getElementById("fpSearchResult")?.addEventListener("click", ()=>{ closeSearch(); openFpModal(); });
+          return;
+        }
+        // Особый поиск: "аксессуары"
+        if("аксессуары".includes(q) || q.includes("аксессуар")){
+          searchResults.innerHTML = `
+            <div class="result acc-search-result" role="listitem" id="accSearchResult" aria-label="Аксессуары">
+              <div class="result-img" style="background:rgba(0,0,0,.04);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+              </div>
+              <div class="result-mid">
+                <div class="result-name">АКСЕССУАРЫ</div>
+                <div class="result-meta">Новый каталог</div>
+              </div>
+              <div class="result-price" style="font-size:10px;opacity:.6;">ПЕРЕЙТИ</div>
+            </div>`;
+          document.getElementById("accSearchResult")?.addEventListener("click", ()=>{ closeSearch(); enterAccessoriesMode(); });
+          return;
+        }
       }
 
-      // Особый поиск: "аксессуары"
-      if("аксессуары".includes(q) || q.includes("аксессуар")){
-        searchResults.innerHTML = `
-          <div class="result acc-search-result" role="listitem" id="accSearchResult" aria-label="Аксессуары">
-            <div class="result-img" style="background:rgba(0,0,0,.04);border-radius:10px;display:flex;align-items:center;justify-content:center;">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
-            </div>
-            <div class="result-mid">
-              <div class="result-name">АКСЕССУАРЫ</div>
-              <div class="result-meta">Новый каталог</div>
-            </div>
-            <div class="result-price" style="font-size:10px;opacity:.6;">ПЕРЕЙТИ</div>
-          </div>`;
-        document.getElementById("accSearchResult")?.addEventListener("click", ()=>{ closeSearch(); enterAccessoriesMode(); });
-        return;
-      }
-
-      // Обычный поиск — теперь включает аксессуары (по названиям). Исключены только забытое прошлое и распроданные.
-      const excluded = [...FORGOTTEN_IDS, ...SOLD_OUT_IDS];
-      const found = PRODUCTS.filter(p=>
-        !excluded.includes(p.id) &&
+      // Пул поиска: в режиме закрытия — только эксклюзив; иначе все товары кроме забытых/распроданных
+      const pool = CLOSING_MODE
+        ? PRODUCTS.filter(p=>p.id===EXCLUSIVE_ID)
+        : PRODUCTS.filter(p=>![...FORGOTTEN_IDS, ...SOLD_OUT_IDS].includes(p.id));
+      const found = pool.filter(p=>
         `${p.name} ${p.badge} ${fmtRub(p.priceRub)} ${p.id}`.toLowerCase().includes(q)
       ).slice(0,10);
       if(!found.length){ searchResults.innerHTML=`<div class="drawer-empty">ничего не найдено</div>`; return; }
@@ -2006,6 +2042,11 @@
     }
     function renderDesc(p){ pDescList.innerHTML=(p.desc||[]).map(x=>`<li>${x}</li>`).join(""); }
     function renderRelated(p){
+      if(CLOSING_MODE){
+        relTrack.innerHTML = `<div class="rel-closing">Тут больше нечего смотреть —<br>мы закрываемся.</div>`;
+        requestAnimationFrame(()=>relTrack.scrollTo({left:0,behavior:"instant"}));
+        return;
+      }
       const excluded = [...FORGOTTEN_IDS, ...SOLD_OUT_IDS, ...ACCESSORY_IDS];
       const pick=PRODUCTS.filter(x=>x.id!==p.id && !excluded.includes(x.id)).sort(()=>Math.random()-.5).slice(0,6);
       relTrack.innerHTML=pick.map(x=>`
@@ -2075,7 +2116,7 @@
 
     async function openProduct(pid){
       if(isSwitchingProduct) return;
-      if(SOLD_OUT_IDS.includes(pid)) return; // нельзя открыть распроданный товар
+      if(isSoldOut(byId(pid))) return; // нельзя открыть распроданный товар
       const p=byId(pid); if(!p) return;
       isSwitchingProduct=true;
       closeSearch();
@@ -2249,8 +2290,27 @@
             <a class="news-action-btn" data-news-action="go-vk" href="${n.btnUrl}" target="_blank" rel="noopener">${n.btnText}</a>
           </div>`;
         }
+        if(n.type==="closing"){
+          // Новость о закрытии: название товара кликабельно (→ открыть эксклюзив), кнопка "ПОЧЕМУ?" → пост
+          return `
+          <div class="news-slide" data-news-id="${n.id}" data-news-type="closing">
+            <div class="news-title">${n.title}</div>
+            <div class="news-text">
+              ${n.prefix}<br>
+              <span class="news-text-clickable" data-news-action="go-exclusive" role="button" tabindex="0">${n.clickable}</span>.
+            </div>
+            <a class="news-action-btn" data-news-action="go-why" href="${n.btnUrl}" target="_blank" rel="noopener">${n.btnText}</a>
+          </div>`;
+        }
         return "";
       }).join("");
+
+      // Если новость одна — не показываем точки и не запускаем авто-листание
+      if(NEWS.length <= 1){
+        dotsEl.innerHTML = "";
+        dotsEl.style.display = "none";
+        return;
+      }
 
       dotsEl.innerHTML = NEWS.map((_,i)=>
         `<div class="news-dot${i===0?" active":""}" data-news-dot="${i}" role="button" tabindex="0" aria-label="Слайд ${i+1}"></div>`
@@ -2602,8 +2662,11 @@
         // Открыть каталог аксессуаров
         if(_inAccessoriesMode) return;
         enterAccessoriesMode();
+      } else if(act === "go-exclusive"){
+        // Открыть единственный товар в наличии
+        openProduct(EXCLUSIVE_ID);
       }
-      // act === "go-vk": <a target="_blank"> — браузер сам откроет ссылку
+      // act === "go-vk" / "go-why": <a target="_blank"> — браузер сам откроет ссылку
     });
 
     /* ═══════════ ОТЗЫВЫ POPUP ═══════════ */
@@ -2623,6 +2686,7 @@
 
     /* ═══════════ INIT ═══════════ */
     (function init(){
+      if(CLOSING_MODE) document.body.classList.add("closing");
       loadCart();
       renderCategories("all");
       renderProducts("all");
