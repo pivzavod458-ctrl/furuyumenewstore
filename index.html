@@ -2043,7 +2043,7 @@
     function renderDesc(p){ pDescList.innerHTML=(p.desc||[]).map(x=>`<li>${x}</li>`).join(""); }
     function renderRelated(p){
       if(CLOSING_MODE){
-        relTrack.innerHTML = `<div class="rel-closing">Тут больше нечего смотреть —<br>мы закрываемся.</div>`;
+        relTrack.innerHTML = `<div class="rel-closing">Тут больше нечего смотреть: <br>мы закрываемся.</div>`;
         requestAnimationFrame(()=>relTrack.scrollTo({left:0,behavior:"instant"}));
         return;
       }
