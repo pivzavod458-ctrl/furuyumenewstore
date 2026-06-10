@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
   <meta name="theme-color" content="#ffffff" />
+  <meta name="description" content="FURUYUME — закрытие магазина. Последние товары в наличии: ADIDAS X YOHJI YAMAMOTO TRACK JACKET." />
   <title>FURUYUME</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -129,7 +130,6 @@
       display:flex; overflow-x:auto; scroll-snap-type:x mandatory;
       scrollbar-width:none; -ms-overflow-style:none;
       -webkit-overflow-scrolling:touch; gap:0;
-      transition:scroll-behavior .4s;
     }
     .drop-track::-webkit-scrollbar{ display:none; }
     .drop-slide{
@@ -267,6 +267,13 @@
       transition:transform .18s ease, opacity .18s ease, background .18s ease; touch-action:manipulation;
     }
     .result:active{ transform:scale(.99); opacity:.8; background:rgba(0,0,0,.05); }
+    /* Плавное появление результатов поиска — лёгкая лесенка снизу вверх */
+    @keyframes resultIn{
+      from{ opacity:0; transform:translateY(5px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+    .drawer-results .result{ animation:resultIn .28s cubic-bezier(0.22,1,0.36,1) both; }
+    .drawer-results .drawer-empty{ animation:resultIn .24s cubic-bezier(0.22,1,0.36,1) both; }
     .result-img{ width:44px; height:44px; display:flex; align-items:center; justify-content:center; flex:0 0 auto; overflow:hidden; }
     .result-img img{ width:100%; height:100%; object-fit:contain; display:block; pointer-events:none; user-select:none; }
     .result-mid{ min-width:0; flex:1 1 auto; }
@@ -451,16 +458,22 @@
     .grid{
       display:grid; grid-template-columns:1fr 1fr; gap:30px 18px;
       align-items:start; padding-top:4px;
-      transition:opacity .28s cubic-bezier(0.22,1,0.36,1), transform .28s cubic-bezier(0.22,1,0.36,1);
+      transition:opacity .30s cubic-bezier(0.22,1,0.36,1), transform .30s cubic-bezier(0.22,1,0.36,1);
     }
-    /* Эксклюзивный товар — отдельная строка по центру каталога */
+    /* Эксклюзивные товары — отдельная строка по центру каталога (1 или 2 карточки рядом) */
     .exclusive-row{
       grid-column:1 / -1;
-      display:flex; justify-content:center;
+      display:flex; justify-content:center; gap:18px;
     }
-    .exclusive-row .card{ width:calc(50% - 9px); }
-    .exclusive-card .img{
-      box-shadow:0 0 0 1px rgba(0,0,0,.05) inset;
+    .exclusive-row .card{ width:calc(50% - 9px); flex:0 0 auto; }
+    /* Плашка "ОСТАЛОСЬ: N ШТ." над эксклюзивным товаром */
+    .stock-label{
+      display:inline-flex; align-items:center; justify-content:center;
+      margin:0 auto 10px; padding:6px 13px; border-radius:999px;
+      background:rgba(0,0,0,.045); border:1px solid rgba(0,0,0,.08);
+      font-size:9px; font-weight:800; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.06em); color:#111;
+      white-space:nowrap;
     }
     /* Режим закрытия: прячем кнопки спец-каталогов и чуть добавляем воздух категориям */
     body.closing #accLauncher{ display:none !important; }
@@ -478,6 +491,7 @@
       cursor:pointer; -webkit-tap-highlight-color:transparent; touch-action:manipulation;
       transition:transform .26s cubic-bezier(0.22,1,0.36,1), opacity .22s ease;
     }
+    .img[role="button"]:active{ transform:scale(.98); opacity:.88; }
     .product-photo{ width:100%; height:100%; object-fit:contain; display:block; -webkit-user-drag:none; user-select:none; pointer-events:none; }
     .name{
       margin-top:14px; font-weight:650; font-size:14px; text-transform:uppercase;
@@ -605,7 +619,9 @@
     }
     .rel-track::-webkit-scrollbar{ display:none; }
     .rel-closing{
-      flex:1 1 auto; min-width:0; text-align:center;
+      flex:1 1 auto; min-width:0; align-self:stretch;
+      display:flex; align-items:center; justify-content:center;
+      text-align:center;
       padding:24px 18px; border-radius:18px;
       border:1px solid rgba(0,0,0,.06); background:rgba(0,0,0,.02);
       font-size:11px; font-weight:700; text-transform:uppercase;
@@ -842,39 +858,79 @@
       display:flex; overflow-x:auto; scroll-snap-type:x mandatory;
       scrollbar-width:none; -ms-overflow-style:none;
       -webkit-overflow-scrolling:touch; gap:0;
-      transition:scroll-behavior .4s;
     }
     .news-track::-webkit-scrollbar{ display:none; }
     .news-slide{
       flex:0 0 100%; scroll-snap-align:center;
       display:flex; flex-direction:column; align-items:center; justify-content:center;
-      text-align:center; padding:8px 6px 4px;
-      min-height:148px; /* все 3 новости одинаковой высоты — flex автоматически выровняет */
+      text-align:center; padding:14px 8px 10px;
+      min-height:150px; /* все новости одинаковой высоты — flex автоматически выровняет */
       -webkit-tap-highlight-color:transparent; touch-action:manipulation;
     }
     .news-title{
       font-size:17px; font-weight:900; text-transform:uppercase;
-      letter-spacing:var(--ls); line-height:1.1; margin-bottom:8px;
+      letter-spacing:var(--ls); line-height:1.1;
     }
+    .news-slide > .news-title{ margin-bottom:13px; } /* у новостей без кнопки в строке заголовка отступ сохраняется */
+
+    /* ════════ НОВОСТЬ "МЫ ЗАКРЫВАЕМСЯ" — НАСТРОЙКА ОТСТУПОВ ════════
+       Меняй ТОЛЬКО эти три числа — всё остальное пересчитается само:
+       --gap-title-btn : МЫ ЗАКРЫВАЕМСЯ → кнопка ПОЧЕМУ? (маленький отступ)
+       --gap-section   : кнопка ПОЧЕМУ? → текстовый блок (в ~2.5 раза больше)
+       --gap-lines     : одинаковое расстояние между тремя строками текста */
+    .news-slide[data-news-type="closing"]{
+      --gap-title-btn: 3px;
+      --gap-section: 20px;
+      --gap-lines: 1px;
+    }
+    .news-slide[data-news-type="closing"] .news-title{ margin-bottom:0; }
+    .news-why-btn{
+      margin-top:var(--gap-title-btn, 9px);
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:6px 13px; border-radius:10px;
+      background:#111; color:#fff;
+      font-size:9px; font-weight:800; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.04em);
+      cursor:pointer; -webkit-tap-highlight-color:transparent;
+      transition:opacity .18s ease, transform .18s ease;
+      touch-action:manipulation; text-decoration:none;
+      white-space:nowrap; flex:0 0 auto;
+    }
+    .news-why-btn:active{ opacity:.8; transform:scale(.96); }
     .news-text{
       font-size:11px; font-weight:600; line-height:1.5;
       letter-spacing:calc(var(--ls) + 0.01em); opacity:.78;
-      max-width:280px; margin:0 auto;
+      max-width:290px; margin:0 auto;
+    }
+    /* Текстовый блок новости о закрытии: три строки с одинаковым отступом --gap-lines */
+    .news-body{
+      margin-top:var(--gap-section, 24px);
+      display:flex; flex-direction:column; align-items:center;
+      gap:var(--gap-lines, 7px);
+      font-size:11px; font-weight:600; line-height:1.45;
+      letter-spacing:calc(var(--ls) + 0.01em); opacity:.78;
+      max-width:300px;
     }
     .news-text-clickable{
       display:inline-block;
-      font-weight:800; color:var(--text); opacity:1;
-      border-bottom:1px dashed rgba(0,0,0,.30);
-      padding-bottom:1px;
+      font-size:13px; line-height:1.3;
+      font-weight:800; color:var(--text);
+      /* border-bottom:1.5px solid rgba(0,0,0,.75); /* ровная полосочка под названием; толщина/цвет меняются здесь */
+      /* padding-bottom:0.2px; /* насколько полосочка отстоит от текста */
       cursor:pointer; -webkit-tap-highlight-color:transparent;
-      transition:opacity .18s ease, border-color .18s ease;
+      transition:opacity .18s ease, transform .18s ease;
       touch-action:manipulation;
     }
-    .news-text-clickable:active{ opacity:.55; border-color:rgba(0,0,0,.55); }
+    .news-text-clickable:active{ opacity:.5; transform:scale(.98); }
+    .news-colors-hint{
+      display:block;
+      font-size:10px; font-weight:600; opacity:.55;
+      letter-spacing:calc(var(--ls) + 0.01em);
+    }
     .news-action-btn{
-      margin-top:10px;
+      margin-top:16px;
       display:inline-flex; align-items:center; justify-content:center;
-      padding:8px 20px; border-radius:12px;
+      padding:9px 22px; border-radius:12px;
       background:#111; color:#fff;
       font-size:10px; font-weight:800; text-transform:uppercase;
       letter-spacing:calc(var(--ls) + 0.04em);
@@ -930,6 +986,41 @@
       background:rgba(0,0,0,.04); opacity:.9; white-space:nowrap;
     }
     .interest-cats .cat:active{ transform:scale(.96); opacity:.6; background:rgba(0,0,0,.09); }
+
+    /* ─── ВЫБОР РАСЦВЕТКИ (из новости о закрытии) ─── */
+    .choice-list{ display:flex; flex-direction:column; gap:8px; }
+    .choice-item{
+      display:flex; align-items:center; gap:12px; padding:10px; border-radius:14px;
+      background:rgba(0,0,0,.03); border:1px solid rgba(0,0,0,.05); cursor:pointer;
+      -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+      transition:transform .18s ease, opacity .18s ease, background .18s ease;
+      text-align:left;
+    }
+    .choice-item:active{ transform:scale(.985); opacity:.8; background:rgba(0,0,0,.05); }
+    .choice-img{
+      width:52px; height:52px; display:flex; align-items:center; justify-content:center;
+      flex:0 0 auto; overflow:hidden; border-radius:12px;
+      background:rgba(0,0,0,.03); border:1px solid rgba(0,0,0,.05);
+    }
+    .choice-img img{ width:100%; height:100%; object-fit:contain; display:block; pointer-events:none; user-select:none; }
+    .choice-mid{ min-width:0; flex:1 1 auto; }
+    .choice-name{
+      font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:var(--ls);
+      line-height:1.2; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+    }
+    .choice-meta{
+      margin-top:5px; font-size:9px; font-weight:800; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.03em); opacity:.60;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .choice-price{
+      flex:0 0 auto; font-size:11px; font-weight:900; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.02em); opacity:.9;
+    }
+    .choice-hint{
+      margin-top:12px; font-size:9px; font-weight:700; text-transform:uppercase;
+      letter-spacing:calc(var(--ls) + 0.03em); opacity:.40; text-align:center;
+    }
 
     /* ─── АКСЕССУАРЫ — кнопка "Выйти в главное меню" (как у Забытого прошлого) ─── */
     .acc-back-bar{
@@ -1051,7 +1142,13 @@
       .countdown-inner{ padding:28px 10px 30px; }
       .news-title{ font-size:15px; }
       .news-text{ font-size:10px; }
-      .news-slide{ min-height:140px; padding:6px 4px 2px; }
+      .news-body{ font-size:10px; max-width:280px; }
+      .news-text-clickable{ font-size:12px; }
+      .news-why-btn{ padding:5px 10px; font-size:8px; }
+      .news-slide{ min-height:142px; padding:12px 6px 8px; }
+      .stock-label{ font-size:8px; padding:5px 10px; gap:6px; }
+      .exclusive-row{ gap:14px; }
+      .exclusive-row .card{ width:calc(50% - 7px); }
       .acc-btn{ padding:8px 10px; font-size:9px; gap:5px; }
       .acc-badge{ font-size:7px; padding:2px 4px; }
       .forgotten-btn{ padding:8px 10px; font-size:9px; gap:5px; }
@@ -1071,11 +1168,16 @@
 
 <body>
 
+  <noscript>
+    <style>.loader-screen{display:none!important;}</style>
+    <div style="padding:40px 20px;text-align:center;font-size:12px;font-weight:700;text-transform:uppercase;">Для работы магазина включите JavaScript</div>
+  </noscript>
+
   <!-- LOADER -->
   <div id="loader" class="loader-screen safe top-safe bottom-safe" aria-live="polite">
     <div class="spinner" aria-hidden="true"></div>
     <div class="loader-title">Загрузка</div>
-    <div class="loader-sub">Прогружаем всё нужное. Если загрузка идёт слишком долго — перезагрузите приложение.</div>
+    <div class="loader-sub">Прогружаем всё нужное. Если загрузка идёт слишком долго, то перезагрузите приложение.</div>
     <div id="loaderHint" class="loader-hint">Совет: иногда помогает закрыть и открыть Telegram заново.</div>
   </div>
 
@@ -1091,7 +1193,7 @@
         <button id="searchClose" class="drawer-close" type="button">закрыть</button>
       </div>
       <div id="searchResults" class="drawer-results" aria-live="polite">
-        <div class="drawer-empty">начните ввод — появятся товары</div>
+        <div class="drawer-empty">начните ввод: появятся товары</div>
       </div>
     </div>
   </div>
@@ -1149,7 +1251,7 @@
             <div class="dolyami-step-text">Разбивайте любой заказ на 4 части - без переплат и процентов</div>
           </div>
         </div>
-        <a href="https://t.me/furuyume_online" target="_blank" rel="noopener" class="dolyami-support-btn">по вопросам — написать в поддержку</a>
+        <a href="https://t.me/furuyume_online" target="_blank" rel="noopener" class="dolyami-support-btn">по вопросам: написать в поддержку</a>
       </div>
     </div>
   </div>
@@ -1161,6 +1263,17 @@
         <div class="center-card-title">Что вас интересует?</div>
       </div>
       <div class="interest-cats" id="interestGrid"></div>
+    </div>
+  </div>
+
+  <!-- COLOR CHOICE MODAL (выбор расцветки эксклюзива из новости о закрытии) -->
+  <div id="colorChoiceModal" class="modal modal-center" aria-hidden="true">
+    <div class="center-card" role="dialog" aria-label="Выберите расцветку">
+      <div class="center-card-head">
+        <div class="center-card-title">Выберите расцветку</div>
+      </div>
+      <div class="choice-list" id="colorChoiceList"></div>
+      <div class="choice-hint">Нажмите на понравившуюся, чтобы открыть</div>
     </div>
   </div>
 
@@ -1481,6 +1594,7 @@
         id:"p3", slug:"adidas-yohjiyamamoto-wt",
         name:"ADIDAS X YOHJI YAMAMOTO TRACK JACKET (WHITE-TURQ)",
         badge:"В НАЛИЧИИ", priceRub:3000, oldPriceRub:7200, dolyami:"Подробнее: Долями",
+        stock:70, // ← ОСТАТОК В ШТУКАХ. Меняй это число, плашка "ОСТАЛОСЬ: N ШТ." обновится сама
         categories:["olymp"],
         gallery:["p1_1.webp","p1_2.webp","p1_3.webp","p1_4.webp"],
         articles:{ S:"AYYWT-S", M:"AYYWT-M", L:"AYYWT-L", XL:"AYYWT-XL" },
@@ -1492,6 +1606,26 @@
           },
           female:{
             images:["p3_fit_f_1.webp","p3_fit_f_2.webp","p3_fit_f_3.webp","p3_fit_f_4.webp"],
+            text:"Размерная сетка: @furuyume_online"
+          }
+        }
+      },
+      {
+        id:"p33", slug:"adidas-yohjiyamamoto-bw",
+        name:"ADIDAS X YOHJI YAMAMOTO TRACK JACKET (BLACK-WHITE)",
+        badge:"В НАЛИЧИИ", priceRub:3000, oldPriceRub:7200, dolyami:"Подробнее: Долями",
+        stock:10, // ← ОСТАТОК В ШТУКАХ. Меняй это число, плашка "ОСТАЛОСЬ: N ШТ." обновится сама
+        categories:["olymp"],
+        gallery:["p33_1.webp","p33_2.webp"],
+        articles:{ S:"AYYBW-S", M:"AYYBW-M", L:"AYYBW-L", XL:"AYYBW-XL" },
+        desc:["РАСПРОДАЖА — Максимальная скидка. БЕЗ РЕСТОКА!","Ткань: кринкл-нейлон.","Все детали выполнены качественной вышивкой.","Стирать в холодной воде, деликатный режим."],
+        fit:{
+          male:{
+            images:["p33_fit_m_1.webp","p33_fit_m_2.webp","p33_fit_m_3.webp","p33_fit_m_4.webp"],
+            text:"Размерная сетка: @furuyume_online"
+          },
+          female:{
+            images:["p33_fit_f_1.webp","p33_fit_f_2.webp","p33_fit_f_3.webp","p33_fit_f_4.webp"],
             text:"Размерная сетка: @furuyume_online"
           }
         }
@@ -1556,25 +1690,6 @@
         }
       },
       {
-        id:"p4", slug:"adidas-chinese",
-        name:"ADIDAS CHINESE TRACK JACKET",
-        badge:"ОРИГИНАЛ", priceRub:5700, oldPriceRub:10900, dolyami:"Подробнее: Долями",
-        categories:["olymp"],
-        gallery:["p4_1.webp","p4_2.webp","p4_3.webp","p4_4.webp"],
-        articles:{ S:"AC-S", M:"AC-M", L:"AC-L", XL:"AC-XL" },
-        desc:["ОРИГИНАЛ под заказ с Poizon (Шанхай).","Оверсайз крой, лёгкая посадка — идеально для весны.","Все детали выполнены качественной вышивкой.","Доступно более 10 цветов, подробнее в ЛС."],
-        fit:{
-          male:{
-            images:["p4_fit_m_1.webp","p4_fit_m_2.webp","p4_fit_m_3.webp","p4_fit_m_4.webp"],
-            text:"Размерная сетка: @furuyume_online"
-          },
-          female:{
-            images:["p4_fit_f_1.webp","p4_fit_f_2.webp","p4_fit_f_3.webp","p4_fit_f_4.webp"],
-            text:"Размерная сетка: @furuyume_online"
-          }
-        }
-      },
-      {
         id:"p7", slug:"furhoodiew",
         name:"FURUYUME PLUSH HOODIE (WHITE)",
         badge:"БЕСПЛАТНАЯ ДОСТАВКА", priceRub:3000, oldPriceRub:5700, dolyami:"Подробнее: Долями",
@@ -1604,18 +1719,21 @@
     const ACCESSORY_IDS = ["a1"];
 
     /* ═══════════ РЕЖИМ ЗАКРЫТИЯ МАГАЗИНА ═══════════
-       CLOSING_MODE = true  → магазин закрывается: всё распродано, кроме одного
-       эксклюзивного товара EXCLUSIVE_ID. Скрываются кнопки спец-каталогов,
-       поиск находит только эксклюзив, "Смотрите также" — заглушка.
+       CLOSING_MODE = true  → магазин закрывается: всё распродано, кроме
+       эксклюзивных товаров EXCLUSIVE_IDS. Скрываются кнопки спец-каталогов,
+       поиск находит только эксклюзивы, "Смотрите также" показывает другие расцветки.
        Чтобы вернуть обычный режим (для нового магазина по этому шаблону) —
        поставь CLOSING_MODE = false. Всё остальное продолжит работать как раньше. */
-    const CLOSING_MODE = true;
-    const EXCLUSIVE_ID  = "p3";
+    const CLOSING_MODE  = true;
+    /* Эксклюзивные товары (отображаются рядом в одном ряду по центру).
+       Чтобы добавить/убрать — просто отредактируй массив. */
+    const EXCLUSIVE_IDS = ["p3","p33"];
+    function isExclusive(id){ return EXCLUSIVE_IDS.includes(id); }
 
-    /* Распродан ли товар: в режиме закрытия — всё, кроме эксклюзива; иначе по списку SOLD_OUT_IDS */
+    /* Распродан ли товар: в режиме закрытия — всё, кроме эксклюзивов; иначе по списку SOLD_OUT_IDS */
     function isSoldOut(p){
       if(!p) return false;
-      if(CLOSING_MODE) return p.id !== EXCLUSIVE_ID;
+      if(CLOSING_MODE) return !isExclusive(p.id);
       return SOLD_OUT_IDS.includes(p.id);
     }
 
@@ -1745,14 +1863,14 @@
 
     /* Универсальный HTML карточки товара — поддерживает sold-out стиль (блюр + оверлей + не кликается)
        и эксклюзивный стиль (isExclusive — тонкая подсветка). */
-    function productCardHTML(p, isExclusive){
+    function productCardHTML(p, isExclusiveCard){
       const soldOut = isSoldOut(p);
       if(soldOut){
         // Распроданные товары — без кнопки Долями, без описания, без цены/старой цены
         return `
         <article class="card sold-out-card" data-product-id="${p.id}">
           <div class="img" aria-label="${p.name} — распродано" style="cursor:default; pointer-events:none; position:relative; overflow:hidden;">
-            <img class="product-photo" src="${p.gallery[0]}" alt="${p.name}" loading="lazy" style="filter:blur(3px); opacity:.55;">
+            <img class="product-photo" src="${p.gallery[0]}" alt="${p.name}" loading="lazy" decoding="async" style="filter:blur(3px); opacity:.55;">
             <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:2;">
               <div style="background:rgba(255,255,255,.92); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); border:1px solid rgba(0,0,0,.10); border-radius:11px; padding:6px 14px; font-size:11px; font-weight:900; text-transform:uppercase; letter-spacing:-.03em; color:#111;">РАСПРОДАНО</div>
             </div>
@@ -1760,10 +1878,18 @@
           <div class="name" style="cursor:default; opacity:.55;">${p.name}</div>
         </article>`;
       }
+      // Плашка "ОСТАЛОСЬ: N ШТ." — только для эксклюзивов с указанным остатком
+      const stockLabel = (isExclusiveCard && Number(p.stock) > 0) ? `
+          <div class="stock-label" aria-label="Осталось ${p.stock} штук">ОСТАЛОСЬ: ${p.stock} ШТ.</div>` : "";
+      // Эксклюзивы видны первым экраном — грузим их с приоритетом, остальные лениво
+      const imgLoad = isExclusiveCard
+        ? `loading="eager" fetchpriority="high" decoding="async"`
+        : `loading="lazy" decoding="async"`;
       return `
-        <article class="card${isExclusive ? " exclusive-card" : ""}" data-product-id="${p.id}">
+        <article class="card${isExclusiveCard ? " exclusive-card" : ""}" data-product-id="${p.id}">
+          ${stockLabel}
           <div class="img" role="button" tabindex="0" data-open-product="${p.id}" aria-label="Открыть ${p.name}">
-            <img class="product-photo" src="${p.gallery[0]}" alt="${p.name}" loading="lazy">
+            <img class="product-photo" src="${p.gallery[0]}" alt="${p.name}" ${imgLoad}>
           </div>
           <div class="name" role="button" tabindex="0" data-open-product="${p.id}">${p.name}</div>
           <div class="desc">${p.badge}</div>
@@ -1772,7 +1898,7 @@
             <span class="old">${fmtRub(p.oldPriceRub)}</span>
           </div>
           <button class="dolyami" type="button" data-action="dolyami" aria-label="Узнать про Долями">
-            <img class="dolyami-icon" src="dolyami.webp" alt="" aria-hidden="true">
+            <img class="dolyami-icon" src="dolyami.webp" alt="" aria-hidden="true" loading="lazy" decoding="async">
             <span>${p.dolyami}</span>
           </button>
         </article>`;
@@ -1785,17 +1911,18 @@
         grid.innerHTML = `<div class="grid-empty">каталог пустой</div>`;
         return;
       }
-      // В режиме закрытия эксклюзивный товар идёт отдельной строкой по центру, остальные — ниже
-      const exIdx = CLOSING_MODE ? items.findIndex(p=>p.id===EXCLUSIVE_ID) : -1;
-      if(exIdx >= 0){
-        const ex   = items[exIdx];
-        const rest = items.filter((_,i)=>i!==exIdx);
-        grid.innerHTML =
-          `<div class="exclusive-row">${productCardHTML(ex, true)}</div>` +
-          rest.map(p=>productCardHTML(p)).join("");
-      } else {
-        grid.innerHTML = items.map(p=>productCardHTML(p)).join("");
+      // В режиме закрытия эксклюзивные товары идут одним рядом по центру, остальные — ниже
+      if(CLOSING_MODE){
+        const exclusives = items.filter(p=>isExclusive(p.id));
+        const rest       = items.filter(p=>!isExclusive(p.id));
+        if(exclusives.length){
+          grid.innerHTML =
+            `<div class="exclusive-row">${exclusives.map(p=>productCardHTML(p, true)).join("")}</div>` +
+            rest.map(p=>productCardHTML(p)).join("");
+          return;
+        }
       }
+      grid.innerHTML = items.map(p=>productCardHTML(p)).join("");
     }
     /* Кнопка "Забытое прошлое" теперь статична в .launcher-row рядом с "Аксессуары".
        Функция оставлена как no-op на случай старых вызовов / совместимости. */
@@ -1803,11 +1930,15 @@
     async function switchCategory(nextId){
       // Если сейчас активен режим забытого прошлого — выходим через лоадер
       if(_inForgottenMode){ await exitForgottenMode(); return; }
+      // Фиксируем текущую высоту сетки — страница не дёргается, пока товары меняются
+      grid.style.minHeight = grid.offsetHeight + "px";
       grid.classList.add("fade-out");
-      await sleep(160);
+      await sleep(300); // даём fade-out полностью отыграть (.30s)
       renderProducts(nextId);
-      await sleep(20);
-      grid.classList.remove("fade-out");
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        grid.classList.remove("fade-out"); // плавное появление новой выдачи
+        setTimeout(()=>{ grid.style.minHeight = ""; }, 320); // отпускаем высоту после fade-in
+      }));
     }
 
     /* ═══════════ FLOATBAR ═══════════ */
@@ -1845,7 +1976,7 @@
     }
     function renderSearchResults(query){
       const q = (query||"").trim().toLowerCase();
-      if(!q){ searchResults.innerHTML=`<div class="drawer-empty">начните ввод — появятся товары</div>`; return; }
+      if(!q){ searchResults.innerHTML=`<div class="drawer-empty">начните ввод: появятся товары</div>`; return; }
 
       // Спец-разделы в поиске работают только вне режима закрытия
       if(!CLOSING_MODE){
@@ -1883,17 +2014,17 @@
         }
       }
 
-      // Пул поиска: в режиме закрытия — только эксклюзив; иначе все товары кроме забытых/распроданных
+      // Пул поиска: в режиме закрытия — только эксклюзивы; иначе все товары кроме забытых/распроданных
       const pool = CLOSING_MODE
-        ? PRODUCTS.filter(p=>p.id===EXCLUSIVE_ID)
+        ? PRODUCTS.filter(p=>isExclusive(p.id))
         : PRODUCTS.filter(p=>![...FORGOTTEN_IDS, ...SOLD_OUT_IDS].includes(p.id));
       const found = pool.filter(p=>
         `${p.name} ${p.badge} ${fmtRub(p.priceRub)} ${p.id}`.toLowerCase().includes(q)
       ).slice(0,10);
       if(!found.length){ searchResults.innerHTML=`<div class="drawer-empty">ничего не найдено</div>`; return; }
-      searchResults.innerHTML = found.map(p=>`
-        <div class="result" role="listitem" data-open-product="${p.id}" aria-label="${p.name}">
-          <div class="result-img"><img src="${p.gallery[0]}" alt="" loading="lazy"></div>
+      searchResults.innerHTML = found.map((p,i)=>`
+        <div class="result" role="listitem" data-open-product="${p.id}" aria-label="${p.name}" style="animation-delay:${i*30}ms">
+          <div class="result-img"><img src="${p.gallery[0]}" alt="" loading="lazy" decoding="async"></div>
           <div class="result-mid">
             <div class="result-name">${p.name}</div>
             <div class="result-meta">${p.badge}</div>
@@ -1967,7 +2098,7 @@
         const p=byId(it.pid); if(!p) return "";
         return `
           <div class="cart-row" data-cart-pid="${it.pid}" data-cart-size="${it.size}">
-            <div class="cart-img"><img src="${p.gallery[0]}" alt="" loading="lazy"></div>
+            <div class="cart-img"><img src="${p.gallery[0]}" alt="" loading="lazy" decoding="async"></div>
             <div class="cart-mid">
               <div class="cart-name">${p.name}</div>
               <div class="cart-meta">${it.size ? it.size + " · " : ""}${fmtRub(p.priceRub)}</div>
@@ -1984,7 +2115,7 @@
 
     /* ═══════════ MODALS ═══════════ */
     function openModal(el){ el.classList.add("show"); el.setAttribute("aria-hidden","false"); requestAnimationFrame(()=>el.classList.add("visible")); }
-    function closeModal(el){ el.classList.remove("visible"); el.setAttribute("aria-hidden","true"); setTimeout(()=>el.classList.remove("show"),380); }
+    function closeModal(el){ el.classList.remove("visible"); el.setAttribute("aria-hidden","true"); setTimeout(()=>el.classList.remove("show"),440); } // 440мс ≥ transition .42s — анимация закрытия не обрезается
     function openCart(){ renderCart(); openModal(cartModal); }
     function closeCart(){ closeModal(cartModal); }
     function openDolyami(){ openModal(dolyamiModal); }
@@ -2021,7 +2152,7 @@
     let currentProductId=null, currentSize="M";
 
     function renderGalleryScroll(p){
-      galleryStage.innerHTML = p.gallery.map(src=>`<img src="${src}" alt="${p.name}">`).join("");
+      galleryStage.innerHTML = p.gallery.map((src,i)=>`<img src="${src}" alt="${p.name}" decoding="async"${i>0?' loading="lazy"':''}>`).join("");
       galleryDots.innerHTML  = p.gallery.map((_,i)=>`<div class="dot ${i===0?"active":""}"></div>`).join("");
       requestAnimationFrame(()=>{
         galleryStage.scrollLeft=0;
@@ -2043,7 +2174,19 @@
     function renderDesc(p){ pDescList.innerHTML=(p.desc||[]).map(x=>`<li>${x}</li>`).join(""); }
     function renderRelated(p){
       if(CLOSING_MODE){
-        relTrack.innerHTML = `<div class="rel-closing">Тут больше нечего смотреть: <br>мы закрываемся.</div>`;
+        // Показываем другие эксклюзивы (вторую расцветку); если их нет — заглушка
+        const others = PRODUCTS.filter(x=>isExclusive(x.id) && x.id!==p.id);
+        if(others.length){
+          relTrack.innerHTML = others.map(x=>`
+            <div class="rel-card" role="button" tabindex="0" data-open-product="${x.id}" aria-label="Открыть ${x.name}">
+              <div class="rel-img"><img src="${x.gallery[0]}" alt="" loading="lazy" decoding="async"></div>
+              <div class="rel-name">${x.name}</div>
+              <div class="rel-price">${fmtRub(x.priceRub)}</div>
+            </div>`
+          ).join("") + `<div class="rel-closing">Это всё, что осталось: <br>мы закрываемся.</div>`;
+        } else {
+          relTrack.innerHTML = `<div class="rel-closing">Тут больше нечего смотреть: <br>мы закрываемся.</div>`;
+        }
         requestAnimationFrame(()=>relTrack.scrollTo({left:0,behavior:"instant"}));
         return;
       }
@@ -2051,7 +2194,7 @@
       const pick=PRODUCTS.filter(x=>x.id!==p.id && !excluded.includes(x.id)).sort(()=>Math.random()-.5).slice(0,6);
       relTrack.innerHTML=pick.map(x=>`
         <div class="rel-card" role="button" tabindex="0" data-open-product="${x.id}" aria-label="Открыть ${x.name}">
-          <div class="rel-img"><img src="${x.gallery[0]}" alt="" loading="lazy"></div>
+          <div class="rel-img"><img src="${x.gallery[0]}" alt="" loading="lazy" decoding="async"></div>
           <div class="rel-name">${x.name}</div>
           <div class="rel-price">${fmtRub(x.priceRub)}</div>
         </div>`
@@ -2075,7 +2218,7 @@
       }
       // Иконки в стиле сайта: контурный SVG (Mars и Venus), без буквенной подписи — только символ
       const maleBtn = hasMale ? `
-        <button class="pfit-btn pfit-btn-m" type="button" data-fit-gender="male" aria-label="Как сидит на мужчине">
+        <button class="pfit-btn pfit-btn-m" type="button" data-fit-gender="male" aria-label="Как сидит на парне">
           <svg class="pfit-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="10" cy="14" r="5"/>
             <path d="M14.5 9.5L20.5 3.5"/>
@@ -2084,7 +2227,7 @@
           </svg>
         </button>` : "";
       const femaleBtn = hasFemale ? `
-        <button class="pfit-btn pfit-btn-f" type="button" data-fit-gender="female" aria-label="Как сидит на женщине">
+        <button class="pfit-btn pfit-btn-f" type="button" data-fit-gender="female" aria-label="Как сидит на девушке">
           <svg class="pfit-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="9" r="5"/>
             <path d="M12 14v8"/>
@@ -2201,11 +2344,11 @@
       _fitViewerProductId = productId;
 
       // Заголовок
-      fitViewerTitle.textContent = gender === "male" ? "Как сидит на мужчине" : "Как сидит на женщине";
+      fitViewerTitle.textContent = gender === "male" ? "Как сидит на парне" : "Как сидит на девушке";
 
       // Галерея — 4 фото со свайпом
       const imgs = Array.isArray(data.images) ? data.images : [];
-      fitGalleryStage.innerHTML = imgs.map(src => `<img src="${src}" alt="${p.name}" loading="lazy">`).join("");
+      fitGalleryStage.innerHTML = imgs.map((src,i) => `<img src="${src}" alt="${p.name}" decoding="async"${i>0?' loading="lazy"':''}>`).join("");
       fitGalleryDots.innerHTML  = imgs.map((_,i) => `<div class="dot${i===0?' active':''}" data-fit-dot="${i}"></div>`).join("");
 
       // Текст-подпись (редактируется в данных товара). Caption кликабелен → открывает Telegram.
@@ -2291,15 +2434,21 @@
           </div>`;
         }
         if(n.type==="closing"){
-          // Новость о закрытии: название товара кликабельно (→ открыть эксклюзив), кнопка "ПОЧЕМУ?" → пост
+          // Новость о закрытии: кнопка "ПОЧЕМУ?" под заголовком,
+          // ниже — текстовый блок из трёх строк с одинаковым отступом.
+          // Название товара кликабельно (→ выбор расцветки).
+          const colorsHint = EXCLUSIVE_IDS.length > 1
+            ? `<div class="news-colors-hint">${EXCLUSIVE_IDS.length} расцветки: нажмите на название товара, чтобы выбрать</div>`
+            : "";
           return `
           <div class="news-slide" data-news-id="${n.id}" data-news-type="closing">
             <div class="news-title">${n.title}</div>
-            <div class="news-text">
-              ${n.prefix}<br>
-              <span class="news-text-clickable" data-news-action="go-exclusive" role="button" tabindex="0">${n.clickable}</span>.
+            <a class="news-why-btn" data-news-action="go-why" href="${n.btnUrl}" target="_blank" rel="noopener">${n.btnText}</a>
+            <div class="news-body">
+              <div>${n.prefix}:</div>
+              <div><span class="news-text-clickable" data-news-action="go-exclusive" role="button" tabindex="0">${n.clickable}</span>.</div>
+              ${colorsHint}
             </div>
-            <a class="news-action-btn" data-news-action="go-why" href="${n.btnUrl}" target="_blank" rel="noopener">${n.btnText}</a>
           </div>`;
         }
         return "";
@@ -2513,11 +2662,14 @@
     }
     async function switchAccessoryCategory(nextId){
       if(nextId === _currentAccCatId) return;
+      grid.style.minHeight = grid.offsetHeight + "px";
       grid.classList.add("fade-out");
-      await sleep(160);
+      await sleep(300);
       renderAccessoryCards(nextId);
-      await sleep(20);
-      grid.classList.remove("fade-out");
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        grid.classList.remove("fade-out");
+        setTimeout(()=>{ grid.style.minHeight = ""; }, 320);
+      }));
     }
 
     async function enterAccessoriesMode(){
@@ -2628,18 +2780,10 @@
       } else if(_inForgottenMode){
         await exitForgottenMode();
         renderCategories(catId);
-        grid.classList.add("fade-out");
-        await sleep(160);
-        renderProducts(catId);
-        await sleep(20);
-        grid.classList.remove("fade-out");
+        await switchCategory(catId);
       } else {
         renderCategories(catId);
-        grid.classList.add("fade-out");
-        await sleep(160);
-        renderProducts(catId);
-        await sleep(20);
-        grid.classList.remove("fade-out");
+        await switchCategory(catId);
       }
       window.scrollTo({ top:0, behavior:"smooth" });
     }
@@ -2649,6 +2793,43 @@
       const btn = e.target.closest("[data-interest-cat]");
       if(!btn) return;
       selectInterestCategory(btn.dataset.interestCat);
+    });
+
+    /* ═══════════ ВЫБОР РАСЦВЕТКИ (клик по названию товара в новости о закрытии) ═══════════ */
+    const colorChoiceModal = document.getElementById("colorChoiceModal");
+    const colorChoiceList  = document.getElementById("colorChoiceList");
+
+    function colorwayLabel(p){
+      // Достаём расцветку из скобок названия: "... (WHITE-TURQ)" → "WHITE-TURQ"
+      const m = p.name.match(/\(([^)]+)\)\s*$/);
+      return m ? m[1] : p.badge;
+    }
+    function renderColorChoice(){
+      if(!colorChoiceList) return;
+      const items = PRODUCTS.filter(p=>isExclusive(p.id));
+      colorChoiceList.innerHTML = items.map(p=>{
+        const stockPart = Number(p.stock) > 0 ? ` · осталось ${p.stock} шт.` : "";
+        return `
+        <button class="choice-item" type="button" data-choice-product="${p.id}" aria-label="Открыть ${p.name}">
+          <div class="choice-img"><img src="${p.gallery[0]}" alt="" loading="lazy" decoding="async"></div>
+          <div class="choice-mid">
+            <div class="choice-name">${colorwayLabel(p)}</div>
+            <div class="choice-meta">${p.badge}${stockPart}</div>
+          </div>
+          <div class="choice-price">${fmtRub(p.priceRub)}</div>
+        </button>`;
+      }).join("");
+    }
+    function openColorChoice(){ renderColorChoice(); openModal(colorChoiceModal); }
+    function closeColorChoice(){ closeModal(colorChoiceModal); }
+
+    colorChoiceModal?.addEventListener("click", e=>{
+      if(e.target===colorChoiceModal){ closeColorChoice(); return; }
+      const btn = e.target.closest("[data-choice-product]");
+      if(!btn) return;
+      const pid = btn.dataset.choiceProduct;
+      closeColorChoice();
+      setTimeout(()=>openProduct(pid), 260); // даём модалке плавно уйти, затем открываем товар
     });
 
     /* ═══════════ NEWS ACTIONS (клики внутри карусели новостей) ═══════════ */
@@ -2663,8 +2844,9 @@
         if(_inAccessoriesMode) return;
         enterAccessoriesMode();
       } else if(act === "go-exclusive"){
-        // Открыть единственный товар в наличии
-        openProduct(EXCLUSIVE_ID);
+        // Несколько расцветок → даём выбрать; одна — открываем сразу
+        if(EXCLUSIVE_IDS.length > 1) openColorChoice();
+        else openProduct(EXCLUSIVE_IDS[0]);
       }
       // act === "go-vk" / "go-why": <a target="_blank"> — браузер сам откроет ссылку
     });
@@ -2718,7 +2900,12 @@
       });
 
       searchClose.addEventListener("click", closeSearch);
-      searchInput.addEventListener("input", e=>renderSearchResults(e.target.value));
+      let _searchDebounce;
+      searchInput.addEventListener("input", e=>{
+        clearTimeout(_searchDebounce);
+        const v = e.target.value;
+        _searchDebounce = setTimeout(()=>renderSearchResults(v), 70); // дебаунс — меньше перерисовок при быстром наборе
+      });
       document.addEventListener("pointerdown", e=>{
         if(!searchDrawer.classList.contains("open")) return;
         const card=searchDrawer.querySelector(".drawer-card");
@@ -2772,15 +2959,17 @@
 
       document.addEventListener("keydown", e=>{
         if(e.key!=="Escape") return;
-        if(searchDrawer.classList.contains("open"))       closeSearch();
-        if(cartModal.classList.contains("show"))          closeCart();
-        if(dolyamiModal.classList.contains("show"))       closeDolyami();
-        if(interestModal.classList.contains("show"))      closeInterestModal();
-        if(fitViewer.classList.contains("show"))          closeFitViewer();
-        if(reviewsPopup.classList.contains("show"))       closeReviews();
-        if(fpOverlay.classList.contains("show"))          closeFpModal();
-        if(imageViewer.classList.contains("show"))        closeImageViewer();
-        if(document.body.classList.contains("product-open")) closeProduct();
+        // Закрываем только ВЕРХНИЙ слой за одно нажатие — слои в порядке z-index
+        if(imageViewer.classList.contains("show"))             { closeImageViewer();  return; }
+        if(fitViewer.classList.contains("show"))               { closeFitViewer();    return; }
+        if(searchDrawer.classList.contains("open"))            { closeSearch();       return; }
+        if(cartModal.classList.contains("show"))               { closeCart();         return; }
+        if(dolyamiModal.classList.contains("show"))            { closeDolyami();      return; }
+        if(interestModal.classList.contains("show"))           { closeInterestModal();return; }
+        if(colorChoiceModal?.classList.contains("show"))       { closeColorChoice();  return; }
+        if(reviewsPopup.classList.contains("show"))            { closeReviews();      return; }
+        if(fpOverlay.classList.contains("show"))               { closeFpModal();      return; }
+        if(document.body.classList.contains("product-open"))   { closeProduct();      return; }
       });
 
       document.addEventListener("gesturestart",  e=>{ if(!document.body.classList.contains("zoom-open")) e.preventDefault(); });
