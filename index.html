@@ -29,6 +29,13 @@
 
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
+    html{
+      /* Резервируем место под вертикальный скроллбар всегда — при смене каталога
+         (когда товаров становится больше/меньше) ширина страницы не прыгает,
+         и хедер/футер/соцсети не «косоёбятся». На мобильных скроллбар overlay,
+         поэтому визуально ничего не меняется. */
+      scrollbar-gutter: stable;
+    }
     body{
       margin:0;
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -466,6 +473,12 @@
       display:flex; justify-content:center; gap:18px;
     }
     .exclusive-row .card{ width:calc(50% - 9px); flex:0 0 auto; }
+    /* Одиночный товар без пары (нечётное число) — по центру ряда, шириной в одну колонку */
+    .card-orphan{
+      grid-column:1 / -1;
+      width:calc(50% - 9px);
+      justify-self:center;
+    }
     /* Плашка "ОСТАЛОСЬ: N ШТ." над эксклюзивным товаром */
     .stock-label{
       display:inline-flex; align-items:center; justify-content:center;
@@ -479,6 +492,19 @@
     body.closing #accLauncher{ display:none !important; }
     body.closing .categories{ padding-top:18px; }
     .grid.fade-out{ opacity:0; transform:translateY(4px); }
+    /* ─── ЛОАДЕР КАТАЛОГА (при переключении категорий) ─── */
+    .products{ position:relative; }
+    .cat-loader{
+      position:absolute; inset:0; z-index:5;
+      display:flex; align-items:flex-start; justify-content:center;
+      padding-top:60px;
+      opacity:0; pointer-events:none;
+      transition:opacity .22s ease;
+    }
+    .cat-loader.show{ opacity:1; }
+    .cat-loader .spinner{
+      width:32px; height:32px; border-width:2.6px; margin-bottom:0;
+    }
     .grid-empty{
       grid-column:1/-1; text-align:center; padding:44px 0 24px;
       font-size:11px; font-weight:800; text-transform:uppercase;
@@ -1146,7 +1172,7 @@
       .news-text-clickable{ font-size:12px; }
       .news-why-btn{ padding:5px 10px; font-size:8px; }
       .news-slide{ min-height:142px; padding:12px 6px 8px; }
-      .stock-label{ font-size:8px; padding:5px 10px; gap:6px; }
+      .stock-label{ font-size:8px; padding:5px 10px; }
       .exclusive-row{ gap:14px; }
       .exclusive-row .card{ width:calc(50% - 7px); }
       .acc-btn{ padding:8px 10px; font-size:9px; gap:5px; }
@@ -1504,6 +1530,7 @@
 
     <main class="content safe" aria-label="Товары">
       <section class="products">
+        <div id="catLoader" class="cat-loader" aria-hidden="true"><div class="spinner"></div></div>
         <div id="grid" class="grid" aria-live="polite"></div>
       </section>
     </main>
@@ -1594,7 +1621,7 @@
         id:"p3", slug:"adidas-yohjiyamamoto-wt",
         name:"ADIDAS X YOHJI YAMAMOTO TRACK JACKET (WHITE-TURQ)",
         badge:"В НАЛИЧИИ", priceRub:3000, oldPriceRub:7200, dolyami:"Подробнее: Долями",
-        stock:70, // ← ОСТАТОК В ШТУКАХ. Меняй это число, плашка "ОСТАЛОСЬ: N ШТ." обновится сама
+        stock:56, // ← ОСТАТОК В ШТУКАХ. Меняй это число, плашка "ОСТАЛОСЬ: N ШТ." обновится сама
         categories:["olymp"],
         gallery:["p1_1.webp","p1_2.webp","p1_3.webp","p1_4.webp"],
         articles:{ S:"AYYWT-S", M:"AYYWT-M", L:"AYYWT-L", XL:"AYYWT-XL" },
@@ -1725,9 +1752,11 @@
        Чтобы вернуть обычный режим (для нового магазина по этому шаблону) —
        поставь CLOSING_MODE = false. Всё остальное продолжит работать как раньше. */
     const CLOSING_MODE  = true;
-    /* Эксклюзивные товары (отображаются рядом в одном ряду по центру).
-       Чтобы добавить/убрать — просто отредактируй массив. */
-    const EXCLUSIVE_IDS = ["p3","p33"];
+    /* Эксклюзивные товары (отображаются по центру каталога).
+       Сейчас эксклюзив только p3 — он стоит особняком, по центру, с плашкой остатка.
+       p33 убран отсюда → он автоматически стал РАСПРОДАН (пропал из поиска,
+       из "Смотрите также", без плашки остатка). Чтобы вернуть — допиши "p33". */
+    const EXCLUSIVE_IDS = ["p3"];
     function isExclusive(id){ return EXCLUSIVE_IDS.includes(id); }
 
     /* Распродан ли товар: в режиме закрытия — всё, кроме эксклюзивов; иначе по списку SOLD_OUT_IDS */
@@ -1760,6 +1789,7 @@
     const floatLogoBtn  = document.getElementById("floatLogoBtn");
     const catWrap       = document.getElementById("catWrap");
     const grid          = document.getElementById("grid");
+    const catLoader     = document.getElementById("catLoader");
     const searchDrawer  = document.getElementById("searchDrawer");
     const searchInput   = document.getElementById("searchInput");
     const searchClose   = document.getElementById("searchClose");
@@ -1911,18 +1941,33 @@
         grid.innerHTML = `<div class="grid-empty">каталог пустой</div>`;
         return;
       }
-      // В режиме закрытия эксклюзивные товары идут одним рядом по центру, остальные — ниже
+      // В режиме закрытия эксклюзивные товары идут одним рядом по центру, остальные — ниже обычной сеткой
       if(CLOSING_MODE){
         const exclusives = items.filter(p=>isExclusive(p.id));
         const rest       = items.filter(p=>!isExclusive(p.id));
         if(exclusives.length){
           grid.innerHTML =
             `<div class="exclusive-row">${exclusives.map(p=>productCardHTML(p, true)).join("")}</div>` +
-            rest.map(p=>productCardHTML(p)).join("");
+            buildGridCards(rest);
           return;
         }
       }
-      grid.innerHTML = items.map(p=>productCardHTML(p)).join("");
+      grid.innerHTML = buildGridCards(items);
+    }
+
+    /* Собирает карточки обычной сетки. Если товаров нечётное число — последний
+       висит без пары: помечаем его классом .card-orphan, и CSS ставит его по центру. */
+    function buildGridCards(list){
+      let html = list.map(p=>productCardHTML(p)).join("");
+      if(list.length % 2 === 1){
+        // Находим последний открывающий тег <article ...> и добавляем ему класс центрирования.
+        const idx = html.lastIndexOf('<article class="card');
+        if(idx !== -1){
+          const end = html.indexOf('"', idx + '<article class="'.length);
+          html = html.slice(0, end) + ' card-orphan' + html.slice(end);
+        }
+      }
+      return html;
     }
     /* Кнопка "Забытое прошлое" теперь статична в .launcher-row рядом с "Аксессуары".
        Функция оставлена как no-op на случай старых вызовов / совместимости. */
@@ -1930,15 +1975,50 @@
     async function switchCategory(nextId){
       // Если сейчас активен режим забытого прошлого — выходим через лоадер
       if(_inForgottenMode){ await exitForgottenMode(); return; }
-      // Фиксируем текущую высоту сетки — страница не дёргается, пока товары меняются
-      grid.style.minHeight = grid.offsetHeight + "px";
+      await runGridTransition(()=>renderProducts(nextId));
+    }
+
+    /* Универсальный плавный переход содержимого сетки.
+       Гасит текущую сетку + показывает спиннер, рендерит новое содержимое,
+       плавно анимирует высоту от старой к новой (страница не дёргается),
+       затем проявляет новую сетку. Используется и категориями, и аксессуарами. */
+    let _gridBusy = false;
+    async function runGridTransition(renderFn){
+      if(_gridBusy) return;          // защита от наложения быстрых тапов
+      _gridBusy = true;
+
+      const startH = grid.offsetHeight;
+      grid.style.minHeight = startH + "px";   // держим высоту, чтобы низ страницы не прыгал
       grid.classList.add("fade-out");
-      await sleep(300); // даём fade-out полностью отыграть (.30s)
-      renderProducts(nextId);
+      catLoader.classList.add("show");
+      catLoader.setAttribute("aria-hidden","false");
+
+      await sleep(300);                        // даём fade-out + спиннеру проявиться
+
+      renderFn();                              // подменяем содержимое (сетка ещё прозрачна)
+
+      // Измеряем новую высоту и плавно анимируем переход высоты
+      grid.style.minHeight = "";               // снимаем фикс, чтобы узнать натуральную высоту
+      const endH = grid.offsetHeight;
+      grid.style.minHeight = startH + "px";
+      // форсируем рефлоу, затем анимируем к новой высоте
+      void grid.offsetHeight;
+      grid.style.transition = "min-height .34s cubic-bezier(0.22,1,0.36,1)";
+      grid.style.minHeight = endH + "px";
+
+      catLoader.classList.remove("show");
+      catLoader.setAttribute("aria-hidden","true");
+
       requestAnimationFrame(()=>requestAnimationFrame(()=>{
-        grid.classList.remove("fade-out"); // плавное появление новой выдачи
-        setTimeout(()=>{ grid.style.minHeight = ""; }, 320); // отпускаем высоту после fade-in
+        grid.classList.remove("fade-out");     // плавно проявляем новую выдачу
       }));
+
+      // после завершения анимации высоты — снимаем инлайновые стили
+      setTimeout(()=>{
+        grid.style.transition = "";
+        grid.style.minHeight = "";
+        _gridBusy = false;
+      }, 380);
     }
 
     /* ═══════════ FLOATBAR ═══════════ */
@@ -2579,7 +2659,7 @@
 
       // Рендерим товары
       const forgottenProducts = PRODUCTS.filter(p=>FORGOTTEN_IDS.includes(p.id));
-      grid.innerHTML = forgottenProducts.map(productCardHTML).join("");
+      grid.innerHTML = buildGridCards(forgottenProducts);
 
       // Добавляем кнопку "Выйти в главное меню" СНИЗУ — после grid
       const content = document.querySelector(".content.safe");
@@ -2655,21 +2735,14 @@
         grid.innerHTML = `<div class="grid-empty">каталог пустой</div>`;
         return;
       }
-      grid.innerHTML = items.map(productCardHTML).join("");
+      grid.innerHTML = buildGridCards(items);
     }
     function renderAccessoryCategories(activeId){
       catWrap.innerHTML = buildCatRows(ACCESSORY_CATEGORIES, activeId);
     }
     async function switchAccessoryCategory(nextId){
       if(nextId === _currentAccCatId) return;
-      grid.style.minHeight = grid.offsetHeight + "px";
-      grid.classList.add("fade-out");
-      await sleep(300);
-      renderAccessoryCards(nextId);
-      requestAnimationFrame(()=>requestAnimationFrame(()=>{
-        grid.classList.remove("fade-out");
-        setTimeout(()=>{ grid.style.minHeight = ""; }, 320);
-      }));
+      await runGridTransition(()=>renderAccessoryCards(nextId));
     }
 
     async function enterAccessoriesMode(){
