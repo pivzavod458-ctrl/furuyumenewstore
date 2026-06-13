@@ -472,7 +472,7 @@
       grid-column:1 / -1;
       display:flex; justify-content:center; gap:18px;
     }
-    .exclusive-row .card{ width:calc(50% - 9px); flex:0 0 auto; }
+    .exclusive-row .card{ width:calc(62% - 9px); flex:0 0 auto; }
     /* Одиночный товар без пары (нечётное число) — по центру ряда, шириной в одну колонку */
     .card-orphan{
       grid-column:1 / -1;
@@ -482,7 +482,7 @@
     /* Плашка "ОСТАЛОСЬ: N ШТ." над эксклюзивным товаром */
     .stock-label{
       display:inline-flex; align-items:center; justify-content:center;
-      margin:0 auto 10px; padding:6px 13px; border-radius:999px;
+      margin:0 auto 4px; padding:6px 13px; border-radius:999px;
       background:rgba(0,0,0,.045); border:1px solid rgba(0,0,0,.08);
       font-size:9px; font-weight:800; text-transform:uppercase;
       letter-spacing:calc(var(--ls) + 0.06em); color:#111;
@@ -889,8 +889,8 @@
     .news-slide{
       flex:0 0 100%; scroll-snap-align:center;
       display:flex; flex-direction:column; align-items:center; justify-content:center;
-      text-align:center; padding:14px 8px 10px;
-      min-height:150px; /* все новости одинаковой высоты — flex автоматически выровняет */
+      text-align:center; padding:8px 8px 6px;
+      min-height:120px; /* все новости одинаковой высоты — flex автоматически выровняет */
       -webkit-tap-highlight-color:transparent; touch-action:manipulation;
     }
     .news-title{
@@ -1171,8 +1171,8 @@
       .news-body{ font-size:10px; max-width:280px; }
       .news-text-clickable{ font-size:12px; }
       .news-why-btn{ padding:5px 10px; font-size:8px; }
-      .news-slide{ min-height:142px; padding:12px 6px 8px; }
-      .stock-label{ font-size:8px; padding:5px 10px; }
+      .news-slide{ min-height:115px; padding:8px 6px 6px; }
+      .stock-label{ font-size:8px; padding:2.5px 5px; }
       .exclusive-row{ gap:14px; }
       .exclusive-row .card{ width:calc(50% - 7px); }
       .acc-btn{ padding:8px 10px; font-size:9px; gap:5px; }
